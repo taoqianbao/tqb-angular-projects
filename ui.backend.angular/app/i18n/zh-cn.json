@@ -1,0 +1,110 @@
+{
+  "dashboard": {
+    "WELCOME": "欢迎访问 {{appName}}"
+  },
+  "topbar": {
+    "messages": {
+      "UNREAD": "未读消息",
+      "MORE": "更多消息"
+    },
+    "search": {
+      "PLACEHOLDER": "输入查询.."
+    },
+    "notification": {
+      "MORE": "更多提醒消息"
+    }
+  },
+  "offsidebar": {
+    "setting": {
+      "SETTINGS": "设置",
+      "THEMES": "皮肤",
+      "layout": {
+        "FIXED": "固定",
+        "COLLAPSED": "折叠"
+      }
+    },
+    "chat": {
+      "CONNECTIONS": "连接",
+      "SEARCH": "查找联系人",
+      "ONLINE": "ONLINE",
+      "OFFLINE": "OFFLINE",
+      "LOAD_MORE": "加载更多",
+      "TASK_COMPLETION": "任务完成",
+      "QUOTA": "剩余容量"
+    }
+  },
+  "sidebar": {
+    "WELCOME": "欢迎",
+    "heading": {
+      "HEADER": "主导航区",
+      "COMPONENTS": "组件",
+      "MORE": "更多"
+    },
+    "nav": {
+      "DASHBOARD": "Dashboard",
+      "WIDGETS": "Widgets",
+      "WIDGETS": "Widgets",
+      "DOCUMENTATION": "Documentation",
+      "element": {
+        "ELEMENTS": "Elements",
+        "BUTTON": "Button",
+        "COLOR": "Colors",
+        "NOTIFICATION": "Notification",
+        "INTERACTION": "Interaction",
+        "SPINNER": "Spinner",
+        "ANIMATION": "Animation",
+        "DROPDOWN": "Dropdown",
+        "PANEL": "Panel",
+        "PORTLET": "Portlet",
+        "GRID": "Grid",
+        "GRID_MASONRY": "Grid Masonry",
+        "TYPO": "Typography",
+        "FONT_ICON": "Font Icons",
+        "WEATHER_ICON": "Weather Icons"
+      },
+      "form": {
+        "FORM": "Forms",
+        "STANDARD": "Standard",
+        "EXTENDED": "Extended",
+        "VALIDATION": "Validation",
+        "WIZARD": "Wizard",
+        "UPLOAD": "Upload"
+      },
+      "chart": {
+        "CHART": "Charts",
+        "FLOT": "Flot",
+        "RADIAL": "Radial"
+      },
+      "table": {
+        "TABLE": "Table",
+        "STANDARD": "Standard",
+        "EXTENDED": "Extended",
+        "DATATABLE": "Datatable"
+      },
+      "map": {
+        "MAP": "Maps",
+        "GOOGLE": "Google Map",
+        "VECTOR": "Vector Map"
+      },
+      "extra": {
+        "EXTRA": "Extras",
+        "MAILBOX": "Mailbox",
+        "TIMELINE": "Timeline",
+        "CALENDAR": "Calendar",
+        "INVOICE": "Invoice",
+        "SEARCH": "Search",
+        "TODO": "Todo List",
+        "PROFILE": "Profile"
+      },
+      "pages": {
+        "PAGES": "页面",
+        "LOGIN": "登录",
+        "REGISTER": "注册",
+        "RECOVER": "找回密码",
+        "PROFILE": "简介",
+        "LOCK": "Lock",
+        "STARTER": "入门模版"
+      }
+    }
+  }
+}
