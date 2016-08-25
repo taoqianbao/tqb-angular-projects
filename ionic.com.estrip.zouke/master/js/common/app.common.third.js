@@ -1,0 +1,1 @@
+angular.module("app.common.third", ["app.common.third.service"])

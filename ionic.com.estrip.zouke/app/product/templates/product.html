@@ -1,0 +1,274 @@
+<ion-view drag-back view-title="{{title}}" align-title="center" class="product">
+
+    <ion-content has-bouncing="false" delegate-handle="product-content">
+        <div class="gallery">
+            <ion-slide-box ignore-bouncing prevent-event
+                           delegate-handle="product-handle"
+                           does-continue="true"
+                           ng-style="{height: imgHeight}">
+
+                <ion-slide ng-repeat="img in product.images">
+                    <img class="img-responsive" ng-src="{{img+imgSize}}"/>
+                </ion-slide>
+            </ion-slide-box>
+            <div class="caption-bottom"></div>
+            <div class="play-time" ng-if="product.min_time!=''">
+                <i class="icon ion-ios-clock"></i>{{product.min_time}}
+            </div>
+            <div class="title" ng-bind-html="product.title"></div>
+        </div>
+
+        <div class="list">
+
+            <div class="item assertive" ion-affix data-affix-within-parent-with-class="list">
+                <h3 ng-if="product.cat!='FS'">
+                    <span class="price" ng-bind-html="'&yen'+product.adult_price"></span>
+                    <span class="ori-price" ng-if="product.ori_price&&product.ori_price!=='0'">原价: &yen{{product.ori_price}}</span>
+                    <span class="onsale" ng-if="product.activity">{{product.activity}}</span>
+                </h3>
+                <h3 ng-if="product.cat=='FS'">
+                    <span class="ori-price" style="text-decoration:none;">人均消费&yen;{{product.min_cost}}</span>
+                </h3>
+                <!--<h3 ng-if="product.activity">-->
+                <!--{{product.activity}} <i class="onsale">促销</i>-->
+                <!--</h3>-->
+                <!--<h3>优选自:<span class="sp-name">{{product.sp_name}}</span></h3>-->
+            </div>
+            <div class="item border-bottom-none padding-bottom-0" ng-if="product.desc!=''">
+                <i class="balanced">{{product.desc}}</i>
+                <!--<i class="balanced right-5">简介:</i>{{product.desc}}-->
+            </div>
+            <div class="card">
+                <div class="item item-text-wrap top-18" ng-bind-html="product.brief" ng-if="product.brief!=''">
+                </div>
+                <div class="item item-divider" ng-bind-html="product.tags" ng-if="product.tags!=''">
+                </div>
+            </div>
+            <div ng-init="toggle=true" ng-if="product.highlight!=''">
+                <div class="item item-highlight item-icon-right balanced" ng-click="toggleClick(0)">
+                    产品亮点:
+                    <i class="icon ion-ios-minus-empty" ng-if="toggles[0]"></i>
+                    <i class="icon ion-ios-plus-empty" ng-if="!toggles[0]"></i>
+                </div>
+                <ion-item class="item-text-wrap" ng-show="toggles[0]">
+                    <span ng-bind-html="product.highlight"></span>
+                </ion-item>
+            </div>
+            <a class="item item-icon-right balanced" href="#/pdjourney/{{product.pid}}" ng-if="product.journey_info">
+                详细行程:
+                <i class="icon ion-ios-arrow-right"></i>
+            </a>
+
+            <div ng-init="toggle=true" ng-if="product.include_price||product.exclude_price">
+                <div class="item item-price item-icon-right balanced top-18" ng-click="toggleClick(1)">
+                    价格说明:
+                    <i class="icon ion-ios-minus-empty" ng-if="toggles[1]"></i>
+                    <i class="icon ion-ios-plus-empty" ng-if="!toggles[1]"></i>
+                </div>
+                <ion-item class="item-text-wrap" ng-show="toggles[1]">
+                    <div ng-if="product.include_price">
+                        <h2>包含</h2>
+
+                        <p ng-bind-html="product.include_price"></p>
+                    </div>
+                    <div class="top-15" ng-if="product.exclude_price">
+                        <h2>不包含</h2>
+
+                        <p ng-bind-html="product.exclude_price"></p>
+                    </div>
+                </ion-item>
+            </div>
+
+            <!--适用于随身WIFI产品-->
+            <div ng-init="toggle=true" ng-if="product.standard">
+                <div class="item item-icon-right balanced top-18" ng-click="toggleClick(2)">
+                    产品规格:
+                    <i class="icon ion-ios-minus-empty" ng-if="toggles[2]"></i>
+                    <i class="icon ion-ios-plus-empty" ng-if="!toggles[2]"></i>
+                </div>
+                <ion-item class="item-text-wrap" ng-show="toggles[2]">
+                    <p ng-bind-html="product.standard"></p>
+                </ion-item>
+            </div>
+            <div ng-init="toggle=true" ng-if="product.tips">
+                <div class="item item-icon-right balanced top-18" ng-click="toggleClick(3)">
+                    注意事项:
+                    <i class="icon ion-ios-minus-empty" ng-if="toggles[3]"></i>
+                    <i class="icon ion-ios-plus-empty" ng-if="!toggles[3]"></i>
+                </div>
+                <ion-item class="item-text-wrap" ng-show="toggles[3]">
+                    <p ng-bind-html="product.tips"></p>
+                </ion-item>
+            </div>
+
+            <div ng-init="toggle=false" ng-if="product.usemethod">
+                <div class="item item-icon-right balanced top-18" ng-click="toggleClick(4)">
+                    使用方法:
+                    <i class="icon ion-ios-minus-empty" ng-if="toggles[4]"></i>
+                    <i class="icon ion-ios-plus-empty" ng-if="!toggles[4]"></i>
+                </div>
+                <ion-item class="item-text-wrap" ng-show="toggles[4]">
+                    <p ng-bind-html="product.usemethod"></p>
+                </ion-item>
+            </div>
+
+            <!--适用于随身WIFI产品-->
+            <div ng-init="toggle=false" ng-if="product.buy_process">
+                <div class="item item-icon-right balanced top-18" ng-click="toggleClick(5)">
+                    购买流程:
+                    <i class="icon ion-ios-minus-empty" ng-if="toggles[5]"></i>
+                    <i class="icon ion-ios-plus-empty" ng-if="!toggles[5]"></i>
+                </div>
+                <ion-item class="item-text-wrap" ng-show="toggles[5]">
+                    <p ng-bind-html="product.buy_process"></p>
+                </ion-item>
+            </div>
+            <div ng-init="toggle=false" ng-if="product.refund">
+                <div class="item item-icon-right balanced" ng-click="toggleClick(6)">
+                    退订政策:
+                    <i class="icon ion-ios-minus-empty" ng-if="toggles[6]"></i>
+                    <i class="icon ion-ios-plus-empty" ng-if="!toggles[6]"></i>
+                </div>
+                <ion-item class="item-text-wrap" ng-show="toggles[6]">
+                    <p ng-bind-html="product.refund"></p>
+                </ion-item>
+            </div>
+
+
+            <div ng-init="toggle=false" ng-if="product.opentime">
+                <div class="item item-icon-right balanced" ng-click="toggleClick(7)">
+                    开放时间:
+                    <i class="icon ion-ios-minus-empty" ng-if="toggles[7]"></i>
+                    <i class="icon ion-ios-plus-empty" ng-if="!toggles[7]"></i>
+                </div>
+                <ion-item class="item-text-wrap" ng-show="toggles[7]">
+                    <p ng-bind-html="product.opentime"></p>
+                </ion-item>
+            </div>
+            <div ng-init="toggle=false" ng-if="product.sig_dishes">
+                <div class="item item-icon-right balanced" ng-click="toggleClick(8)">
+                    招牌菜:
+                    <i class="icon ion-ios-minus-empty" ng-if="toggles[8]"></i>
+                    <i class="icon ion-ios-plus-empty" ng-if="!toggles[8]"></i>
+                </div>
+                <ion-item class="item-text-wrap" ng-show="toggles[8]">
+                    <p ng-bind-html="product.sig_dishes"></p>
+                </ion-item>
+            </div>
+
+            <!--适用于签证-->
+            <p class="top-18 left-10 bottom-5 dark"
+               ng-if="product.officer_file||product.freelancer_file||product.retirees_file||product.studentship_file">
+                所需材料</p>
+
+            <div ng-if="product.officer_file">
+                <div class="item item-icon-right balanced" ng-click="showFile('officer')">
+                    在职人员:
+                    <i class="icon ion-ios-arrow-right"></i>
+                </div>
+            </div>
+            <div ng-if="product.freelancer_file">
+                <div class="item item-icon-right balanced" ng-click="showFile('freelancer')">
+                    自由职业:
+                    <i class="icon ion-ios-arrow-right"></i>
+                </div>
+            </div>
+            <div ng-if="product.retirees_file">
+                <div class="item item-icon-right balanced" ng-click="showFile('retirees')">
+                    退休人员:
+                    <i class="icon ion-ios-arrow-right"></i>
+                </div>
+            </div>
+            <div ng-if="product.studentship_file">
+                <div class="item item-icon-right balanced" ng-click="showFile('studentship')">
+                    学生儿童:
+                    <i class="icon ion-ios-arrow-right"></i>
+                </div>
+            </div>
+
+            <!--会合地点-->
+            <p class="top-18 left-10 bottom-5 dark" ng-if="product.meet_points">集合时间与地点</p>
+
+            <div ng-if="product.meet_points">
+                <div ng-repeat="address in product.meet_points">
+                    <a class="item item-icon-right balanced" ng-click="onClickAddress(address)">
+                        {{checkExpress(address)?(address.point||address.name):address.name}}
+                        <i ng-if="!checkExpress(address)" class="icon ion-ios-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            <a class="item item-icon-right balanced top-18 bottom-18" href="tel:4008502259">
+                咨询我们<i class="pull-right">400-850-2259</i>
+                <i class="icon ion-ios-telephone-outline"></i>
+            </a>
+
+        </div>
+
+        <!-- 评论 -->
+        <div class="list list-borderless list-comment">
+            <div class="item item-section item-section-comment">
+                <span><i class="ic ic-comment-grey"></i>评论</span>
+                    <span class="more" ng-show="product.comments.num>0" ng-click="onClickAllComments()">
+                        所有{{product.comments.num}}条评论<i class="icon ion-ios-arrow-right"></i>
+                    </span>
+            </div>
+            <div class="comment">
+                <div class="item item-avatar item-comment" ng-repeat="comment in product.comments.content">
+                    <img ng-src="{{comment.avatar}}"
+                         ng-click="comment.user_id==user.info.user_id?sideModal.setUserInfo():onClickUser(comment.user_id, comment.user, comment.avatar)">
+
+                    <h3>{{comment.comment}}</h3>
+
+                    <!--<p ng-if="comment.reply_id == null"><span>回复此条</span></p>-->
+
+                    <!--<p ng-if="comment.reply_id != null"><span>{{comment.reply_nick}}</span>回复:-->
+                    <!--{{comment.reply_comment}}</p>-->
+
+                    <div class="like" ng-click="onClickCommentLike(comment.id, $index)">
+                        {{comment.like_num}}<span ng-class="{'active':comment.is_liked}">有用</span>
+                        <!--<i class="ic" ng-class="{'ic-like':!comment.is_liked,'ic-liked':comment.is_liked}"></i>-->
+                    </div>
+                    <i class="hr"></i>
+                </div>
+
+                <form class="item item-input-inset top-grey" ng-submit="onSubmitComment()">
+                    <!--<span>说两句</span>-->
+                    <img class="avatar" ng-src="{{user.isSigned?user.info.avatar:'img/user.png'}}"
+                         ng-click="sideModal.setUserInfo()">
+                    <label class="item-input-wrapper">
+                        <!-- 使用elastic指令实现textarea高度自适应 -->
+                            <textarea rows="1" minlength="1" maxlength="140" placeholder="说点什么吧" elastic
+                                      ng-click="onClickComment()"
+                                      ng-keyup="onCommentInput()"
+                                      ng-model="$parent.commentInput"></textarea>
+                        <button class="button button-small button-clear button-balanced" type="submit">发送</button>
+                    </label>
+                </form>
+            </div>
+        </div>
+
+    </ion-content>
+
+    <ion-footer-bar>
+        <a class="tab-item">
+            <span class="action-bar share" click-share="product" share-object="product">
+                <i class="icon ic ic-share-grey"></i>
+            </span>
+        </a>
+        <a class="tab-item">
+            <span class="action-bar heart" ng-click="onClickMark()">
+                <i class="icon ic"
+                   ng-class="{'ic-heart-inactive-grey': !user.isSigned||!product.is_marked, 'ic-heart-active': user.isSigned&&product.is_marked}"></i>
+            </span>
+        </a>
+        <a class="tab-item">
+            <span class="action-bar comment" ng-click="onClickAllComments()">
+                <i class="icon ic ic-comment-grey"></i>
+                <span class="badge badge-balanced">{{product.comments.num}}</span>
+            </span>
+        </a>
+        <a class="tab-item"></a>
+        <button class="button button-round button-assertive" ng-click="orderNow(product.pid, product.cat)">{{product.cat==="FS"?"免费预约":"现在预订"}}</button>
+    </ion-footer-bar>
+
+</ion-view>

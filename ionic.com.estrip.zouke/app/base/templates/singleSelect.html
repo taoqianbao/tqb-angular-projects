@@ -1,0 +1,11 @@
+<!-- 用于代替常规的select控件，实现单选 -->
+<ion-view drag-back view-title="{{title}}" class="single-select">
+    <ion-content scroll="false">
+        <div class="list">
+            <div class="item" ng-repeat="item in list" ng-click="onClick($index)">
+                {{item.name}}
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
+

@@ -1,0 +1,26 @@
+<ion-view view-title="编辑兴趣点（{{nowNode.name}}）" class="journey-poi-edit">
+    <ion-content>
+        <poi-selected-list>
+            <day ng-repeat="d in selectedPoi" ng-init="$dIndex=$index">
+                <ion-list show-reorder="showReorder[$index]">
+                    <ion-item class="item-avatar item-remove-animate" ng-repeat="p in d">
+                        <img ng-src="p.img">
+                        <h2>{{p.name}}</h2>
+                        <p>{{p.price?("&yen;"+p.price):"免费"}},&ensp;{{p.person}}人去过</p>
+                        <ion-option-button class="button-assertive" ng-click="deletePoi(p,$dIndex,$index)">
+                            删除
+                        </ion-option-button>
+                        <ion-reorder-button class="ion-navicon" on-reorder="movePoi(p,$dIndex, $fromIndex, $toIndex)"></ion-reorder-button>
+                    </ion-item>
+                </ion-list>
+                <div class="add" ng-click="reOrder($index)">{{showReorder[$index]?"确定":"重新排序"}}</div>
+                <div class="add" ng-click="addPoi($index)">+&ensp;添加兴趣点</div>
+            </day>
+        </poi-selected-list>
+    </ion-content>
+    <ion-footer-bar ng-click="select.hotelDone()" class="bg-assertive">
+        <div class="title">确定</div>
+    </ion-footer-bar>
+</ion-view>
+
+

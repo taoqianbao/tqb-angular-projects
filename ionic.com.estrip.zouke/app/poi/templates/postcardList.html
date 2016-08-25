@@ -1,0 +1,22 @@
+<ion-view drag-back view-title="明信片墙" class="postcard-list">
+    <!--load-modal="startModal.html"-->
+    <!--modal-name="modalPostcard"-->
+    <!--modal-slide-direction="up"-->
+    <!--modal-drag-hide="modalPostcard">-->
+
+    <ion-content header-shrink>
+        <div class="card-list">
+            <div class="card-item" ng-repeat="card in postcards" ng-click="onClickPostcard($index)"
+                 ng-style="{backgroundImage: 'url('+card.img+imgSizeCardThumb+')', 'padding-top': thumbPaddingTop}">
+            </div>
+        </div>
+    </ion-content>
+
+    <div class="bottom-plus-button">
+        <span>
+            <i class="icon ion-ios-plus-empty" ng-click="addPostcard()"></i>
+        </span>
+    </div>
+
+</ion-view>
+

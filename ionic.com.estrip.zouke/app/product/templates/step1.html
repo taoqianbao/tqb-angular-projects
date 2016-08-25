@@ -1,0 +1,257 @@
+<ion-view drag-back view-title="{{title}}" class="step1">
+    <ion-content class="has-footer">
+        <form name="select" role="list" class="list" novalidate  ng-submit="select.$valid&&nextStep()">
+            <!--日历-->
+            <div ng-if="orderData.hasCalendar()">
+                <div role="listitem" class="item item-icon-left item-divider item-borderless">
+                    <i class="icon ion-ios-calendar-outline"></i>{{orderData.isAirport()? (orderData.method==="0"?"接机":"送机") :"游玩"}}日期<span ng-if="orderData.isAirport()" class="assertive">（当地时间）</span>
+                </div>
+                <div role="listitem" class="item"><datepicker ng-model="orderData.calendarModel"></datepicker></div>
+            </div>
+            <!--套餐选择-->
+            <div ng-if="orderData.hasPackage()">
+                <div role="listitem" class="item item-icon-left item-divider">
+                    <i class="icon ion-grid"></i>产品套餐
+                </div>
+                <div role="listitem" class="item">
+                    <div ng-repeat="(key,value) in orderData.packageInfos" class="item item-checkbox"><label class="checkbox"><input type="radio" name="package" ng-value="key" ng-model="orderData.packageSelected"></label>{{value.set_name}}</div>
+                </div>
+            </div>
+            <!--出行时间/就餐时间-->
+            <div ng-if="orderData.hasTime()">
+                <div role="itemlist" class="item item-icon-left item-divider">
+                    <i class="icon ion-ios-time-outline"></i>{{orderData.isMQL()?'就餐时间（当地时间）':"出行时间"}}
+                </div>
+                <div role="listitem" class="item">
+                    <div ng-repeat="(key,value) in orderData.timeInfos" class="item item-checkbox"><label class="checkbox"><input type="radio" name="time" ng-value="key" ng-model="orderData.timeSelected"></label>{{value}}</div>
+                </div>
+            </div>
+            <!--签证:常住地点-->
+            <div ng-if="orderData.isVisa()">
+                <div role="listitem" class="item item-icon-left item-divider">
+                    <i class="icon ion-ios-location-outline"></i>常住地
+                </div>
+                <div class="item">省（市）
+                    <input name="address" ng-model="orderData.address" required type="text">
+                    <div class="form-errors"
+                         ng-show="select['address'].$error && (select['address'].$touched || select.$submitted)"
+                         ng-messages="select['address'].$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                </div>
+            </div>
+            <!--出行人数-->
+            <div ng-if="orderData.hasPerson()">
+                <div role="listitem" class="item item-icon-left item-divider">
+                    <i class="icon ion-ios-people-outline"></i>出行人数&ensp;(&ensp;{{orderData.getMin()}}&ensp;-&ensp;{{orderData.getMax()}}&ensp;人&ensp;)
+                </div>
+                <div role="listitem" class="item order-number">
+                    <div>成人&ensp;(&ensp;&yen;{{ orderData.getPerPrice('personA')+orderData.getPackageOffset()}}/人&ensp;)
+                        <div>
+                            <span ng-click="orderData.changeNumber('personA',-1)" ng-class="{enabled:orderData.subAble('personA')}"></span>
+                            <input ng-blur="orderData.revertShadow('personA')" type="number" ng-model="orderData.personA" >
+                            <span ng-click="orderData.changeNumber('personA',1)" ng-class="{enabled:orderData.addAble('personA')}"></span>
+                        </div>
+                    </div>
+                    <div ng-if="orderData.getPerPrice('personC')>0">儿童&ensp;(&ensp;{{orderData.calendarInfos[orderData.dateSelected].range_c}}岁&ensp;&yen;{{orderData.getPerPrice('personC')+orderData.getPackageOffset()}}/人&ensp;)
+                        <div>
+                            <span ng-click="orderData.changeNumber('personC',-1)" ng-class="{enabled:orderData.subAble('personC')}"></span>
+                            <input ng-blur="orderData.revertShadow('personC')" type="number" ng-model="orderData.personC" >
+                            <span ng-click="orderData.changeNumber('personC',1)" ng-class="{enabled:orderData.addAble('personC')}"></span>
+                        </div>
+                    </div>
+                    <div ng-if="orderData.getPerPrice('personT')>0">青少年&ensp;(&ensp;{{orderData.calendarInfos[orderData.dateSelected].range_t}}岁&ensp;&yen;{{orderData.getPerPrice('personT')+orderData.getPackageOffset()}}/人&ensp;)
+                        <div>
+                            <span ng-click="orderData.changeNumber('personT',-1)" ng-class="{enabled:orderData.subAble('personT')}"></span>
+                            <input ng-blur="orderData.revertShadow('personT')" type="number" ng-model="orderData.personT" >
+                            <span ng-click="orderData.changeNumber('personT',1)" ng-class="{enabled:orderData.addAble('personT')}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--就餐人数-->
+            <div ng-if="orderData.hasRperson()">
+                <div role="listitem" class="item item-icon-left item-divider">
+                    <i class="icon ion-ios-people-outline"></i>就餐人数
+                </div>
+                <div role="listitem" class="item">
+                    <div ng-repeat="p in orderData.rpersonInfos" class="item item-checkbox"><label class="checkbox"><input type="radio" name="package" ng-value="p" ng-model="orderData.rperson" ></label>{{p}}人</div>
+                </div>
+            </div>
+            <!--使用天数(wifi)-->
+            <div ng-if="orderData.isWifi()">
+                <div role="listitem" class="item item-icon-left item-divider">
+                    <i class="icon ion-ios-people-outline"></i>租用天数
+                </div>
+                <div role="listitem" class="item order-number">
+                    <div class="item">预约天数&ensp;(&ensp;&yen;{{orderData.getPerPrice("gDays")+orderData.getPackageOffset()}}/天&ensp;)
+                        <div>
+                            <span ng-click="orderData.changeNumber('gDays',-1)" ng-class="{enabled:orderData.subAble('gDays')}"></span>
+                            <input ng-blur="orderData.revertShadow('gDays')" type="number" ng-model="orderData.gDays" >
+                            <span ng-click="orderData.changeNumber('gDays',1)" ng-class="{enabled:orderData.addAble('gDays')}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--领取地点(wifi)-->
+            <div ng-if="orderData.isWifi()">
+                <div role="listitem" class="item item-icon-left item-divider">
+                    <i class="icon ion-ios-location-outline"></i>领取地点
+                </div>
+                <div role="listitem" class="item">
+                    <div ng-repeat="(key,value) in orderData.pointInfos" class="item item-checkbox"><label class="checkbox"><input type="radio" name="point" ng-value="key" ng-model="orderData.pointSelected"></label>{{value.name}}</div>
+                </div>
+            </div>
+            <!--预约导游-->
+            <div ng-if="orderData.isGuide()">
+                <div role="listitem" class="item item-icon-left item-divider">
+                    <i class="icon ion-ios-people-outline"></i>导游需求
+                </div>
+                <div role="listitem" class="item order-number">
+                    <div class="item">预约天数&ensp;(&ensp;&yen;{{orderData.getPerPrice("gDays")+orderData.getPackageOffset()}}/天&ensp;)
+                        <div>
+                            <span ng-click="orderData.changeNumber('gDays',-1)" ng-class="{enabled:orderData.subAble('gDays')}"></span>
+                            <input ng-blur="orderData.revertShadow('gDays')" type="number" ng-model="orderData.gDays" >
+                            <span ng-click="orderData.changeNumber('gDays',1)" ng-class="{enabled:orderData.addAble('gDays')}"></span>
+                        </div>
+                    </div>
+                    <div class="item">出游人数
+                        <div>
+                            <span ng-click="orderData.changeNumber('gPerson',-1)" ng-class="{enabled:orderData.subAble('gPerson')}"></span>
+                            <input ng-blur="orderData.revertShadow('gPerson')" type="number" ng-model="orderData.gPerson" >
+                            <span ng-click="orderData.changeNumber('gPerson',1)" ng-class="{enabled:orderData.addAble('gPerson')}"></span>
+                        </div>
+                    </div>
+                    <div class="item">会合地址
+                        <input name="address" ng-model="orderData.address" required type="text">
+                        <div class="form-errors"
+                             ng-show="select['address'].$error && (select['address'].$touched || select.$submitted)"
+                             ng-messages="select['address'].$error"
+                             ng-messages-include="app/common/templates/form-errors.html">
+                        </div>
+                    </div>
+                    <div class="small assertive button-small"><i class="icon ion-alert-circled assertive"></i>&ensp;押金仅作为双方保障，奖在服务完成后退还</div>
+                </div>
+            </div>
+            <!--定制-->
+            <div ng-if="orderData.isPersonal()">
+                <div role="listitem" class="item item-icon-left item-divider">
+                    <i class="icon ion-ios-settings"></i>定制信息
+                </div>
+                <div role="listitem" class="item order-number">
+                    <div class="item">旅行天数
+                        <div>
+                            <span ng-click="orderData.changeNumber('gDays',-1)" ng-class="{enabled:orderData.subAble('gDays')}"></span>
+                            <input ng-blur="orderData.revertShadow('gDays')" type="number" ng-model="orderData.gDays" >
+                            <span ng-click="orderData.changeNumber('gDays',1)" ng-class="{enabled:orderData.addAble('gDays')}"></span>
+                        </div>
+                    </div>
+                    <div class="item">成人
+                        <div>
+                            <span ng-click="orderData.changeNumber('personA',-1)" ng-class="{enabled:orderData.subAble('personA')}"></span>
+                            <input ng-blur="orderData.revertShadow('personA')" type="number" ng-model="orderData.personA" >
+                            <span ng-click="orderData.changeNumber('personA',1)" ng-class="{enabled:orderData.addAble('personA')}"></span>
+                        </div>
+                    </div>
+                    <div class="item">儿童
+                        <div>
+                            <span ng-click="orderData.changeNumber('personC',-1)" ng-class="{enabled:orderData.subAble('personC')}"></span>
+                            <input ng-blur="orderData.revertShadow('personC')" type="number" ng-model="orderData.personC" >
+                            <span ng-click="orderData.changeNumber('personC',1)" ng-class="{enabled:orderData.addAble('personC')}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div role="listitem" class="item item-icon-left item-divider">
+                    <i class="icon ion-ios-calculator-outline"></i>预算（/人）
+                </div>
+                <div role="listitem" class="item">
+                    <div class="item item-checkbox"><label class="checkbox"><input type="radio" name="budget" value="0" ng-model="orderData.budget"></label>2-5万</div>
+                    <div class="item item-checkbox"><label class="checkbox"><input type="radio" name="budget" value="1" ng-model="orderData.budget"></label>5-8万</div>
+                    <div class="item item-checkbox"><label class="checkbox"><input type="radio" name="budget" value="2" ng-model="orderData.budget"></label>8万以上</div>
+                </div>
+
+                <div role="listitem" class="item item-icon-left item-divider">
+                    <i class="icon ion-ios-calculator-outline"></i>备注
+                </div>
+                <div role="listitem" class="item">
+                    <textarea  ng-model="orderData.remark" placeholder="您想去的地方，或者您对本次旅行的特殊期待"></textarea>
+                </div>
+            </div>
+
+            <!--接送机-->
+            <div ng-if="orderData.isAirport()">
+                <div role="listitem" class="item item-icon-left item-divider">
+                    <i class="icon ion-arrow-swap"></i>服务类型
+                </div>
+                <div role="listitem" class="item">
+                    <div class="item item-checkbox"><label class="checkbox"><input type="radio" name="method" value="0" ng-model="orderData.method"></label>接机</div>
+                    <div class="item item-checkbox"><label class="checkbox"><input type="radio" name="method" value="1" ng-model="orderData.method"></label>送机</div>
+                </div>
+
+                <div ng-if="orderData.method==='1'" role="listitem" class="item item-icon-left item-divider">
+                    <i class="icon ion-paper-airplane"></i>送达机场
+                </div>
+                <div ng-if="orderData.method==='1'" role="listitem" class="item">
+                    <div ng-repeat="(key,value) in orderData.airportInfos" class="item item-checkbox"><label class="checkbox"><input type="radio" name="airport" ng-value="key" ng-model="orderData.airportSelected"></label>{{value}}</div>
+                </div>
+
+                <div role="listitem" class="item item-icon-left item-divider">
+                    <i class="icon ion-grid"></i>{{orderData.method==="0"?"接机":"送机"}}选项
+                </div>
+
+                <div ng-if="orderData.method==='0'" role="listitem" class="item"><!--航班号-->
+                    航班号
+                    <input name="flight" ng-model="orderData.flight" required type="text">
+                    <div class="form-errors"
+                         ng-show="select['flight'].$error && (select['flight'].$touched || select.$submitted)"
+                         ng-messages="select['flight'].$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                </div>
+                <div ng-if="orderData.method==='1'" role="listitem" class="item">
+                    送机时间<span class="assertive">（当地时间）</span>
+                    <input name="aTime" ng-model="orderData.aTime" required type="time">
+                    <div class="form-errors"
+                         ng-show="select['aTime'].$error && (select['aTime'].$touched || select.$submitted)"
+                         ng-messages="select['aTime'].$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                </div>
+                <div role="listitem" class="item order-number">
+                    <div>乘客人数
+                        <div>
+                            <span ng-click="orderData.changeNumber('gPerson',-1)" ng-class="{enabled:orderData.subAble('gPerson')}"></span>
+                            <input ng-blur="orderData.revertShadow('gPerson')" type="number" ng-model="orderData.gPerson" >
+                            <span ng-click="orderData.changeNumber('gPerson',1)" ng-class="{enabled:orderData.addAble('gPerson')}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div role="listitem" class="item">
+                    {{orderData.method==="0"?"送达":"出发"}}地址
+                    <input name="address" ng-model="orderData.address" required type="text">
+                    <div class="form-errors"
+                         ng-show="select['address'].$error && (select['address'].$touched || select.$submitted)"
+                         ng-messages="select['address'].$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                </div>
+            </div>
+            <!--submit: check and next step-->
+            <input type="submit" id="selectedSubmit" hidden />
+        </form>
+    </ion-content>
+
+    <div keyboard-attach role="banner" class="bar bar-footer">
+        <a class="tab-item">
+            <div ng-if="orderData.hasPrice()">
+                <span style="color:#3EB8B2;font-size:1.2em">{{orderData.isGuide()?"押金":"共" }}&ensp;&yen;{{orderData.getPrice()}}</span>
+                <span ng-if="!orderData.isGuide()" style="color:#777;font-size:0.8em;">省&yen;{{orderData.getSave()}}</span>
+            </div>
+            <div ng-if="!orderData.hasPrice()">
+                <span style="color:#3eb8b2">{{orderData.isPersonal()?"尊享定制":"免费预约"}}</span>
+            </div>
+        </a>
+        <button linked="selectedSubmit" class="button button-round icon-right button-assertive ion-ios-arrow-right">下一步</button>
+    </div>
+</ion-view>

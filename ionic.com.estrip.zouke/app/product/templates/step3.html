@@ -1,0 +1,200 @@
+<ion-view drag-back view-title="{{title}}" class="step3">
+    <ion-content ng-init="orderData.budgetValue=['2-5万','5-8万','8万以上']" ng-class="{'has-footer':[0,1,3].indexOf(orderData.status)>-1}">
+        <div role="list" class="list">
+            <!--产品信息-->
+            <div class="item item-divider item-stable item-borderless balanced">{{orderData.pName}}</div>
+            <div ng-if="orderData.statusText" class="item">
+                状态
+                <span class="item-note dark">{{orderData.statusText}}</span>
+            </div>
+            <div ng-if="orderData.hasPackage()" class="item">
+                套餐
+                <span class="item-note dark">{{orderData.packageInfos[orderData.packageSelected].set_name}}</span>
+            </div>
+            <div ng-if="orderData.hasPrice()" class="item">
+                {{orderData.isGuide()?"押金":"金额"}}
+                <span class="item-note dark">&yen;{{orderData.getPrice()}}&emsp;{{orderData.isGuide()?"":"省&yen;"+orderData.getSave()}}</span>
+            </div>
+            <div ng-if="orderData.isGuide()" class="small assertive button-small"><i
+                    class="icon ion-alert-circled assertive"></i>&ensp;押金仅作为双方保障，奖在服务完成后退还
+            </div>
+            <div ng-if="orderData.isWifi()">
+                <div class="item">
+                    领取地点<span class="item-note dark">{{orderData.pointInfos[orderData.pointSelected].name}}</span>
+                </div>
+                <div class="item">
+                    领取位置<span class="item-note dark">{{orderData.pointInfos[orderData.pointSelected].point}}</span>
+                </div>
+                <div class="small assertive button-small">{{orderData.pointInfos[orderData.pointSelected].mp_remark}}
+                </div>
+            </div>
+            <!--导游-->
+            <div ng-if="orderData.isGuide()">
+                <div class="item item-divider item-stable balanced">导游需求</div>
+                <div class="item">
+                    预约天数<span class="item-note dark">{{orderData.gDays}}</span>
+                </div>
+                <div class="item">出游人数<span class="item-note dark">{{orderData.gPerson}}</span></div>
+                <div class="item">会合地址<span class="item-note dark">{{orderData.address}}</span></div>
+            </div>
+            <!--接送机-->
+            <div ng-if="orderData.isAirport()">
+                <div class="item item-divider item-stable balanced">{{orderData.method==="0"?"接机信息":"送机信息"}}</div>
+                <div ng-if="orderData.method==='0'" class="item">
+                    航班号
+                    <span class="item-note dark">{{orderData.flight}}</span>
+                </div>
+                <div class="item">
+                    {{orderData.method==="0"?"接机":"送机"}}日期<span class="assertive">（当地时间）</span>
+                    <span class="item-note dark">{{orderData.dateSelected}}</span>
+                </div>
+                <div ng-if="orderData.method==='1'" class="item">
+                    送机时间<span class="assertive">（当地时间）</span>
+                    <span class="item-note dark">{{orderData.aTime|date:"HH:MM"}}</span>
+                </div>
+                <div ng-if="orderData.method==='1'" class="item">
+                    送达机场
+                    <span class="item-note dark">{{orderData.airportInfos[orderData.airportSelected]}}</span>
+                </div>
+                <div class="item">
+                    乘客人数
+                    <span class="item-note dark">{{orderData.gPerson}}</span>
+                </div>
+                <div class="item">
+                    {{orderData.method==="0"?"送达":"出发"}}地址
+                    <span class="item-note dark">{{orderData.address}}</span>
+                </div>
+            </div>
+            <!--就餐信息-->
+            <div ng-if="orderData.isMQL()">
+                <div class="item item-divider item-stable balanced">就餐信息</div>
+                <div class="item">
+                    就餐日期
+                    <span class="item-note dark">{{orderData.dateSelected}}<span class="assertive">(当地时间)</span></span>
+                </div>
+                <div class="item">
+                    就餐时间
+                    <span class="item-note dark">{{orderData.timeInfos[orderData.timeSelected]}}<span class="assertive">(当地时间)</span></span>
+                </div>
+                <div class="item">
+                    就餐人数
+                    <span class="item-note dark">{{orderData.rperson}}</span>
+                </div>
+            </div>
+            <!--出行信息-->
+            <div ng-if="orderData.hasPerson()">
+                <div class="item item-divider item-stable balanced">出行信息</div>
+                <div class="item">
+                    出行人
+                    <span class="item-note dark">{{getAllNames()}}</span>
+                </div>
+                <div class="item">
+                    出行日期
+                    <span class="item-note dark">{{orderData.dateSelected}}<span class="assertive">(当地时间)</span></span>
+                </div>
+                <div ng-if="orderData.hasTime()" class="item">
+                    出行时间
+                    <span class="item-note dark">{{orderData.timeInfos[orderData.timeSelected]}}<span class="assertive">(当地时间)</span></span>
+                </div>
+                <div class="item">
+                    人数
+                    <span class="item-note dark">{{orderData.personA+"成人"}}{{orderData.personC>0?"&emsp;"+orderData.personC+"儿童":""}}{{orderData.personT>0?"&emsp;"+orderData.personT+"青少年":""}}</span>
+                </div>
+            </div>
+            <!--定制信息-->
+            <div ng-if="orderData.isPersonal()">
+                <div class="item item-divider item-stable balanced">定制信息</div>
+                <div class="item">
+                    出行时间
+                    <span class="item-note dark">{{orderData.dateSelected}}<span class="assertive">(当地时间)</span></span>
+                </div>
+                <div class="item">
+                    旅行天数
+                    <span class="item-note dark">{{orderData.gDays}}</span>
+                </div>
+                <div class="item">
+                    人数
+                    <span class="item-note dark">{{orderData.personA+"成人"}}{{orderData.personC>0?"&emsp;"+orderData.personC+"儿童":""}}</span>
+                </div>
+                <div class="item">
+                    备注
+                    <span class="item-note dark">{{orderData.remark||"无"}}</span>
+                </div>
+                <div class="item">预算<span class="item-note dark">{{orderData.budgetValue[orderData.budget]}}</span>
+                </div>
+            </div>
+            <!--联系人-->
+            <div class="item item-divider item-stable balanced">{{orderData.isMQL()||orderData.isGuide() ?"预约人":"联系人"}}
+            </div>
+            <div class="item">
+                姓名
+                <span class="item-note dark">{{orderData.contactInfo.name}}</span>
+            </div>
+            <div class="item">
+                手机
+                <span class="item-note dark">{{orderData.contactInfo.mobile}}</span>
+            </div>
+            <div class="item">
+                邮箱
+                <span class="item-note dark">{{orderData.contactInfo.email}}</span>
+            </div>
+            <!--说明-->
+            <div ng-if="orderData.refund">
+                <div class="item item-divider item-stable balanced">说明</div>
+                <div class="item">
+                    <p ng-repeat="r in orderData.refund" style="white-space:normal;">{{r}}</p><br>
+                </div>
+            </div>
+            <!--优惠活动-->
+            <div ng-if="orderData.status===0">
+                <div class="item item-divider item-stable balanced">优惠活动</div>
+                <div class="item">
+                    <div class="item-input-inset" style="padding:0;">
+                        <label class="item-input-wrapper"><input type="text" ng-model="orderData.code"
+                                                                 placeholder="输入优惠码"></label>
+                        <button ng-click="checkCode()"
+                                ng-class="{'ion-checkmark-round':codecorrent===true,'ion-close-round':codecorrent===false, 'button-balanced':codecorrent===true||codecorrent==undefined,'button-assertive':codecorrent===false}"
+                                class="button button-clear ion-left">&ensp;查询
+                        </button>
+                    </div>
+                    <div ng-if="codecorrent===false" class="assertive center">{{errormessage}}</div>
+                </div>
+            </div>
+
+            <!--支付选项-->
+            <div ng-if="orderData.hasPrice()&&(orderData.status===0||orderData.status===1)">
+                <div class="item item-divider item-stable balanced">支付选项</div>
+                <div class="item item-checkbox">
+                    <label class="checkbox">
+                        <input name="pay" ng-model="orderData.payType" value="weix" type="radio">
+                    </label>微信支付
+                </div>
+                <div class="item item-checkbox">
+                    <label class="checkbox">
+                        <input name="pay" ng-model="orderData.payType" value="ali" type="radio">
+                    </label>支付宝
+                </div>
+            </div>
+
+            <div ng-if="orderData.hasPrice()&&orderData.status===0" ng-click="save()"
+                 class="button button-block button-outline button-small button-balanced" style="margin:30px 50px 10px;">
+                保存订单
+            </div>
+
+            <div class="item bg-trans">
+                <p style="text-align:center;font-size:0.8em;" class="balanced">若需帮助，请致电&emsp;
+                    <a href="tel:400-850-2259" class="balanced">
+                        <i class="icon ion-ios-telephone-outline balanced"></i>&ensp;400-850-2259
+                    </a>
+                </p>
+            </div>
+        </div>
+    </ion-content>
+
+    <ion-footer-bar ng-if="[0,1,3].indexOf(orderData.status)>-1" ng-click="submit();" role="banner" class="bar-balanced" ng-class="{'bg-assertive':orderData.status==1}" ng-switch="orderData.status">
+        <div ng-switch-when="0" class="title">提交订单{{orderData.hasPrice()?"并付款":""}}</div>
+        <div ng-switch-when="1" class="title">支付</div>
+        <div ng-switch-when="3" class="title">评价</div>
+        <!--<div ng-switch-default class="title">{{orderData.statusText}}</div>-->
+    </ion-footer-bar>
+</ion-view>

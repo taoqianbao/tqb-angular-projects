@@ -1,0 +1,38 @@
+<ion-view drag-back view-title="选择城市" class="city-select">
+    <ion-content delegate-handle="city-select">
+
+        <div class="list hot">
+            <div class="item item-divider" ion-affix data-affix-within-parent-with-class="list">热门城市</div>
+
+            <div class="item item-text-wrap"
+                 ng-repeat="city in cities.hot" ng-click="onClickCity(city.en_name, city.zh_name)">
+                {{city.zh_name}}
+            </div>
+        </div>
+
+        <div class="list">
+            <div class="item item-divider" ion-affix data-affix-within-parent-with-class="list">所有国家</div>
+
+            <div ng-repeat="item in cities.country" ng-init="index = $index">
+
+                <div class="item item-text-wrap"
+                     ng-click="toggleGroup(index)"
+                     ng-class="{active: isGroupShown(index)}">
+                    {{item.name}}
+                    <span class="more">
+                        <i class="icon" ng-class="isGroupShown(index) ? 'ion-ios-arrow-up' : 'ion-ios-arrow-down'"></i>
+                    </span>
+                </div>
+
+                <div class="item item-text-wrap item-accordion city"
+                     ng-repeat="city in item.cities"
+                     ng-show="isGroupShown(index)"
+                     ng-click="onClickCity(city.en_name, city.zh_name)">
+                    {{city.zh_name}}
+                </div>
+            </div>
+
+        </div>
+
+    </ion-content>
+</ion-view>

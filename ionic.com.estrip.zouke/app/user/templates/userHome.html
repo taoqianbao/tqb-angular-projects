@@ -1,0 +1,182 @@
+<ion-view drag-back class="user user-home"
+          load-modal="modal.url"
+          modal-name="modal.name"
+          modal-slide-direction="modal.direction"
+          modal-remove-leave="modal.removeLeave"
+          modal-drag-hide="modal.dragHide"
+          modal-blur-view="modal.blurView">
+
+    <ion-nav-title>欧客秀
+        <!--<i ng-show="!userCardHidden">走客秀</i>-->
+        <!--<img class="avatar" ng-src="{{userAvatar}}" ng-if="userCardHidden">-->
+        <!--<i ng-if="userCardHidden" ng-bind="userName"></i>-->
+    </ion-nav-title>
+
+    <ion-content scroll="false">
+        <push-up push-height="120" scroll-handle="scrollHandle">
+            <div class="user-info list card">
+                <div class="item item-avatar">
+                    <img ng-src="{{userAvatar}}">
+
+                    <h2>{{userName}}
+                        <!--<span>lv8</span>-->
+                    </h2>
+
+                    <p><span ng-repeat="tag in userTags">{{tag}}</span></p>
+
+                    <p class="brief">{{userBrief}}</p>
+                    <!--<button ng-click="sendMessage.show()" class="button">发私信</button>-->
+                </div>
+                <div class="item tabs tabs-secondary">
+                    <!--<a class="tab-item" ng-class="{'active': activeSlide==0}" ng-click="onClickSwitch(0)">-->
+                    <!--动态-->
+                    <!--</a>-->
+                    <a class="tab-item" ng-class="{'active': activeSlide==0}" ng-click="onClickSwitch(0)">
+                        行程
+                    </a>
+                    <a class="tab-item" ng-class="{'active': activeSlide==1}" ng-click="onClickSwitch(1)">
+                        地点
+                    </a>
+                    <a class="tab-item" ng-class="{'active': activeSlide==2}" ng-click="onClickSwitch(2)">
+                        故事
+                    </a>
+                </div>
+            </div>
+
+            <ion-slide-box ignore-bouncing prevent-event
+                           on-slide-changed="onSlideChanged($index)"
+                           delegate-handle="user-home"
+                           show-pager="false">
+                <!-- 动态 -->
+                <!--<ion-slide>-->
+                <!--<ion-scroll has-bouncing="false" delegate-handle="activity">-->
+
+                <!--</ion-scroll>-->
+                <!--</ion-slide>-->
+
+                <!-- 行程 -->
+                <ion-slide>
+                    <ion-scroll has-bouncing="false" delegate-handle="journey">
+                        <div class="list card card-journey"
+                             ng-repeat="journey in result.journey track by journey.id"
+                             ng-click="onClickJourney($index, journey.id)">
+                            <div class="item">
+                                <h2>{{journey.name}}</h2>
+
+                                <p>{{journey.total_day}}天 {{journey.city_num}}城市</p>
+
+                                <!--<span class="flag">{{journey.flag}}</span>-->
+                            </div>
+
+                            <div class="item item-image">
+                                <img class="full-image" ng-src="{{journey.img+imgSizeJourney}}"
+                                     ng-style="{height: hImgJourney}">
+                            </div>
+
+                            <div class="item tabs-action tabs tabs-secondary">
+                                <a class="tab-item" click-share="journey" share-object="journey">
+                                    <span class="action-bar share">
+                                        <i class="icon ic ic-share-grey"></i>
+                                    </span>
+                                </a>
+                                <a class="tab-item">
+                                </a>
+                                <a class="tab-item" ng-click="onClickLikeJourney($event, $index)">
+                                    <span class="action-bar like">
+                                        <i class="icon ic ic-like-grey"
+                                           ng-class="{'ic-like-grey': !user.isSigned||!journey.is_liked, 'ic-liked': user.isSigned&&journey.is_liked}"></i>
+                                        <span>{{journey.like_num}}</span>
+                                    </span>
+                                </a>
+                                <a class="tab-item" ng-click="onClickJourneyComments($event, $index)">
+                                    <span class="action-bar comment">
+                                        <i class="icon ic ic-comment-grey"></i>
+                                        <span>{{journey.comment_num}}</span>
+                                        <!--<span class="badge badge-balanced">{{journey.comments.num}}</span>-->
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <ion-infinite-scroll
+                                on-infinite="loadMore('journey',page.journey)"
+                                ng-show="httpRequesting && hasMore.journey"
+                                spinner="spiral"
+                                immediate-check="false"
+                                distance="20%">
+                        </ion-infinite-scroll>
+
+                    </ion-scroll>
+                </ion-slide>
+
+                <!-- 兴趣点 -->
+                <ion-slide>
+                    <ion-scroll has-bouncing="false" delegate-handle="poi">
+                        <div class="list list-poi list-borderless">
+                            <a class="item item-thumbnail-left item-poi"
+                               collection-repeat="poi in result.poi track by poi.id"
+                               ng-click="onClickPoi($index, poi.id, poi.name)">
+                                <img ng-src="{{poi.img?poi.img+imgSizeThumb:hostImg+'/app/poi/default-thumb.jpg'+imgSizeThumb}}">
+
+                                <h3>{{poi.name}}</h3>
+
+                                <p class="has-ic"><i class="ic ic-location-fill-grey"></i>{{poi.city}}</p>
+
+                                <span class="badge">{{poi.story_num}}</span>
+                                <span class="more">
+                                    <i class="icon ion-ios-arrow-right"></i>
+                                </span>
+                            </a>
+                        </div>
+
+                        <ion-infinite-scroll
+                                on-infinite="loadMore('poi',page.poi)"
+                                ng-show="httpRequesting && hasMore.poi"
+                                spinner="spiral"
+                                immediate-check="false"
+                                distance="20%">
+                        </ion-infinite-scroll>
+
+                    </ion-scroll>
+                </ion-slide>
+
+                <!-- 故事 -->
+                <ion-slide>
+                    <ion-scroll has-bouncing="false" delegate-handle="story">
+                        <div class="list list-borderless bottom-0"
+                             ng-repeat="item in result.story track by item.id"
+                             ng-init="pIndex=$index">
+                            <p class="poi-title" ng-click="onClickPoi($index, item.id, item.name)">
+                                <i class="ic ic-location-fill"></i>{{item.city}}&nbsp;&nbsp;{{item.name}}
+                                <span class="more">
+                                    <i class="icon ion-ios-arrow-right"></i>
+                                </span>
+                            </p>
+                            <a class="item item-thumbnail-left item-story2"
+                               ng-repeat="story in item.storys track by story.id"
+                               ng-click="onClickStory(story.id)">
+                                <img ng-src="{{story.img + imgSizeThumb}}"/>
+
+                                <h1>{{story.tag}}</h1>
+
+                                <h2>{{story.name}}</h2>
+
+                                <p>by {{story.user}}</p>
+                            </a>
+                        </div>
+
+                        <ion-infinite-scroll
+                                on-infinite="loadMore('story',page.story)"
+                                ng-show="httpRequesting && hasMore.story"
+                                spinner="spiral"
+                                immediate-check="false"
+                                distance="20%">
+                        </ion-infinite-scroll>
+
+                    </ion-scroll>
+                </ion-slide>
+
+            </ion-slide-box>
+        </push-up>
+    </ion-content>
+</ion-view>

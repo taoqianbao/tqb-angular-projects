@@ -1,0 +1,1 @@
+angular.module("app.common.viewdragback", ["app.common.viewdragback.directive"])

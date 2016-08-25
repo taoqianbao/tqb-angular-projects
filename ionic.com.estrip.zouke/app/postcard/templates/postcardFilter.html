@@ -1,0 +1,103 @@
+<ion-view hide-nav-bar="true" hide-back-button="true" class="postcard-filter">
+    <div ng-show="prepublish" class="publish-bar flex">
+        <span ng-click="stopPublish();$event.stopPropagation()"><i class="ic ic-return-white"></i>&ensp;返回</span>
+        <span ng-click="toggleOpen()" class="main"><img ng-src="img/icon-new/postcard/{{saveInfo.allow_open?'un':''}}lock.png">&ensp;仅自己可见</span>
+        <span ng-click="publish()">发布</span>
+    </div>
+    <ion-content ng-class="{'publish':prepublish}" has-bouncing="false" scrollbar-y="false" ng-click="closeOperator()" on-swipe-left="$event.stopPropagation()">
+        <div ng-click="stopPublish()" ng-if="clipNow&&prepublish" class="publish-mask"></div>
+        <div ng-if="!clipNow" class="filter-operator flex">
+            <div class="save" ng-click="save()"></div>
+            <div class="back" ng-click="back(true)"></div>
+        </div>
+        <div class="{{template}}">
+            <div class="imageContainer">
+                <div ng-if="hasStamp" class="stamp"><img ng-click="stampOperator($event)" ng-src="img/icon-new/postcard/stamp/stamp.png">
+                    <div ng-if="!clipNow" class="stamp-operator flex full" ng-show="showStampOperator" ng-click="$event.stopPropagation()">
+                        <div class="main" ng-click="stampOP.remove()">删除</div>
+                    </div>
+                </div>
+                <datetime ng-click="selectDate()" ng-init="monthMap=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec']">
+                    <span>{{date.getDate()}}</span>
+                    <span>{{monthMap[date.getMonth()]}}</span>
+                    <span>{{date.getFullYear()}}</span>
+                </datetime>
+                <address ng-click="selectAddress()" ng-class="{'clip':clipNow}">
+                    <i class="icon ion-ios-location"></i>
+                    &emsp;{{positionInfo.en_name||positionInfo.zh_name||"正在定位..."}}&emsp;
+                    <i class="icon ion-ios-arrow-forward"></i>
+                </address>
+                <canvas ng-class="{backcolor:!clipNow}" width="720" height="{{template=='rome'?720:900}}" style="width:100%" on-drag="$event.stopPropagation()" on-swipe-left="$event.stopPropagation()" ng-click="imageOperator($event ,0)"></canvas>
+                <div ng-if="template==='rome'" class="flex tempImg" ng-class="{'clip':clipNow}">
+                    <div class="main" ng-repeat="src in templateImageList track by $index"><img ng-click="imageOP.reSelectImage($index)" class="main" ng-src="{{src}}"></div>
+                </div>
+                <div ng-if="!clipNow" class="image-operator flex full" ng-show="showManageOperator" ng-click="$event.stopPropagation()">
+                    <div class="main flex" ng-click="imageOP.reSelectImage(true)"><!--重选--><img src="img/icon-new/postcard/new.png"></div>
+                    <div class="main flex" ng-click="imageOP.filter()"><!--效果--><img ng-src="img/icon-new/postcard/filter{{panName=='filters'?'-a':''}}.png"></div>
+                    <div class="main flex" ng-click="imageOP.rotate()"><!--旋转--><img src="img/icon-new/postcard/rotate.png"></div>
+                    <!--<div class="main flex" ng-click="imageOP.bigger()">&lt;!&ndash;放大&ndash;&gt;<img src="img/icon-new/postcard/bigger.png"></div>
+                    <div class="main flex" ng-click="imageOP.smaller()">&lt;!&ndash;缩小&ndash;&gt;<img src="img/icon-new/postcard/smaller.png"></div>-->
+                </div>
+            </div>
+        </div>
+        <div class="text flex" ng-click="textOperator($event)">
+            <div ng-if="!clipNow" class="text-operator flex full" ng-show="showTextOperator" ng-click="$event.stopPropagation()">
+                <div class="main" ng-click="textOP.text()" style="{{panName=='text'?'color:#2b4f4e':''}}"><!--文本-->T</div>
+                <!--<div class="main" ng-click="textOP.font()" style="{{panName=='fonts'?'color:#2b4f4e':''}}">&lt;!&ndash;字体&ndash;&gt;A</div>-->
+                <div class="main flex" ng-click="textOP.bigger()"><!--放大--><img src="img/icon-new/postcard/bigger.png"></div>
+                <div class="main flex" ng-click="textOP.smaller()"><!--缩小--><img src="img/icon-new/postcard/smaller.png"></div>
+            </div>
+            <pre class="text-raw" ng-class="{'clip':clipNow}" ng-style="textStyle">{{textString.value||" "}}</pre>
+        </div>
+        <div class="from"><div ng-click="textOP.authorName($event)"><div>from</div><div><span ng-class="{'clip':clipNow}">{{authorString.value||" "}}</span></div></div></div>
+
+
+        <div class="playCon" on-hold="recorderOperator()" ng-show="recorderOP.hasRecordFile&&!recorderOP.isRecording" ng-click="recorderOP.toggle()" ng-class="{play:recorderOP.isPlaying}">
+            <div ng-if="!clipNow" class="recorder-operator flex full" ng-show="showRecorderOperator">
+                <div class="main" ng-click="recorderOP.release()">删除</div>
+            </div>
+            <div ng-if="!clipNow" class="recorder-tip" ng-show="showRecorderTip">长按删除</div>
+            <div class="time">
+                <div>{{recorderOP.getTime()}}</div>
+            </div>
+        </div>
+        <div ng-if="!clipNow&&recorderOP.isRecording" class="showRecording">
+            <img ng-src="img/icon-new/voice/recog00{{random}}.png"><div>{{recorderOP.getTime()}}</div>
+        </div>
+        <div ng-if="!clipNow" class="record" ng-class="{isRecord:recorderOP.isRecording}" ng-show="(!recorderOP.hasRecordFile||recorderOP.isRecording)" ng-click="recorderOP.toggleRecord()">
+            <div></div>
+            <!--<div class="recorder-tip" ng-show="!recorderOP.hasRecordFile&&!recorderOP.isRecording" style="padding-top:0;bottom:100%;">点击录音</div>-->
+        </div>
+
+
+        <div ng-if="!clipNow" class="operator-popup" ng-class="{over:popUpShow}" ng-show="showPan" ng-click="$event.stopPropagation()">
+            <div ng-show="panName==='filters'" class="filter">
+                <ion-scroll direction="x" scrollbar-x="false" scrollbar-y="false" delegate-handle="image-filter" on-drag="$event.stopPropagation()" on-swipe-left="$event.stopPropagation()">
+                    <div><div class="f_sample" ng-click="imageOP.render('')" ng-class="{select:imageOP.filterName===''}">
+                        <img ng-src="img/postcard/sample.jpg">原画
+                    </div>
+                    <div ng-repeat="(name,value) in filterNames" class="f_sample" ng-click="imageOP.render(name)" ng-class="{select:imageOP.filterName===name}">
+                        <img ng-src="img/postcard/sample-{{name}}.jpg">{{value}}
+                    </div></div>
+                </ion-scroll>
+            </div>
+            <div ng-show="panName==='text'" class="text flex full">
+                <div ng-class="{'hide':textOP.pointer==0}" ng-click="textOP.pre()"></div>
+                <div class="main" ng-blur="textareaBlur()" contenteditable ng-model="textString.value"></div>
+                <div ng-click="textOP.next()">
+                </div>
+            </div>
+            <div ng-show="panName==='fonts'" class="font">
+                <ion-scroll direction="x" scrollbar-x="false" scrollbar-y="false" on-drag="$event.stopPropagation()" on-swipe-left="$event.stopPropagation()">
+                    <div ng-repeat="name in fontNames" class="f_sample" ng-click="textOP.setFont(name)" ng-class="{select:textStyle.fontFamily===name}" style="font-family: {{name}}">
+                        欧优游
+                    </div>
+                    <!--<div class="f_sample">更多</div>-->
+                </ion-scroll>
+            </div>
+            <div ng-show="panName==='authorName'" class="authorName flex">
+                <div class="main" ng-blur="textareaBlur()" contenteditable ng-model="authorString.value"></div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

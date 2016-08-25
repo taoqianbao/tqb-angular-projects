@@ -1,0 +1,500 @@
+<ion-modal-view class="user-setting">
+    <ion-content has-bouncing="false" scroll="false">
+        <div class="mask"></div>
+
+        <i class="icon ion-ios-close-empty close" ng-if="settingModal.tranEnd" ng-click="settingModal.close()"></i>
+        <i ng-if="settingModal.hasBack()" class="icon ion-ios-arrow-thin-left layerBack"
+           ng-click="settingModal.back()"></i>
+
+        <modal-layer-list default="settingModal.defaultLayer">
+
+            <modal-layer name="modal.subscribe" class="list push">
+                <div class="item item-divider">
+                    订阅选项
+                </div>
+
+                <div class="item item-checkbox">
+                    <label class="checkbox">
+                        <input type="checkbox">
+                    </label>
+                    特价机票
+                    <span class="more">设置
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+
+                <div class="item item-checkbox">
+                    <label class="checkbox">
+                        <input type="checkbox">
+                    </label>
+                    同路欧客
+                    <span class="more">设置
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+
+                <div class="item item-checkbox">
+                    <label class="checkbox">
+                        <input type="checkbox">
+                    </label>
+                    欧洲动态
+                    <span class="more">设置
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+
+                <div class="item item-checkbox">
+                    <label class="checkbox">
+                        <input type="checkbox">
+                    </label>
+                    最新特惠
+                    <span class="more">设置
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+
+            </modal-layer>
+
+            <modal-layer name="modal.setting" class="list setting">
+                <div class="item item-divider">
+                    设置
+                </div>
+                <div class="item" ng-click="settingModal.clearCache()">
+                    清除缓存
+                    <span class="more">
+                        <!--150m-->
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+                <div class="item" ng-show="user.isSigned" ng-click="settingModal.go('modal.setting.user')">
+                    个人信息
+                    <span class="more">
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+                <div class="item" ng-show="user.isSigned" ng-click="settingModal.go('modal.setting.modify')">
+                    修改密码
+                    <span class="more">
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+                <div class="item" ng-click="settingModal.onClickRate()">
+                    鼓励一下
+                    <span class="more">
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+                <div class="item" ng-click="settingModal.go('modal.setting.aboutus')">
+                    关于我们
+                    <span class="more">
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+                <div class="item" ng-click="settingModal.go('modal.setting.contactus')">
+                    联系我们
+                    <span class="more">
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+                <!--<div class="item" ng-click="settingModal.go('modal.setting.license')">-->
+                <!--用户协议-->
+                <!--<span class="more">-->
+                <!--<i class="icon ion-ios-arrow-right"></i>-->
+                <!--</span>-->
+                <!--</div>-->
+                <button class="button button-full button-small button-stable assertive" ng-show="user.isSigned"
+                        ng-click="settingModal.signOut()">
+                    退出登录
+                </button>
+
+                <button class="button button-full button-small button-stable button-balanced" ng-show="!user.isSigned"
+                        ng-click="settingModal.login()">
+                    登录欧优游
+                </button>
+
+            </modal-layer>
+
+            <modal-layer name="modal.setting.user" class="list">
+                <div class="item item-avatar bg-stable">
+                    <img ng-src="{{user.info.avatar}}">
+
+                    <h2>{{user.info.user_name}}<!--&ensp;<i>lv28</i>--></h2>
+
+                    <!--<p>{{user.info.brief}}</p>-->
+                </div>
+                <div class="item" ng-click="settingModal.go('modal.setting.avatar')">
+                    头像
+                    <span class="more">
+                        上传
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+                <div class="item" ng-click="settingModal.onClickProfile('name')">
+                    用户名
+                    <span class="more">
+                        {{user.info.user_name}}
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+                <div class="item" ng-click="settingModal.onClickProfile('tag')">
+                    标签
+                    <span class="more">
+                        {{user.info.tag.join('/')||'未设置'}}
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+                <div class="item" ng-click="settingModal.onClickProfile('gender')">
+                    性别
+                    <span class="more">
+                        {{ settingModal.genderType[user.info.gender]||'未设置'}}
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+                <div class="item" ng-click="settingModal.onClickProfile('brief')">
+                    简述
+                    <span class="more">
+                        {{user.info.brief?user.info.brief:'未设置'}}
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+                <div class="item" ng-click="settingModal.onClickProfile('contact')">
+                    常用旅客
+                    <span class="more">
+                        <span class="badge bg-grey">{{user.info.contact}}</span>
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </div>
+                <!--<div class="item bg-stable"></div>-->
+                <!--<div class="item bg-trans light item-borderless text-right">用户等级说明</div>-->
+            </modal-layer>
+
+            <modal-layer name="modal.setting.avatar">
+                <div image-clip ng-model="settingModal.avatar" min-width="360" max-width="720"
+                     bind-input=".fileSelector"></div>
+                <button class="button button-small button-balanced" ng-click="settingModal.uploadAvatar()">上传</button>
+                <div class="button button-small button-balanced button-reload"
+                     ng-class="{show:settingModal.avatar.hasImage}">
+                    <input class="fileSelector" type="file">重选图片
+                </div>
+            </modal-layer>
+
+            <modal-layer name="modal.setting.profile">
+                <form name="profile" novalidate
+                      ng-submit="profile.$valid && settingModal.updateProfile(settingModal.profile.cat)"
+                      class="input-set">
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : profile.value.$invalid && (profile.value.$touched || profile.$submitted) }">
+                        <input ime-next="$submit" type="text" name="value" required maxlength="10" focus-me
+                               ng-model="settingModal.profile.data"
+                               ng-if="settingModal.profile.cat!='brief'"
+                               placeholder="{{settingModal.profile.placeholder}}">
+                        <textarea ime-next="$submit" ng-model="settingModal.profile.data" maxlength="30" focus-me
+                                  ng-if="settingModal.profile.cat=='brief'">
+                        </textarea>
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="profile.value.$error && (profile.value.$touched || profile.$submitted)"
+                         ng-messages="profile.value.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                    <input type="submit" id="profile" hidden/>
+                </form>
+
+                <button class="button button-small button-full button-balanced" linked="profile">
+                    确定
+                </button>
+            </modal-layer>
+
+            <!-- 修改密码 -->
+            <modal-layer name="modal.setting.modify">
+                <form name="modify" novalidate
+                      ng-submit="modify.$valid && settingModal.modifyPassword()"
+                      class="input-set">
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : modify.password.$invalid && (modify.password.$touched || modify.$submitted) }">
+                        <input ime-next="modify.psd1" type="password"
+                               name="password" ng-model="settingModal.modifyData.old_password" required focus-me
+                               minlength="6" placeholder="原密码">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="modify.password.$error && (modify.password.$touched || modify.$submitted)"
+                         ng-messages="modify.password.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : modify.password1.$invalid && (modify.password1.$touched || modify.$submitted) }">
+                        <input ime-focus-id="modify.psd1" ime-next="modify.psd2" type="password"
+                               name="password1" ng-model="settingModal.modifyData.new_password" required
+                               minlength="6" placeholder="新密码">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="modify.password1.$error && (modify.password1.$touched || modify.$submitted)"
+                         ng-messages="modify.password1.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+
+                    <label class="item item-input item-last"
+                           ng-class="{ 'has-error' : modify.password2.$invalid && (modify.password2.$touched || modify.$submitted) }">
+                        <input ime-focus-id="modify.psd2" ime-next="$submit" type="password"
+                               name="password2" ng-model="settingModal.modifyData.password2" required
+                               equal-to="settingModal.modifyData.new_password"
+                               minlength="6" placeholder="新密码(重复)">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="modify.password2.$error && (modify.password2.$touched || modify.$submitted)"
+                         ng-messages="modify.password2.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                    <input type="submit" id="modify" hidden/>
+                </form>
+
+                <button class="button button-small button-full button-balanced" linked="modify">
+                    确定
+                </button>
+            </modal-layer>
+
+            <modal-layer name="modal.setting.contacts" class="list">
+                <div class="item item-divider">
+                    常用旅客信息
+                </div>
+                <ion-scroll has-bouncing="false">
+                    <ion-list>
+                        <ion-item ng-repeat="c in settingModal.contacts"
+                                  ng-click="settingModal.modifyContact($index)">
+                            <h2>{{c.name}}</h2>
+
+                            <p>邮箱地址：{{c.email}}</p>
+
+                            <p>电话：{{c.mobile}}</p>
+                            <span class="more">
+                                <i class="icon ion-ios-arrow-right"></i>
+                            </span>
+                            <ion-option-button class="button-assertive"
+                                               ng-click="settingModal.deleteContact($index)">
+                                删除
+                            </ion-option-button>
+                        </ion-item>
+                    </ion-list>
+                </ion-scroll>
+                <button class="button button-small button-full button-balanced" ng-click="settingModal.addContact()">
+                    添加
+                </button>
+            </modal-layer>
+
+            <modal-layer name="modal.setting.mContact" class="list">
+                <div class="item item-divider">
+                    {{settingModal.mContact.opt}}旅客信息
+                </div>
+                <form name="modifyContactForm" novalidate
+                      ng-submit="modifyContactForm.$valid&&settingModal.saveContact()">
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : modifyContactForm.name.$invalid && (modifyContactForm.name.$touched || modifyContactForm.$submitted) }">
+                        <span class="input-label">旅客姓名*</span>
+                        <input ime-next="mContact.passport" type="text" name="name" autocorrect="off" required focus-me
+                               ng-blur="settingModal.genPinyin()" ng-model="settingModal.mContact.name">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="modifyContactForm.name.$error && (modifyContactForm.name.$touched || modifyContactForm.$submitted)"
+                         ng-messages="modifyContactForm.name.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : modifyContactForm.pyname.$invalid && (modifyContactForm.pyname.$touched || modifyContactForm.$submitted) }">
+                        <span class="input-label">旅客拼音*</span>
+                        <input type="text" name="pyname" autocorrect="off" ng-model="settingModal.mContact.pyname"
+                               required>
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="modifyContactForm.pyname.$error && (modifyContactForm.pyname.$touched || modifyContactForm.$submitted)"
+                         ng-messages="modifyContactForm.pyname.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : modifyContactForm.mobile.$invalid && (modifyContactForm.mobile.$touched || modifyContactForm.$submitted) }">
+                        <span class="input-label">电话号码*</span>
+                        <input ime-focus-id="mContact.mobile" ime-next="mContact.email" type="number" name="mobile"
+                               autocorrect="off" ng-model="settingModal.mContact.mobile" is-mobile required>
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="modifyContactForm.mobile.$error && (modifyContactForm.mobile.$touched || modifyContactForm.$submitted)"
+                         ng-messages="modifyContactForm.mobile.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : modifyContactForm.email.$invalid && (modifyContactForm.email.$touched || modifyContactForm.$submitted) }">
+                        <span class="input-label">邮箱地址*</span>
+                        <input ime-focus-id="mContact.email" ime-next="mContact.zipcode" type="email" name="email"
+                               required
+                               ng-model="settingModal.mContact.email" autocorrect="off">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="modifyContactForm.email.$error && (modifyContactForm.email.$touched || modifyContactForm.$submitted)"
+                         ng-messages="modifyContactForm.email.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : modifyContactForm.passport.$invalid && (modifyContactForm.passport.$touched || modifyContactForm.$submitted) }">
+                        <span class="input-label">护照号码</span>
+                        <input ime-focus-id="mContact.passport" ime-next="mContact.mobile" type="text" name="passport"
+                               ng-model="settingModal.mContact.passport" autocorrect="off">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="modifyContactForm.passport.$error && (modifyContactForm.passport.$touched || modifyContactForm.$submitted)"
+                         ng-messages="modifyContactForm.passport.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : modifyContactForm.zipcode.$invalid && (modifyContactForm.zipcode.$touched || modifyContactForm.$submitted) }">
+                        <span class="input-label">邮编</span>
+                        <input ime-focus-id="mContact.zipcode" ime-next="mContact.address" type="number" name="zipcode"
+                               ng-model="settingModal.mContact.zipcode" autocorrect="off">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="modifyContactForm.zipcode.$error && (modifyContactForm.zipcode.$touched || modifyContactForm.$submitted)"
+                         ng-messages="modifyContactForm.zipcode.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : modifyContactForm.address.$invalid && (modifyContactForm.address.$touched || modifyContactForm.$submitted) }">
+                        <span class="input-label">地址</span>
+                        <input ime-focus-id="mContact.address" ime-next="$submit" type="text" name="address"
+                               ng-model="settingModal.mContact.address" autocorrect="off">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="modifyContactForm.address.$error && (modifyContactForm.address.$touched || modifyContactForm.$submitted)"
+                         ng-messages="modifyContactForm.address.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                    <input type="submit" id="modifyContactForm" hidden/>
+                </form>
+
+                <button class="button button-small button-full button-balanced" linked="modifyContactForm">
+                    保存
+                </button>
+            </modal-layer>
+
+            <modal-layer name="modal.setting.gender" class="list">
+                <div class="item item-divider">
+                    选择性别
+                </div>
+                <li ng-repeat="item in settingModal.genderType.list" class="item item-checkbox">
+                    <label class="checkbox">
+                        <input ng-model="settingModal.profile.data" name="contactType" value="{{item.key}}"
+                               type="radio">
+                    </label>
+                    {{item.value}}
+                </li>
+                <button class="button button-small button-full button-balanced"
+                        ng-click="settingModal.updateProfile('gender')">
+                    确定
+                </button>
+            </modal-layer>
+
+            <modal-layer name="modal.setting.tags" class="list">
+                <div class="item item-divider">
+                    选择标签（最多三个）
+                </div>
+                <ion-scroll has-bouncing="false">
+                    <li ng-repeat="item in settingModal.profile.tags" class="item item-checkbox">
+                        <label class="checkbox">
+                            <input ng-change="settingModal.tagChange(item)"
+                                   ng-model="settingModal.profile.data[item]" value="{{item}}"
+                                   type="checkbox">
+                        </label>
+                        {{item}}
+                    </li>
+                </ion-scroll>
+                <button class="button button-small button-full button-balanced"
+                        ng-click="settingModal.updateProfile('tag')">
+                    确定
+                </button>
+            </modal-layer>
+
+            <modal-layer name="modal.setting.aboutus">
+                <ion-scroll has-bouncing="false" scrollbar-y="false">
+                    <img class="img-responsive" ng-src="img/about.png"/>
+                </ion-scroll>
+            </modal-layer>
+
+            <modal-layer name="modal.setting.contactus">
+                <div class="list">
+                    <div class="item">
+                        <span>客服: 400-850-2259</span>
+                    </div>
+                    <div class="item">
+                        <span>商务: 189-3087-8111</span>
+                    </div>
+                    <div class="item">
+                        <span>微信: myzouke</span>
+                    </div>
+                    <!--<div class="item">-->
+                        <!--<span>微博: @走客-欧洲微奢旅行</span>-->
+                    <!--</div>-->
+                    <div class="item">
+                        <span>QQ群: 208493327</span>
+                    </div>
+                </div>
+            </modal-layer>
+
+            <!-- 和我们聊聊 -->
+            <modal-layer name="modal.setting.feedback">
+                <form name="feedback" novalidate
+                      ng-submit="feedback.$valid && settingModal.sendFeedback()"
+                      class="input-set">
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : feedback.value.$invalid && (feedback.value.$touched || feedback.$submitted) }">
+                        <textarea name="content" ng-model="settingModal.feedback.content"
+                                  minlength="1" maxlength="600" placeholder="跟产品经理吐个槽？跟运营小鲜肉（妹纸）交朋友？或者许个愿吧，看我们能不能帮你实现……"
+                                  elastic focus-me required>
+                        </textarea>
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="feedback.content.$error && (feedback.content.$touched || feedback.$submitted)"
+                         ng-messages="feedback.content.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : feedback.value.$invalid && (feedback.value.$touched || feedback.$submitted) }">
+                        <input ime-next="$submit" type="email" name="email" required
+                               ng-model="settingModal.feedback.email"
+                               placeholder="请留名（邮箱）">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="feedback.email.$error && (feedback.email.$touched || feedback.$submitted)"
+                         ng-messages="feedback.email.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                    <input type="submit" id="feedback" hidden/>
+                </form>
+
+                <button class="button button-small button-full button-balanced" linked="feedback">
+                    提交
+                </button>
+            </modal-layer>
+
+        </modal-layer-list>
+    </ion-content>
+
+</ion-modal-view>
+

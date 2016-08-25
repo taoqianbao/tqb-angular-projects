@@ -1,0 +1,32 @@
+<ion-view drag-back view-title="我的兴趣点" class="user user-poi">
+
+    <ion-content back-to-root>
+
+        <div class="list list-borderless">
+            <a class="item item-thumbnail-left item-poi"
+               collection-repeat="poi in poiList track by poi.id"
+               ng-click="onClickPoi($index, poi.id, poi.name)">
+                <img ng-src="{{poi.img?poi.img+imgSizeThumb:hostImg+'/app/poi/default-thumb.jpg'+imgSizeThumb}}">
+
+                <h3>{{poi.name}}</h3>
+
+                <p class="has-ic"><i class="ic ic-location-fill-grey"></i>{{poi.city}}</p>
+
+                <span class="badge">{{poi.story_num}}</span>
+                <span class="more">
+                    <i class="icon ion-ios-arrow-right"></i>
+                </span>
+            </a>
+        </div>
+
+        <ion-infinite-scroll on-infinite="loadMore()"
+                             ng-show="httpRequesting && hasMore"
+                             spinner="spiral"
+                             immediate-check="false"
+                             distance="20%">
+        </ion-infinite-scroll>
+
+    </ion-content>
+
+</ion-view>
+

@@ -1,0 +1,195 @@
+<ion-view drag-back class="journey-detail"
+          load-modal="modal.url"
+          modal-name="modal.name"
+          modal-slide-direction="modal.direction"
+          modal-remove-leave="modal.removeLeave"
+          modal-drag-hide="modal.dragHide"
+          modal-blur-view="modal.blurView">
+
+    <ion-nav-title class="font-14">
+        <span style="font-size: 1.0em" ng-bind-html="journey.name"></span>
+        <span class="tag">{{journey.tags.join("   ")}}</span>
+    </ion-nav-title>
+
+    <ion-nav-buttons side="secondary">
+        <button class="button button-icon" ng-click="onClickMap()"><i class="icon ic ic-map"></i></button>
+    </ion-nav-buttons>
+
+    <ion-content has-bouncing="false" delegate-handle="journey-detail">
+
+        <section class="author">
+            <div class="circle avatar">
+                <div ng-style="{'background-image': 'url('+journey.avatar+')'}" ng-click="onClickUser()"></div>
+                <span>{{journey.user}}</span>
+            </div>
+            <div class="brief">
+                {{journey.user_brief|limitTo:limitWord}}
+            </div>
+            <!--<div class="brief" ng-init="showFlag=true" ng-click="showFlag=!showFlag">-->
+            <!--{{journey.user_brief|limitTo:(showFlag?limitWord:10000)}}-->
+            <!--{{journey.user_brief.length>limitWord?(showFlag?'...更多':'...收起'):''}}-->
+            <!--</div>-->
+            <!--<div class="tag">{{journey.tags}}</div>-->
+        </section>
+
+        <section class="journey-list" ng-repeat="day in journey.days">
+            <section class="journey-node">
+                <!--<header class="circle day">-->
+                <!--<div day="{{day.day}}"></div>-->
+                <!--</header>-->
+                <div class="day">Day {{day.day}}</div>
+
+                <section class="journey-poi" ng-repeat="poi in day.pois track by poi.id">
+                    <div class="title" ng-click="onClickPoi(poi.id,poi.name)">{{poi.wish_brief}}
+                        <!-- 这一版暂不加 -->
+                        <!--<div class="mark" ng-click="clickLikePoi()"></div>-->
+                    </div>
+
+                    <div class="loc" ng-click="onClickPoi(poi.id,poi.name)">
+                        <span class="poi">{{poi.city_name+' / '+poi.name}}</span>
+                    </div>
+
+                    <ion-slide-box ignore-bouncing prevent-event delegate-handle="journey-slider-{{poi.id}}"
+                                   does-continue="false"
+                                   show-pager="true"
+                                   ng-style="{height: sliderHeight}">
+                        <ion-slide ng-repeat="image in poi.imgs">
+                            <a class="box">
+                                <img class="img-responsive" ng-src="{{image+imgSize}}"
+                                     ng-click="onClickPoi(poi.id,poi.name)"/>
+                            </a>
+                        </ion-slide>
+                        <!-- 显示默认图片 -->
+                        <ion-slide ng-if="poi.imgs.length==0">
+                            <a class="box">
+                                <img class="img-responsive" ng-src="{{hostImg+'/app/poi/default.jpg'+imgSize}}"
+                                     ng-click="onClickPoi(poi.id,poi.name)"/>
+                            </a>
+                        </ion-slide>
+                    </ion-slide-box>
+
+                    <div class="about">
+                        <div ng-repeat="story in poi.stories track by story.id" ng-click="clickStory(story)">
+                            <span class="title">{{story.name}}</span>
+                            <span class="content">{{story.desc|limitTo:limitWord}}...
+                            </span>
+                            <!--<span class="content" ng-init="showFlag=true" ng-click="showFlag=!showFlag">{{story.desc|limitTo:(showFlag?limitWord:10000)}}-->
+                            <!--{{story.desc.length>limitWord?(showFlag?'...更多':'...收起'):''}}-->
+                            <!--</span>-->
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </section>
+
+        <section class="add-to-journey">
+            <div class="add-button" ng-click="onClickCopy()">一键加入行程</div>
+        </section>
+
+
+        <div class="page-comment">
+            <div class="title flex full">
+                <span></span>
+                <span class="main">评论</span>
+                    <span ng-click="onClickAllComments()" class="more"
+                          ng-if="journey.comments.num>journey.comments.list.length">
+                        所有{{journey.comments.num}}条评论
+                        <i class="icon ion-chevron-right left-5"></i>
+                    </span>
+            </div>
+            <div class="comment flex full" ng-repeat="comment in journey.comments.list track by comment.id">
+                <div>
+                    <div style="background-image:url({{comment.avatar}})"
+                         ng-click="clickAvatar(comment.user_id,comment.user_name,comment.avatar)"></div>
+                </div>
+                <div class="main" ng-click="replyUser($event,comment.user_name)">
+                    <span class="user-name more">{{comment.user_name}}</span>
+
+                    <div>{{comment.comment}}</div>
+                </div>
+                <div>
+                    <div>{{comment.like_num}}</div>
+                    <div ng-class="{'active':comment.is_liked}" ng-click="onClickCommentLike(comment)"></div>
+                </div>
+            </div>
+            <form ng-submit="onSubmitComment()">
+                <div class="comment-submit flex">
+                    <div>
+                        <div style="background-image:url({{user.isSigned?user.info.avatar:'img/user.png'}})"></div>
+                    </div>
+                    <div class="main">
+                        <div contenteditable="true" placeholder="说两句吧" ng-model="content.value"></div>
+                    </div>
+                    <button type="submit" class="button-clear">发送</button>
+                </div>
+            </form>
+        </div>
+
+        <!--<section class="comment">-->
+        <!--<header class="flex">-->
+        <!--<div class="main">评论</div>-->
+        <!--<div ng-click="onClickAllComments()">所有{{journey.comments.num}}条评论&emsp;<i class="icon ion-ios-arrow-forward"></i></div>-->
+        <!--</header>-->
+        <!--<div class="comment-block flex full" ng-repeat="comment in journey.comments.content">-->
+        <!--<div>-->
+        <!--<div style="background-image:url({{comment.avatar}})"></div>-->
+        <!--</div>-->
+        <!--<div class="main">-->
+        <!--<div class="name">{{comment.user_name}}<span>1小时前</span></div>-->
+        <!--<div class="content">{{comment.comment}}</div>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</section>-->
+
+        <!--<section class="comment-submit flex">-->
+        <!--<div class="main" contenteditable></div>-->
+        <!--<div>-->
+        <!--<div>发表</div>-->
+        <!--</div>-->
+        <!--</section>-->
+
+    </ion-content>
+
+    <!-- 相关操作 -->
+    <i class="btn-comment"
+       ng-click="onClickAllComments()">
+        <span class="badge">{{journey.comments.num}}</span>
+    </i>
+
+    <i class="btn-share" click-share="journey" share-object="journey"></i>
+
+    <!--<i class="btn-like"-->
+    <!--ng-click="onClickLikeStory($event, $index)"></i>-->
+
+
+    <!--<ion-footer-bar>-->
+    <!--<a class="tab-item">-->
+    <!--<span class="action-bar share" click-share="journey" share-object="journey">-->
+    <!--<i class="icon ic ic-share-grey"></i>-->
+    <!--</span>-->
+    <!--</a>-->
+    <!--<a class="tab-item" ng-if="!isPrivate">-->
+    <!--<span class="action-bar like" ng-click="onClickLikeJourney()">-->
+    <!--<i class="icon ic ic-like"-->
+    <!--ng-class="{'ic-like': !user.isSigned||!journey.is_liked, 'ic-liked': user.isSigned&&journey.is_liked}"></i>-->
+    <!--<span>{{journey.like_num}}</span>-->
+    <!--</span>-->
+    <!--</a>-->
+    <!--<a class="tab-item" ng-if="!isPrivate">-->
+    <!--<span class="action-bar comment" ng-click="onClickAllComments()">-->
+    <!--<i class="icon ic ic-comment-grey"></i>-->
+    <!--<span>{{journey.comments.num}}</span>-->
+    <!--</span>-->
+    <!--</a>-->
+    <!--<a class="tab-item"></a>-->
+    <!--<a class="tab-item button-diy" ng-class="{'assertive': diyFocus}" ng-click="onClickCopy($event)"
+       ng-if="!readOnly">
+        &lt;!&ndash;<i class="ic" ng-class="{'ic-modify': !diyFocus, 'ic-modify-red': diyFocus}"></i>&ndash;&gt;
+        <span>复制行程</span>
+    </a>-->
+
+    <!--<button class="button button-round button-diy" ng-class="{'button-assertive': diyFocus}"-->
+    <!--ng-click="onClickDIY($event)">改一改-->
+    <!--</button>-->
+    <!--</ion-footer-bar>-->
+</ion-view>

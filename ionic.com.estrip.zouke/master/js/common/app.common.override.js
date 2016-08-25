@@ -1,0 +1,1 @@
+angular.module("app.common.override", ["ngCordova.plugins.geolocation"])

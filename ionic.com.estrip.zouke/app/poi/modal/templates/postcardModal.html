@@ -1,0 +1,74 @@
+<ion-modal-view class="postcard">
+    <ion-content has-bouncing="true"
+                 scrollbar-y="false"
+                 on-drag-up="cardModal.onDragUp($event)"
+                 on-release="cardModal.onRelease($event)"
+                 delegate-handle="postcard">
+
+        <ion-refresher spinner="lines"
+                       pulling-icon="false"
+                       pulling-text="<i class='ic-next'></i>"
+                       on-refresh="cardModal.refreshStory()">
+        </ion-refresher>
+
+        <div class="list list-borderless list-content"
+             ng-click="cardModal.onClickList($event)"
+             on-swipe-left="cardModal.onClickList($event)"
+             on-swipe-right="cardModal.onClickList($event)"
+             ng-style="{height: cardModal.devHeight+'px'}">
+
+            <div class="item item-image">
+                <img ng-src="{{cardModal.card.img+cardModal.imgSizeCard}}">
+
+                <div class="mark">
+                    <span><i>{{cardModal.card.create_time.day}}</i>{{cardModal.card.create_time.month}}</span>
+                    <span><i class="icon ion-location"></i>{{cardModal.card.city+' '+cardModal.card.poi}}</span>
+                </div>
+            </div>
+
+            <div class="mask"></div>
+
+            <section class="audio" ng-media media-type="audio" progress-show="true" ng-model="cardModal.audioCard">
+                <span>{{cardModal.card.audio.name}}  <i class="time">{{cardModal.card.audio.duration}}</i>
+                    <i class="icon play ion-ios-play"
+                       ng-class="{'ion-ios-play': cardModal.isPaused, 'ion-ios-pause': !cardModal.isPaused}"
+                       ng-click="cardModal.onClickPlay($event)"></i>
+                </span>
+            </section>
+
+            <div class="name">
+                {{cardModal.card.name}}
+            </div>
+
+            <div class="author">
+                by {{cardModal.card.user}}
+            </div>
+
+            <div class="bar bar-footer bg-trans border-none" ng-class="{'active': cardModal.barShow}">
+                <a class="tab-item">
+                    <span class="action-bar share" click-share="postcard" share-object="cardModal.card">
+                        <i class="icon ic ic-share"></i>
+                    </span>
+                </a>
+                <a class="tab-item">
+                    <span class="action-bar heart" ng-click="cardModal.onClickMark($event)">
+                        <i class="ic"
+                           ng-class="{'ic-heart-inactive': !user.isSigned||!cardModal.card.is_marked, 'ic-heart-active': user.isSigned&&cardModal.card.is_marked}"></i>
+                    </span>
+                </a>
+                <a class="tab-item">
+                    <span class="action-bar comment"><i class="icon ic ic-comment"></i></span>
+                </a>
+                <a class="tab-item"></a>
+                <a class="tab-item">
+                    <span class="action-bar shrink" ng-click="cardModal.onClickShrink($event)"><i class="icon ic ic-shrink"></i></span>
+                </a>
+            </div>
+        </div>
+
+        <!--<div class="item bouncing-bottom">-->
+            <!--走客，有故事的旅行！-->
+        <!--</div>-->
+
+    </ion-content>
+</ion-modal-view>

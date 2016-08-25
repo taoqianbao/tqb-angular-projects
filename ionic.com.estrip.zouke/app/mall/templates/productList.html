@@ -1,0 +1,132 @@
+<!-- 注意：ion-tabs必须放在该view后面，否则打开该页面不会显示「返回」按钮 -->
+<ion-view drag-back class="product-list" cache-view="true" ng-class="{'has-filter': hasFilter}" view-title="{{title}}">
+    <!--产品过滤tabs-->
+    <div class="tabs tabs-top bg-light bottom-grey" ng-if="hasFilter" ng-class="{'active': filterActive!=null}">
+        <a class="tab-item"
+           ng-class="{'active': filterActive=='location'||filterCondition.location}"
+           ng-if="filters.location.length"
+           ng-click="filterClick('location')">
+            <span>{{filterCondition.location?filterCondition.location.name:"目的地"}}</span>
+        </a>
+        <a class="tab-item"
+           ng-class="{'active': filterActive=='category'||filterCondition.category}"
+           ng-if="filters.category.length"
+           ng-click="filterClick('category')">
+            <span>{{filterCondition.category?filterCondition.category.name:"分类"}}</span>
+        </a>
+        <a class="tab-item"
+           ng-class="{'active': filterActive=='sort'||sortCondition}"
+           ng-if="filters.location.length || filters.category.length"
+           ng-click="filterClick('sort')">
+            <span>{{sortCondition?sortCondition.name:"默认排序"}}</span>
+        </a>
+    </div>
+
+    <!--产品列表-->
+    <ion-content delegate-handle="pdListScroll" ng-show="!errorFlag">
+        <div class="list">
+            <div class="item"
+                 ng-repeat="product in products|orderByCustom:sortCondition.field:sortCondition.asc|filterProduct:'location':filterCondition.location.value|filterProduct:'category':filterCondition.category.value"
+                 ng-if="$index<number*page"
+                 ng-style="{height: imgHeight, 'margin-bottom': (pdCode=='PT')?'7px':'32px'}">
+
+                <a href="#/product/{{product.pid}}">
+                    <img class="img-responsive"
+                         data-original="{{product.img+imgSize}}"
+                         ng-src="{{product.img+imgSize}}"
+                         ng-style="{height: imgHeight}">
+
+                    <div class="caption-top"></div>
+                    <div class="caption-bottom">
+                        <div class="title">{{product.title}}</div>
+                        <div class="desc">{{product.cat==='FS'?product.tag_name[0].slice(3):product.desc}}</div>
+
+                        <div class="tips">
+                            <span class="location right-5" ng-if="product.cat!='WD'">
+                                <i class="ic ic-location-grey"></i>
+                                {{product.cat == 'TG'?'常住地:' : (product.cat == 'RS'?'出发地:':'')}} {{product.city||product.country}}
+                            </span>
+                            <span class="dist left-5 right-5" ng-if="product.dist!=-1">
+                                <i class="ic ic-location-grey"></i>
+                                {{ product.dist > 1?product.dist+' km':'< 1km'}}
+                            </span>
+                            <span class="location right-5" ng-if="type == 'mark'">
+                                <span class="category left-10 right-5"><i class="ion-bookmark"></i>{{product.category}}</span>
+                            </span>
+                        </div>
+
+                        <div class="min-cost" ng-if="product.cat=='FS'||product == 'PT'">
+                            <span>人均¥{{product.min_cost}}起</span></div>
+                        <div class="price" ng-bind-html="'¥'+product.price"
+                             ng-if="product.cat!='FS'&&product.cat != 'PT'"></div>
+                        <div class="ori-price" ng-if="product.cat != 'FS'&&product != 'PT'">
+                            {{product.ori_price=='0'||product.ori_price==''?'':'¥'+product.ori_price}}
+                        </div>
+
+                    </div>
+                    <div class="pd-flag"></div>
+                </a>
+            </div>
+        </div>
+
+        <ion-infinite-scroll on-infinite="loadMore(page)"
+                             ng-if="products.length>page*number"
+                             spinner="spiral"
+                             immediate-check="false"
+                             distance="20%">
+        </ion-infinite-scroll>
+    </ion-content>
+
+    <!--出现错误后的提示信息-->
+    <div class="error-tips" ng-if="errorFlag" ng-style="{background: farAway?'#FAFAFA':'#fff'}">
+        <ion-list class="center" ng-if="!farAway">
+            <ion-item class="border-none top-80">
+                <i class="icon ion-ios-navigate-outline assertive"></i>
+            </ion-item>
+            <ion-item class="border-none">亲，未获取到位置信息</ion-item>
+            <ion-item class="border-none">{{errorTips}}</ion-item>
+        </ion-list>
+        <img class="img-responsive" ng-src="img/faraway.png" ng-if="farAway"/>
+    </div>
+
+    <!--产品过滤项-->
+    <div class="filter-content has-header"
+         ng-if="hasFilter"
+         ng-show="filterActive=='location'||filterActive=='category'||filterActive=='sort'">
+
+        <div class="mask"></div>
+
+        <ion-scroll delegate-handle="filterScroll" class="full-width" has-bouncing="false" locking="false"
+                    ng-click="onClickFilterMask()">
+
+            <div class="list" ng-show="filterActive=='location'">
+                <div class="item" ng-click="execFilter('location',null,'')">全部</div>
+                <div class="item" ng-repeat="dest in filters.location"
+                     ng-click="execFilter('location', dest.country_code, dest.country_name)">
+                    {{dest.country_name}}
+                </div>
+            </div>
+
+            <div class="list" ng-show="filterActive=='category'">
+                <div class="item" ng-click="execFilter('category',null,'')">全部</div>
+                <div class="item" ng-repeat="cat in filters.category"
+                     ng-click="execFilter('category', cat.code, cat.name)">
+                    {{cat.name}}
+                </div>
+            </div>
+
+            <div class="list" ng-show="filterActive=='sort'">
+                <div class="item" ng-click="execFilter('sort', null, '')">默认排序</div>
+                <div class="item" ng-click="execFilter('sort', false, '价格升序')">
+                    价格： 低&nbsp;<i class="ion-ios-arrow-thin-right"></i>&nbsp;高
+                </div>
+                <div class="item" ng-click="execFilter('sort', true, '价格降序')">
+                    价格： 高&nbsp;<i class="ion-ios-arrow-thin-right"></i>&nbsp;低
+                </div>
+            </div>
+
+        </ion-scroll>
+    </div>
+
+</ion-view>
+

@@ -1,0 +1,11 @@
+<ion-view view-title="明信片 - 选择模版" drag-back class="postcard-template">
+    <ion-content scroll="false">
+        <ion-slide-box
+                ignore-bouncing prevent-event
+                       does-continue="false"
+                       show-pager="false" >
+            <ion-slide><a ng-click="selectTemplate('rome')" class="flex"><img src="img/postcard/rome.jpg"></a></ion-slide>
+            <ion-slide><a ng-click="selectTemplate('alone')" class="flex"><img src="img/postcard/alone.jpg"></a></ion-slide>
+        </ion-slide-box>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,151 @@
+<ion-view drag-back class="poi-detail">
+    <!--<ion-view header-bar-class="dark" drag-back class="poi-detail">-->
+
+    <ion-nav-title class="font-16" ng-bind-html="title"></ion-nav-title>
+
+    <ion-content>
+        <div class="slider-wrapper">
+            <ion-slide-box ignore-bouncing prevent-event delegate-handle="poi-detail-slider"
+                           does-continue="false"
+                           show-pager="true"
+                           ng-style="{height: sliderHeight}">
+                <ion-slide ng-repeat="slide in poi.sliders">
+                    <a class="box">
+                        <img class="img-responsive" ng-src="{{slide.img+imgSize}}"/>
+                    </a>
+                </ion-slide>
+                <!-- 显示默认图片 -->
+                <ion-slide ng-if="poi.sliders.length==0">
+                    <a class="box">
+                        <img class="img-responsive" ng-src="{{hostImg+'/app/poi/default.jpg'+imgSize}}"/>
+                    </a>
+                </ion-slide>
+
+            </ion-slide-box>
+
+            <div class="caption-bottom">
+                <div class="panel">
+                    <div class="time" ng-if="poi.duration"><span>{{poi.duration%60==0?poi.duration/60:(poi.duration/60).toFixed(1)}}</span></div>
+                    <div class="distance" ng-click="onClickAddress()">{{poi.distance}}</div>
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <!--<div class="tag flex full">-->
+                <!--<div class="ic-tag"></div>-->
+                <!--<div class="main" ng-init="showFlag1=true" ng-click="showFlag1=!showFlag1">-->
+                    <!--<span>-->
+                        <!--{{getAllTags()===""?'此为处女地，等你留下印象...':(getAllTags()|limitTo:(showFlag1?limitTag:10000))}}-->
+
+                    <!--</span>-->
+                    <!--<span class="more">-->
+                        <!--{{getAllTags().length>limitTag?(showFlag1?'…更多':'…收起'):''}}-->
+                    <!--</span>-->
+                <!--</div>-->
+                <!--<div class="add ion-ios-plus" ng-click="addTag()"></div>-->
+            <!--</div>-->
+            <div class="brief">
+                <div class="name">{{poi.ori_name||poi.name}}
+                    <!--<span ng-click="speakContent(poi.ori_name||poi.name)" ng-if="poi.ori_name"></span>-->
+                </div>
+                <div class="desc" ng-init="showFlag2=true" ng-click="showFlag2=!showFlag2;resizeScroll()">
+                    <span style="white-space:pre">{{poi.desc|limitTo:(showFlag2?limitWord:10000)}}</span>
+                    <span class="more">{{poi.desc.length>limitWord?(showFlag2?'…更多':'…收起'):''}}</span>
+                </div>
+            </div>
+            <!--<div class="brief">-->
+            <!--<div class="name">地址{{poi.open_time==''?'':'/开放时间'}}</div>-->
+            <!--<div class="desc" ng-init="showFlag=true" ng-click="showFlag=!showFlag">-->
+            <!--<p>{{poi.address}}</p>-->
+            <!--{{poi.open_time|limitTo:(showFlag?limitWord:10000)}}-->
+            <!--<span class="more">{{poi.open_time.length>limitWord?(showFlag?'……更多':'……收起'):''}}</span>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <div class="brief" ng-if="poi.open_time!=''">
+                <div class="desc" ng-init="showFlag3=true" ng-click="showFlag3=!showFlag3;resizeScroll()">
+                    <span class="name">开放时间: </span>
+                    <span style="white-space:pre;">{{poi.open_time|limitTo:(showFlag3?limitWord:10000)}}</span>
+                    <span class="more">{{poi.open_time.length>limitWord?(showFlag3?'…更多':'…收起'):''}}</span>
+                </div>
+            </div>
+
+            <div class="brief" ng-if="poi.address!=''">
+                <div class="desc" ng-click="onClickAddress()">
+                    <span class="name">地址: </span>
+                    <span>{{poi.address}}</span>
+                </div>
+            </div>
+
+            <div class="story-list">
+                <div class="title flex full">
+                    <span></span>
+                    <span class="main">故事</span>
+                    <!--<span class="more">查看更多<i class="icon ion-chevron-right"></i></span>-->
+                </div>
+                <div class="item item-thumbnail-left" ng-repeat="story in poi.stories"
+                     ng-click="onClickStory(story.id)">
+                    <img ng-src="{{story.img+imgSizeThumb}}">
+
+                    <p>by {{story.user}}</p>
+
+                    <h2>{{story.name}}</h2>
+
+                    <!--<p class="loc">{{poi.name}}</p>-->
+                    <p class="view-n">{{story.view_num}}</p>
+                </div>
+            </div>
+
+        </section>
+
+        <div class="page-comment">
+            <div class="title flex full">
+                <span></span>
+                <span class="main">评论</span>
+                    <span ng-click="onClickAllComments()" class="more"
+                          ng-if="poi.comment.count>poi.comment.list.length">
+                        所有{{poi.comment.count}}条评论
+                        <i class="icon ion-chevron-right left-5"></i>
+                    </span>
+            </div>
+            <div class="comment flex full" ng-repeat="comment in poi.comment.list track by comment.id">
+                <div>
+                    <div style="background-image:url({{comment.avatar}})"
+                         ng-click="clickAvatar(comment.user_id,comment.user_name,comment.avatar)"></div>
+                </div>
+                <div class="main" ng-click="replyUser($event,comment.user_name)">
+                    <span class="user-name more">{{comment.user_name}}</span>
+
+                    <div>{{comment.comment}}</div>
+                </div>
+                <div>
+                    <div>{{comment.like_num}}</div>
+                    <div ng-class="{'active':comment.is_liked}" ng-click="likeComment(comment)"></div>
+                </div>
+            </div>
+            <form ng-submit="submitComment()">
+                <div class="comment-submit flex">
+                    <div>
+                        <div style="background-image:url({{user.isSigned?user.info.avatar:'img/user.png'}})"></div>
+                    </div>
+                    <div class="main">
+                        <div contenteditable="true" placeholder="说两句吧" ng-model="content.value"></div>
+                    </div>
+                    <button type="submit" class="button-clear">发送</button>
+                </div>
+            </form>
+        </div>
+
+    </ion-content>
+
+    <i class="btn-mark" ng-class="{'active':poi.is_marked}" ng-click="onClickMarkPoi()">
+    </i>
+
+    <i class="btn-comment"
+       ng-click="onClickAllComments()">
+        <span class="badge">{{poi.comment.count}}</span>
+    </i>
+
+</ion-view>
+

@@ -1,0 +1,95 @@
+<ion-view drag-back view-title="我的行程" class="user user-journey"
+          load-modal="modal.url"
+          modal-name="modal.name"
+          modal-slide-direction="modal.direction"
+          modal-remove-leave="modal.removeLeave"
+          modal-blur-view="modal.blurView">
+
+    <ion-content delegate-handle="my-journey" back-to-root>
+
+        <div class="list card card-journey"
+             collection-repeat="journey in journey track by journey.id"
+             ng-click="onClickJourney($event, $index)">
+            <div class="item">
+                <h2 ng-class="{'balanced':journey.is_current==1}">{{journey.name}}</h2>
+
+                <p>{{journey.total_day}}天 {{journey.city_num}}城市, {{journey.modify_time.split(' ')[0]}}更新</p>
+
+                <span class="seal ic ic-seal" ng-if="journey.is_current==1"></span>
+                <span class="medal ic ic-medal"
+                      ng-class="{'ic-medal-act':journey.status=='0'}"
+                      ng-if="journey.is_current!=1"></span>
+                <!--<span class="flag">{{journey.flag}}</span>-->
+            </div>
+
+            <div class="item item-image">
+                <img class="full-image" ng-src="{{journey.img+imgSizeJourney}}" ng-style="{height: hImgJourney}">
+                <span class="departure" ng-if="journey.is_current==1">
+                    {{journey.start_date+', '+journey.start_city+'出发'}}
+                    <i class="ic ic-flight"></i>
+                </span>
+            </div>
+
+            <div class="item tabs-action tabs tabs-secondary">
+                <a class="tab-item">
+                    <span class="action-bar share" click-share="journey" share-object="journey">
+                        <i class="icon ic ic-share-grey"></i>
+                    </span>
+                </a>
+                <a class="tab-item">
+                    <span class="action-bar like" ng-click="onClickLikeJourney($event, $index)"
+                          ng-if="journey.status=='0'">
+                        <i class="icon ic ic-like"
+                           ng-class="{'ic-like': !user.isSigned||!journey.is_liked, 'ic-liked': user.isSigned&&journey.is_liked}"></i>
+                        <span>{{journey.like_num}}</span>
+                    </span>
+                </a>
+                <a class="tab-item" ng-if="journey.status=='0'">
+                    <span class="action-bar comment" ng-click="onClickAllComments($event, $index)">
+                        <i class="icon ic ic-comment-grey"></i>
+                        <span>{{journey.comment_num}}</span>
+                    </span>
+                </a>
+                <a class="tab-item go" ng-if="journey.status!='0'&&journey.is_current!=1"
+                   ng-click="onClickGo($event, $index)">
+                    <span>出发</span>
+                </a>
+                <a class="tab-item download" ng-if="journey.is_current==1" ng-click="onClickDownload($event, $index)">
+                    <span>下载地图</span>
+                </a>
+                <a class="tab-item del" ng-if="journey.status!='0'&&journey.is_current!=1">
+                    <span ng-click="onClickDel($event, $index)">删除</span>
+                </a>
+                <a class="tab-item diy balance" ng-if="journey.status!='0'">
+                    <span ng-click="onClickDIY($event, $index)">编辑</span>
+                </a>
+                <a class="tab-item" ng-if="journey.is_current==1||journey.status=='0'" ng-click="onClickMore($event, $index)">
+                    <span class="action-bar more">
+                        <i class="icon ion-ios-more"></i>
+                    </span>
+                </a>
+            </div>
+
+            <!-- 更多操作菜单 -->
+            <div class="item item-more" ng-if="journey.is_current==1||journey.status=='0'"
+                 ng-class="{'active':journey.showMore}">
+                <!--<span ng-if="journey.is_current==1" ng-click="onClickComplete($event, $index)">完成</span>-->
+                <span ng-if="journey.is_current==1" ng-click="onClickGo($event, $index)">取消</span>
+                <span ng-if="journey.is_current==1" ng-click="onClickDel($event, $index)">删除</span>
+                <span ng-if="journey.status=='0'" ng-click="onClickGo($event, $index)">出发</span>
+                <span ng-if="journey.status=='0'" ng-click="onClickDIY($event, $index)">编辑</span>
+            </div>
+
+        </div>
+
+        <ion-infinite-scroll on-infinite="loadMore()"
+                             ng-show="httpRequesting&&hasMore"
+                             spinner="spiral"
+                             immediate-check="false"
+                             distance="20%">
+        </ion-infinite-scroll>
+
+    </ion-content>
+
+</ion-view>
+

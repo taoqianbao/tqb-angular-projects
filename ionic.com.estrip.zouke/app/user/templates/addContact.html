@@ -1,0 +1,98 @@
+<ion-view drag-back view-title="新增联系人">
+    <ion-nav-buttons side="right">
+        <button class="button button-clear button-balanced" linked="addContactSubmit">保存</button>
+    </ion-nav-buttons>
+
+    <ion-content on-swipe-left="$event.stopPropagation()">
+
+        <form name="addContactForm" class="list" novalidate ng-submit="addContactForm.$valid && saveContact()">
+            <label class="item item-input"
+                   ng-class="{ 'has-error' : addContactForm.name.$invalid && (addContactForm.name.$touched || addContactForm.$submitted) }">
+                <span class="input-label">姓名*</span>
+                <input type="text" name="name" ng-model="contact.name" autocorrect="off" required
+                       ng-blur="genPinyin()"/>
+            </label>
+
+            <div class="form-errors"
+                 ng-show="addContactForm.name.$error && (addContactForm.name.$touched || addContactForm.$submitted)"
+                 ng-messages="addContactForm.name.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+            <label class="item item-input"
+                   ng-class="{ 'has-error' : addContactForm.pyname.$invalid && (addContactForm.pyname.$touched || addContactForm.$submitted) }">
+                <span class="input-label">拼音*</span>
+                <input type="text" name="pyname" ng-model="contact.pyname" autocorrect="off" required/>
+            </label>
+
+            <div class="form-errors"
+                 ng-show="addContactForm.pyname.$error && (addContactForm.pyname.$touched || addContactForm.$submitted)"
+                 ng-messages="addContactForm.pyname.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+
+            <label class="item item-input"
+                   ng-class="{ 'has-error' : addContactForm.mobile.$invalid && (addContactForm.mobile.$touched || addContactForm.$submitted) }">
+                <span class="input-label">手机*</span>
+                <input type="number" name="mobile" ng-model="contact.mobile" autocorrect="off" is-mobile required/>
+            </label>
+
+            <div class="form-errors"
+                 ng-show="addContactForm.mobile.$error && (addContactForm.mobile.$touched || addContactForm.$submitted)"
+                 ng-messages="addContactForm.mobile.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+
+            <label class="item item-input"
+                   ng-class="{ 'has-error' : addContactForm.email.$invalid && (addContactForm.email.$touched || addContactForm.$submitted) }">
+                <span class="input-label">邮箱*</span>
+                <input type="email" name="email" ng-model="contact.email" autocorrect="off" required/>
+            </label>
+
+            <div class="form-errors"
+                 ng-show="addContactForm.email.$error && (addContactForm.email.$touched || addContactForm.$submitted)"
+                 ng-messages="addContactForm.email.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+
+            <label class="item item-input"
+                   ng-class="{ 'has-error' : addContactForm.passport.$invalid && (addContactForm.passport.$touched || addContactForm.$submitted) }">
+                <span class="input-label">护照</span>
+                <input type="text" name="passport" ng-model="contact.passport" autocorrect="off"/>
+            </label>
+
+            <div class="form-errors"
+                 ng-show="addContactForm.passport.$error && (addContactForm.passport.$touched || addContactForm.$submitted)"
+                 ng-messages="addContactForm.passport.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+
+            <label class="item item-input"
+                   ng-class="{ 'has-error' : addContactForm.address.$invalid && (addContactForm.address.$touched || addContactForm.$submitted) }">
+                <span class="input-label">地址</span>
+                <input type="text" name="address" ng-model="contact.address" autocorrect="off"/>
+            </label>
+
+            <div class="form-errors"
+                 ng-show="addContactForm.address.$error && (addContactForm.address.$touched || addContactForm.$submitted)"
+                 ng-messages="addContactForm.address.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+
+            <label class="item item-input"
+                   ng-class="{ 'has-error' : addContactForm.zipcode.$invalid && (addContactForm.zipcode.$touched || addContactForm.$submitted) }">
+                <span class="input-label">邮编</span>
+                <input type="number" name="zipcode" ng-model="contact.zipcode" autocorrect="off"/>
+            </label>
+
+            <div class="form-errors"
+                 ng-show="addContactForm.zipcode.$error && (addContactForm.zipcode.$touched || addContactForm.$submitted)"
+                 ng-messages="addContactForm.zipcode.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+
+            <input type="submit" id="addContactSubmit" hidden/>
+        </form>
+
+    </ion-content>
+</ion-view>
+

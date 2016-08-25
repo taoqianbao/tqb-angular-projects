@@ -1,0 +1,98 @@
+<!-- 走客小蜜对话框 -->
+<ion-view drag-back view-title="欧优游助手" class="chat-home">
+    <!--<ion-nav-bar class="bar-light">-->
+        <!--<ion-nav-title>走客管家</ion-nav-title>-->
+        <!--<ion-nav-buttons side="secondary">-->
+            <!--<a class="button button-clear button-balanced" ng-click="closeChat()">退出</a>-->
+        <!--</ion-nav-buttons>-->
+    <!--</ion-nav-bar>-->
+
+    <!--<ion-content class="tips" delegate-handle="chat-tips">-->
+    <!--<div class="hot">-->
+    <!--<div class="section"><span>走客们在关注</span></div>-->
+
+    <!--<div class="row" ng-repeat="words in hot">-->
+    <!--<a class="col word" ng-repeat="word in words" ng-click="onClickHot($event, word)">{{word}}</a>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash;<button class="button button-full button-small button-balanced" ng-click="startChat()">开始对话</button>&ndash;&gt;-->
+    <!--</ion-content>-->
+
+    <ion-content class="chat" delegate-handle="chat">
+        <div class="list messages">
+            <div class="row" ng-repeat="message in messages" ng-class="{'userMsg': message.client}">
+                <div class="item item-avatar"
+                     ng-style="{'max-width': msgWidth+'px'}">
+                    <img ng-src="{{message.client?(user.isSigned?user.info.avatar:'img/user.png'): message.msg.logo}}"
+                         ng-click="message.client?sideModal.setUserInfo():{}">
+
+                    <div class="corner"></div>
+
+                    <!--客户端键入内容-->
+                    <a class="userMsg" ng-if="message.client" ng-bind="message.msg"></a>
+
+                    <!--纯文本内容-->
+                    <a class="text" ng-if="message.msg.type=='text'" ng-bind-html="message.msg.content"
+                       ng-click="onClickText($event)"></a>
+
+                    <!--提示内容-->
+                    <a class="tips" ng-if="message.msg.type=='tips'">
+                        <!--<img ng-src="{{message.msg.img+imgSizeThumb}}">-->
+                        <span ng-bind-html="message.msg.tips"></span>
+                    </a>
+
+                    <!--列表内容-->
+                    <a class="list" ng-if="message.msg.type=='list'">
+                        <span ng-bind-html="message.msg.tips"></span>
+                        <span class="item" ng-repeat="item in message.msg.list"
+                              ng-click="onClickItem(item.cat, message.msg.input, message.msg.keyword)">
+                            <i class="ic"
+                               ng-class="{'ic-journey': item.cat=='journey', 'ic-poi-1':item.cat=='poi', 'ic-story-grey': item.cat=='story', 'ic-sale-grey': item.cat=='product', 'ic-article': item.cat=='article'}">
+                            </i>
+                            <span class="name">{{item.name}}</span>
+                            <span class="more"><i class="num">{{item.num}}</i><i
+                                    class="icon ion-ios-arrow-right"></i></span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="notification" ng-class="{'active': showNofity}">{{msgNofity}}</div>-->
+    </ion-content>
+
+    <div class="microphone" ng-class="{'active':isStartRecord}">
+        <img ng-src="{{'img/icon-new/voice/'+voiceImg+'.png'}}" ng-show="!recordWait">
+        <ion-spinner icon="spiral" ng-show="recordWait"></ion-spinner>
+    </div>
+
+    <ion-footer-bar class="bar-light bar-chat item-input-inset" keyboard-attach>
+        <span class="voice" ng-click="switchInputMethod($event)">
+            <i class="ic" ng-class="{'ic-voice': !isVoiceMethod, 'ic-keyboard-grey': isVoiceMethod}"></i>
+        </span>
+        <!--<span class="keyboard" ng-show="isVoiceMethod" ng-click="switchInputMethod($event)">-->
+        <!--<i class="ic ic-keyboard-grey"></i>-->
+        <!--</span>-->
+
+        <!--my-touch-start="onVoiceHold()"-->
+        <!--my-touch-end="onVoiceRelease()"-->
+        <span class="hold-tips"
+              on-touch="onVoiceHold()"
+              on-release="onVoiceRelease()"
+              ng-class="{'active': isStartRecord}"
+              ng-show="isVoiceMethod">按住我说话
+        </span>
+
+        <form ng-submit="sendMessage(msgModel.input)" class="message-form"
+              ng-show="!isVoiceMethod">
+            <label class="item-input-wrapper">
+                <input ng-model="msgModel.input" type="search"
+                       ng-focus="onFocusInput($event)"
+                       ng-blur="onBlurInput($event)"
+                       placeholder="给我个欧洲的关键词……">
+            </label>
+        </form>
+    </ion-footer-bar>
+
+</ion-view>

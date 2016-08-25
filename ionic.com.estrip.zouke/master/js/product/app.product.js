@@ -1,0 +1,1 @@
+angular.module("app.product", ["app.product.controller", "app.product.route"])

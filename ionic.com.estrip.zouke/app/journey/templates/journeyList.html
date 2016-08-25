@@ -1,0 +1,41 @@
+<ion-view drag-back view-title="{{title}}" class="journey-list">
+    <ion-content scrollbar-y="false">
+        <ion-list class="list-borderless">
+            <div class="item item-journey"
+                 collection-repeat="item in items track by item.id"
+                 ng-click="onClickJourney($index, item.id)">
+
+                <div class="journey" ng-style="{height: hJourney}">
+                    <img ng-src="{{item.img+imgSizePd}}" ng-style="{height: hImgJourney}"/>
+
+                    <div class="top-shadow"></div>
+                    <div class="bottom-shadow"></div>
+                    <div class="row journey-summary">
+                        <a ng-click="onClickUser($event, item.user_id, item.user, item.avatar)">
+                            <img class="avatar" ng-src="{{item.avatar}}"/>
+                        </a>
+
+                        <div>
+                            <span class="name">{{item.name}}</span>
+                            <span class="author">{{item.user}}</span>
+                        </div>
+
+                        <!--<div class="like" ng-click="onClickLike($event, $index)">-->
+                            <!--<i class="ic"-->
+                               <!--ng-class="{'ic-like': !user.isSigned||!item.is_liked, 'ic-liked': user.isSigned&&item.is_liked}"></i>-->
+                            <!--{{item.like_num}}-->
+                        <!--</div>-->
+                    </div>
+                </div>
+            </div>
+
+        </ion-list>
+
+        <ion-infinite-scroll on-infinite="loadMore()"
+                             ng-show="httpRequesting&&hasMore"
+                             spinner="spiral"
+                             immediate-check="false"
+                             distance="20%">
+        </ion-infinite-scroll>
+    </ion-content>
+</ion-view>

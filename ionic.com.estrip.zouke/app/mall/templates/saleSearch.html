@@ -1,0 +1,80 @@
+<ion-view drag-back class="sale-search">
+    <ion-nav-title ng-click="openCountryModel()">
+        {{title}}<i class="icon ion-ios-arrow-down"></i>
+    </ion-nav-title>
+
+    <ion-content scrollbar-y="false" has-bouncing="false" delegate-handle="country-srcoll">
+
+        <ion-slide-box ignore-bouncing prevent-event
+                       delegate-handle="sale-search-slider"
+                       does-continue="true"
+                       ng-style="{height: sliderHeight}">
+            <ion-slide ng-repeat="slider in sliders">
+                <a class="box" ng-href="#/{{slider.type=='ac'?'activity':'product'}}/{{slider.id}}"
+                   ng-show="type=='hot'">
+                    <img class="img-responsive" ng-src="{{slider.img + imgSize}}"/>
+                </a>
+
+                <a class="box" href="#/product/{{slider._id}}" ng-show="type=='country'">
+                    <img class="img-responsive" ng-src="{{slider.image + imgSize}}"/>
+
+                    <div class="caption-top">
+                        <div class="pd-flag">
+                            <span>{{slider.cat_name}}</span>
+                        </div>
+                    </div>
+                    <div class="caption-bottom">
+                        <div class="title">{{slider.zh_name}}</div>
+                        <div class="desc">{{slider.desc}}</div>
+                        <div class="price">&yen{{slider.price}}</div>
+                    </div>
+                </a>
+
+            </ion-slide>
+        </ion-slide-box>
+
+        <div class="content">
+            <a class="row" ng-repeat="rs in result"
+               ng-click="onClickCategory(selectCity, rs.code, rs.value.name)">
+                <div class="pd-cat">
+                    <span class="ic ic-scenic-grey" ng-if="rs.code=='AT'"></span>
+                    <span class="ic ic-tticket-grey" ng-if="rs.code=='TP'"></span>
+                    <span class="ic ic-pickup-grey" ng-if="rs.code=='ST'"></span>
+                    <span class="ic ic-bus-grey" ng-if="rs.code=='HO'"></span>
+                    <span class="ic ic-michelin-grey" ng-if="rs.code=='FS'"></span>
+                    <span class="ic ic-food-grey" ng-if="rs.code=='SF'"></span>
+                    <span class="ic ic-art-grey" ng-if="rs.code=='SM'"></span>
+                    <span class="ic ic-ltcar-grey" ng-if="rs.code=='LT'"></span>
+                    <span class="ic ic-oneday-grey" ng-if="rs.code=='ODT'"></span>
+                    <span class="ic ic-multiday-grey" ng-if="rs.code=='MDT'"></span>
+                </div>
+                <span class="cat-name">{{rs.value.name}}
+                    <span class="cat-num"><i>{{rs.value.num}}</i></span>
+                </span>
+
+                <div class="min-price">
+                    <span>&yen{{rs.value.price}}起</span>
+                </div>
+                <div class="pd-more"><i class="ion ion-ios-arrow-right"></i></div>
+            </a>
+        </div>
+    </ion-content>
+
+    <ion-footer-bar class="bg-stable" ng-show="type=='country'" on-drag="$event.stopPropagation()"
+                    on-swipe-left="$event.stopPropagation()">
+        <ion-scroll direction="x" scrollbar-x="false" class="city-list" delegate-handle="city-select"
+                    ng-style="{'max-width': (modalCities.length>5) ? (devWidth-75)+'px': devWidth+'px'}">
+            <div class="city" ng-repeat="rs in footerCities"
+                 ng-class="{true: 'active', false: ''}[rs.city==selectCity]">
+                <span ng-click="clickCity(rs.city)">
+                    {{rs.city_name}}
+                </span>
+            </div>
+        </ion-scroll>
+
+        <div class="city-more" ng-if="modalCities.length>5" ng-click="openCityPop($event)">
+            <span>更多</span>
+            <i class="icon" ng-class="{'ion-arrow-down-b':cityPopup, 'ion-arrow-up-b':!cityPopup}"></i>
+        </div>
+    </ion-footer-bar>
+</ion-view>

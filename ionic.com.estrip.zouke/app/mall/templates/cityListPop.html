@@ -1,0 +1,9 @@
+<ion-popover-view class="city-select" ng-style="{height: 37 * (modalCities.length-5) + 'px'}">
+    <ion-content>
+        <a class="city-item center bottom-grey" ng-click="clickCity(rs.city)"
+           ng-repeat="rs in modalCities" ng-if="$index>4">
+            <span>{{rs.city_name}}</span>
+        </a>
+    </ion-content>
+</ion-popover-view>
+

@@ -1,0 +1,21 @@
+
+<ion-view view-title='{{title}}'>
+    <ion-content class="padding">
+        <div class="list list-borderless bottom-0"
+                ng-repeat="story in stories"
+                ng-click="onClickStoryItem(story)">
+
+            <a class="item item-thumbnail-left test-page2-item">
+                <img src="{{story.avatar}}">
+                <div>
+                    <p>by {{story.author}}</p>
+                    <h2>{{story.title}}</h2>
+                    <p>{{story.location}}</p>
+                    <p>{{story.view}}</p>
+                </div>
+            </a>
+
+        </div>
+
+    </ion-content>
+</ion-view>

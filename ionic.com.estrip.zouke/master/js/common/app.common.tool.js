@@ -1,0 +1,1 @@
+angular.module("app.common.tool", ["app.common.tool.directive", "app.common.tool.service"])

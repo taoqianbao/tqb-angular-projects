@@ -1,0 +1,15 @@
+<ion-view drag-back view-title="详细信息" class="poi-detail">
+    <ion-content>
+        <poi-introduce>
+            {{poi.desc}}
+        </poi-introduce>
+        <info-block class="flex" ng-repeat="item in poi.info" ng-click="item.type=='address'?onClickAddress(item.value):{}">
+            <name>{{item.name}}</name>
+            <value class="main" ng-if="item.type!='tel'">{{item.value}}</value>
+            <value class="main" ng-if="item.type=='tel'"><a href="{{'tel:' + item.value}}">{{item.value}}</a></value>
+            <span class="more" ng-if="item.type=='address'">
+                <i class="ion-ios-arrow-right"></i>
+            </span>
+        </info-block>
+    </ion-content>
+</ion-view>

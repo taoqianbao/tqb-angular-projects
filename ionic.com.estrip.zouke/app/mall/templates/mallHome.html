@@ -1,0 +1,56 @@
+<ion-view exit-app class="mall-home" fix-tabs-animation hide-nav-bar="true" hide-back-button="true">
+<ion-content>
+        <ion-slide-box ignore-bouncing prevent-event
+                       delegate-handle="mall-handle"
+                       does-continue="true"
+                       ng-style="{height: imgHeight}">
+            <ion-slide ng-repeat="s in slider">
+                <img class="img-responsive" ng-src="{{s.img+imgSize}}" ng-click="clickActive(s)"/>
+            </ion-slide>
+        </ion-slide-box>
+
+        <div class="product-type flex">
+            <a class="main" ng-repeat="param in params" ng-click="getProductList(param.title,param.type,param.option,param.filter)">
+                <img ng-src="{{param.img}}">{{param.title}}
+            </a>
+        </div>
+
+        <div class="product-rec flex">
+            <a class="main" ng-click="getProductList('热卖产品','hot','',true)"><img src="img/icon-new/mall/hotsale.png"></a>
+            <a class="main" ng-click="getProductList('非凡体验','uncommon','',true)"><img src="img/icon-new/mall/uncommon.png"></a>
+            <!--<a class="main" ng-click="getProductList('非凡体验','tag','NE',true)"><img src="img/icon-new/mall/uncommon.png"></a>-->
+        </div>
+
+        <div class="product-country">
+            <div>热门国家</div>
+            <div class="country-rec flex">
+                <a ng-repeat="hot in country.hot" ng-click="clickCountry(hot)">
+                    <div><img ng-src="{{hot.img}}"></div>
+                </a>
+            </div>
+
+            <div class="c-col-title">西欧</div>
+            <div class="c-col flex"><a ng-repeat="c in country.west" ng-click="clickCountry(c)">
+                <span>{{c.name}}</span>
+            </a></div>
+
+            <div class="c-col-title">南欧</div>
+            <div class="c-col flex"><a ng-repeat="c in country.south" ng-click="clickCountry(c)">
+                <span>{{c.name}}</span>
+            </a></div>
+
+            <div class="c-col-title">东欧</div>
+            <div class="c-col flex"><a ng-repeat="c in country.east" ng-click="clickCountry(c)">
+                <span>{{c.name}}</span>
+            </a></div>
+
+            <div class="c-col-title">北欧</div>
+            <div class="c-col flex"><a ng-repeat="c in country.north" ng-click="clickCountry(c)">
+                <span>{{c.name}}</span>
+            </a></div>
+
+        </div>
+
+
+    </ion-content>
+</ion-view>

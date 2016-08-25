@@ -1,0 +1,1 @@
+angular.module("app.journey", ["app.journey.controller", "app.journey.service", "app.journey.route"])

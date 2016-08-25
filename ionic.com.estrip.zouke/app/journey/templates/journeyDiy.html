@@ -1,0 +1,148 @@
+<ion-view drag-back class="journey-diy">
+
+    <ion-nav-title ng-bind-html="title"></ion-nav-title>
+    <ion-nav-buttons side="secondary">
+        <button class="button button-icon" ng-click="onClickMap()">
+            <i class="icon ic ic-map"></i>
+        </button>
+    </ion-nav-buttons>
+
+    <!-- 列表视图与地图视图实现翻转效果 -->
+    <ion-content delegate-handle="journey-diy" scrollbar-y="false">
+
+        <div class="map" ng-click="onClickMap()" on-drag="$event.stopPropagation()"
+             on-swipe-left="$event.stopPropagation()"></div>
+        <div class="title">
+            <span ng-show="!rename">{{journey.name}}</span>
+            <input ng-class="{'active':rename}" ng-model="journey.name"/>
+            <a class="rename" ng-class="{'bg-balanced':rename}"
+               ng-click="onClickRename($event)">{{rename?'确定':'改名'}}</a>
+        </div>
+
+        <!--参考价格: 暂不实现-->
+        <!--<section class="price-range assertive bg-stable">-->
+        <!--<min>{{journey.price.min}}</min>-->
+        <!--<max>{{journey.price.max}}</max>-->
+        <!--<i class="icon ion-ios-arrow-right dark"></i>-->
+        <!--</section>-->
+
+        <journey-line ng-if="journey">
+            <journey-info class="flex">
+                <journey-day number="{{journey.journeyDays}}"></journey-day>
+                <note class="main text-right">{{journey.poi_num}}个兴趣点, {{journey.story_num}}个故事</note>
+            </journey-info>
+
+            <ion-list show-reorder="showReorder" ng-init="showReorder=true">
+                <!-- 遍历每个城市 -->
+                <ion-item ng-repeat="n in journey.nodeList"
+                          ng-class="{true:'traffic',false:'place'}[!!n.type]"
+                          ng-init="begin=(n.begin|toDate);end=(n.end|toDate);$odd=!!n.type;$even=!n.type;">
+
+                    <journey-node class="flex">
+                        <node-icon ng-if="$even" number="{{n.days}}"></node-icon>
+                        <node-icon ng-if="$odd">
+                            <i ng-class="{'plane':'ic ic-flight-filled','train':'ic ic-train-filled'}[n.type]"></i>
+                        </node-icon>
+
+                        <node-content ng-if="$even" class="main card"
+                                      ng-class="{'active':adjustCity==$index}"
+                                      ng-init="expanded[n.id]=(journey.is_current? $index===1:$index===0)">
+                            <div class="item item-divider">
+                                {{n.name}}:
+                                <span class="time-range" ng-if="begin">
+                                    {{n.days==0.5?(begin|date:"M.d a"):
+                                    (begin?(n.days==1?(begin|date:"M.d"):(begin|date:"M.d")+" - "+(end|date:"M.d")): (end|date:"yyyy.M.d"))}}
+                                </span>
+                                <span class="more"
+                                      ng-hide="journey.is_current&&($index===0||$index===journey.nodeList.length-1)">
+                                    <i class="ic ic-poi-1"></i>&ensp;{{n.poi.count}}&emsp;
+                                    <i class="ic ic-story-grey"></i>&ensp;{{n.poi.story_num}}
+                                </span>
+                            </div>
+
+                            <div class="item-body" ng-if="n.hotel||n.poi">
+                                <div ng-if="n.hotel" class="item hotel">
+                                    {{n.hotel.name}}&ensp;{{n.days-1}}晚
+                                    <span class="more">&yen{{n.hotel.price}}<i class="ion-ios-arrow-right"></i></span>
+                                </div>
+                                <div ng-if="n.poi" class="item" ng-click="onClickCity($event,$index,n.id)">
+                                    <!--{{poiListToString(n.poi.list,start[$index],n.days,d.expand)}}-->
+                                    <div class="poi" ng-class="{'expand':expanded[n.id]}" ng-init="pIndex=$index">
+                                        <div ng-repeat="p in n.poi.list"
+                                             day="{{getStartDatIndex(pIndex)+$index+0.9|number:0}}">
+                                            {{poiListToString(p)}}
+                                            <i class="icon ion-ios-minus assertive"
+                                               ng-click="onClickDayRemove(pIndex, $index)"
+                                               ng-show="adjustCity==pIndex"></i>
+                                        </div>
+                                    </div>
+                                    <span class="more poiExpand"
+                                          ng-hide="adjustCity==$index">
+                                        <i class="icon"
+                                           ng-class="{true:'ion-android-remove',false:'ion-android-add'}[expanded[n.id]]"></i>
+                                    </span>
+                                </div>
+
+                                <div class="day-add" ng-show="adjustCity==$index">
+                                    <!--<label><input disabled ng-model="daysAdjust"/>天</label>-->
+                                    <!--<i class="icon"-->
+                                    <!--ng-class="{'ion-ios-minus-empty':daysAdjust==1,'ion-ios-plus-empty':daysAdjust==0.5}"-->
+                                    <!--ng-click="onClickPlusMinus()"></i>-->
+                                    <!--<i class="icon ion-ios-plus-empty" ng-click="onClickDayPlus($index)"></i> 天-->
+                                    <button class="button button-small button-outline button-balanced"
+                                            ng-click="onClickDayAdd($index)">+ 1天
+                                    </button>
+                                </div>
+
+                                <!--<a class="button button-small button-full button-balanced"-->
+                                <!--ng-click="onClickDayAdd($index)" ng-show="adjustCity==$index">+ 1天</a>-->
+
+                                <div class="item flex btn text-center balanced" ng-show="expanded[n.id]">
+                                    <div class="main" ng-click="onClickDayAdjust($index)">
+                                        <span ng-hide="adjustCity==$index">调整天数</span>
+                                        <button class="button button-small button-balanced"
+                                                ng-show="adjustCity==$index">确定
+                                        </button>
+                                    </div>
+                                    <div class="main" ng-class="{'cancel':adjustCity==$index}"
+                                         ng-click="adjustCity==$index?onClickDayCancel($index):onClickPoiAdjust(n.id)">
+                                        <span ng-hide="adjustCity==$index">调整兴趣点</span>
+                                        <button class="button button-small button-stable"
+                                                ng-show="adjustCity==$index">取消
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </node-content>
+
+                        <node-content ng-if="$odd" class="main card">
+                            <div class="item">
+                                <p>{{n.number}}&ensp;{{begin|date:"M.d/h:m"}}</p>
+
+                                <p>{{n.from}}&ensp;-&ensp;{{n.to}}</p>
+                                <span class="more">
+                                    &yen{{n.price}}<i class="ion-ios-arrow-right"></i>
+                                </span>
+                            </div>
+                        </node-content>
+
+                        <ion-reorder-button on-reorder="journeyReorder(n,$fromIndex,$toIndex)">
+                        </ion-reorder-button>
+                    </journey-node>
+                </ion-item>
+            </ion-list>
+        </journey-line>
+    </ion-content>
+
+    <!-- 相关操作 -->
+    <ion-footer-bar>
+        <a class="tab-item" ng-class="{'active': modified}" ng-click="onClickFinish()">
+            {{type=='merge'?'保存行程':'保存修改'}}
+        </a>
+        <a class="tab-item" ng-click="onClickJoin()" ng-show="user.info.journey>1&&type!='merge'">
+            加入行程
+        </a>
+    </ion-footer-bar>
+
+</ion-view>
+

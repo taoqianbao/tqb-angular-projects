@@ -1,0 +1,30 @@
+<ion-view view-title="添加兴趣点" class="journey-poi-add">
+    <ion-content scroll="false">
+        <div class="tabs">
+            <a ng-repeat="t in tabs" ng-class="{active:$index===tabs.selectIndex}" ng-click="tabs.select($index)" class="tab-item">{{t.name}}</a>
+        </div>
+        <ion-scroll direction="y">
+            <poi-list>
+                <header>
+                    <icon class="icon ion-ios-home-outline"></icon>
+                </header>
+                <poi ng-repeat="p in list" class="list flex">
+                    <distance>{{p.distance|number:1}}</distance>
+                    <content class="item item-checkbox">
+                        <label class="checkbox">
+                            <input ng-value="s.id" ng-model="selectedId"  type="checkbox">
+                        </label>
+                        <div class="item-avatar">
+                            <img ng-src="p.img">
+                            <h2>{{p.name}}</h2>
+                            <p>{{p.price?("&yen;"+p.price):"免费"}},&ensp;{{p.person}}人去过</p>
+                        </div>
+                    </content>
+                </poi>
+            </poi-list>
+        </ion-scroll>
+    </ion-content>
+    <ion-footer-bar class="bg-assertive">
+        <div class="title">确定</div>
+    </ion-footer-bar>
+</ion-view>

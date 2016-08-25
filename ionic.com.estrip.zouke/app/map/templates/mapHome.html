@@ -1,0 +1,98 @@
+<ion-view exit-app view-title="地图" class="map-home" hide-nav-bar="true" hide-back-button="true" fix-tabs-animation on-drag-up="hideTab()" on-drag-down="showTab()" >
+
+    <ion-content scrollbar-y="false" delegate-handle="map-home">
+        <!--<div class="section">-->
+        <!--<span>我的行程</span>-->
+        <!--</div>-->
+
+        <!--<div class="journey"-->
+        <!--ng-if="journey"-->
+        <!--ng-style="{'background-image': 'url({{journey.img}})'}">-->
+        <!--<div class="bottom-shadow"></div>-->
+        <!--<span class="name">{{journey.name}}</span>-->
+        <!--<span class="city-num">{{journey.cities.length}}城市</span>-->
+        <!--<button class="button button-small button-assertive" ng-click="addToDownload(journey.cities)">-->
+        <!--一键下载离线地图-->
+        <!--</button>-->
+        <!--</div>-->
+
+        <!--<div class="journey">-->
+        <!--<span class="tips">规划行程后可一键下载行程地图</span>-->
+        <!--</div>-->
+
+        <div class="section" ng-show="downloadingArray.length>0">
+            <span>下载中</span>
+        </div>
+
+        <ion-list class="list-borderless">
+            <ion-item class="item-remove-animate" ng-repeat="city in maplist track by city.id | orderBy:'sort'"
+                      ng-if="['2','3','5'].indexOf(city.status.downloadStatus) != -1">
+
+                <div class="city downloading"
+                     on-swipe-left="$event.stopPropagation()"
+                     ng-click="download(false,city)">
+
+                    <img class="img-responsive" ng-src="{{city.image}}-appcity">
+
+                    <div class="mask"
+                         ng-style="{'-webkit-transform':'translate3d('+city.status.length*100/city.size+'%,0,0)'}"></div>
+                    <div class="bg">
+                        <i class="play-pause icon"
+                           ng-class="{'ion-ios-cloud-download-outline': city.status.downloadStatus!='2', 'ion-ios-pause-outline': city.status.downloadStatus=='2'}"></i>
+                    </div>
+                    <span class="name">{{city.city_name}}</span>
+                    <span class="tips">{{city.size_desc}}</span>
+                </div>
+                <ion-option-button class="button-assertive" ng-click="onDeleteDownloading(city)">
+                    删除
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+
+        <div class="section" ng-show="downloadedArray.length>0">
+            <span>已下载</span>
+        </div>
+
+        <ion-list class="list-borderless">
+            <ion-item ng-repeat="city in maplist track by city.id"
+                      ng-if="city.status.downloadStatus == '1'"
+                      ng-click="onClickCity(city.id)"
+                      class="item-stable item-remove-animate">
+                <div class="city" ng-style="{'background-image': 'url({{city.image}})'}"
+                     on-swipe-left="$event.stopPropagation()">
+                    <span class="name">{{city.city_name}}</span>
+                    <span class="tips">
+                        <span><i class="ic ic-location"></i>{{city.poi_num}}</span>
+                        <span><i class="ic ic-heart-inactive"></i>{{city.marker_number||0}}</span>
+                    </span>
+                </div>
+                <ion-option-button class="button-calm">
+                    <span>{{city.size_desc}}</span>
+                </ion-option-button>
+                <ion-option-button class="button-assertive" ng-click="onDeleteDownloading(city)">
+                    删除
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+
+        <div class="no-map" ng-show="!firstEnter && (downloadingArray.length<=0 && downloadedArray.length<=0)">
+            <img class="img-responsive" src="img/bg/offline-map.png">
+
+            <p>没下载过地图？</p>
+
+            <p>万一尿急找不到厕所肿么办……</p>
+        </div>
+
+        <div class="add-city bg-balanced" ng-show="!firstEnter && (downloadingArray.length<=0 && downloadedArray.length<=0)"
+             ng-click="addCity()">
+            <span>添加地图</span>
+        </div>
+
+        <div class="add-city" ng-show="downloadingArray.length>0 || downloadedArray.length>0" ng-click="addCity()">
+            <i class="icon ion-ios-plus-empty"></i>
+        </div>
+
+    </ion-content>
+
+</ion-view>
+

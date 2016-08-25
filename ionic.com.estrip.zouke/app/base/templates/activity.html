@@ -1,0 +1,9 @@
+<ion-view class="activity" header-bar-class="dark" drag-back title="活动详情">
+    <ion-nav-buttons side="secondary">
+        <button class="button button-icon" ng-click="shareActivity()"><i class="icon ic ic-share"></i></button>
+    </ion-nav-buttons>
+    <ion-content has-bouncing="false" scroll="false">
+        <div style="position:absolute;left:0;top:0;width:10px;height:100%;"></div>
+        <iframe src="{{src}}"></iframe>
+    </ion-content>
+</ion-view>

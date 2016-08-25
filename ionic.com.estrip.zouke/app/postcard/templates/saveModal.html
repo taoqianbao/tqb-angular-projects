@@ -1,0 +1,63 @@
+<ion-modal-view class="postcard-save">
+    <ion-content scroll="false">
+        <modal-layer-list default="defaultLayer">
+            <modal-layer name="main" class="flex vertical">
+                <div class="tip" ng-if="hasActivity">国庆活动,10.10前,每人可免费寄出3张明信片</div>
+                <div class="close">
+                    <img src="img/icon-new/postcard/close.png" ng-click="back()">
+                </div>
+                <div class="flex vertical main opt">
+                    <div class="main"></div>
+                    <div ng-if="hasActivity" style="position:relative;" ng-click="send()"><img src="img/icon-new/postcard/send.png"><img style="position:absolute;width:80%;top:8%;left:70%;" src="img/icon-new/postcard/activity.png"><div>免费邮寄</div></div>
+                    <div ng-click="share()"><img src="img/icon-new/postcard/share.png"><div>分享</div></div>
+                    <div ng-click="saveToLocal()"><img src="img/icon-new/postcard/save.png"><div>保存到相册</div></div>
+                    <div class="main"></div>
+                </div>
+            </modal-layer>
+            <modal-layer name="postcard">
+                <div class="back" ng-click="mBack()"></div>
+                <div class="info">
+                    <div class="tip">亲,请填写邮寄信息,加*为必填项</div>
+                    <div class="flex">
+                        <div class="field require main">
+                            <!--<div class="title">收件人</div>-->
+                            <div><input ng-model="sendInfo.to_name" placeholder="*收件人" type="text"></div>
+                        </div>
+                        <div class="field require main">
+                            <!--<div class="title">邮编</div>-->
+                            <div><input ng-model="sendInfo.to_zipcode" placeholder="*邮编" type="text"></div>
+                        </div>
+                    </div>
+                    <div class="field require" style="padding-bottom:40px;">
+                        <!--<div class="title">收件地址</div>-->
+                        <div><input placeholder="*收件地址" ng-model="sendInfo.to_address" type="text"></div>
+                    </div>
+                    <div class="flex">
+                        <div class="field main">
+                            <!--<div class="title">寄件人</div>-->
+                            <div><input placeholder="寄件人" ng-model="sendInfo.from_name" type="text"></div>
+                        </div>
+                        <div class="field main">
+                            <!--<div class="title">邮编</div>-->
+                            <div><input placeholder="邮编" ng-model="sendInfo.from_zipcode" type="text"></div>
+                        </div>
+                    </div>
+                    <!--<div class="field">
+                        <div class="title">寄件地址</div>
+                        <div><input ng-model="sendInfo.from_address" type="text"></div>
+                    </div>-->
+                </div>
+                <div class="sample">
+                    <div>邮寄明信片样例:</div>
+                    <div>
+                        <img src="img/postcard/postcard-sample-f.png">
+                        <img src="img/postcard/postcard-sample-b.png">
+                    </div>
+                </div>
+                <div class="saveInfo">
+                    <div ng-click="sendPostcard()">确认寄出</div>
+                </div>
+            </modal-layer>
+        </modal-layer-list>
+    </ion-content>
+</ion-modal-view>

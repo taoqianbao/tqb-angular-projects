@@ -1,0 +1,1 @@
+angular.module("app.poi", ["app.poi.controller", "app.poi.route", "app.poi.modal"])

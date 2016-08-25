@@ -1,0 +1,1 @@
+angular.module("app.common.injector", ["app.common.injector.service"])

@@ -1,0 +1,131 @@
+<ion-view drag-back class="story-detail">
+    <!--<ion-view header-bar-class="dark" drag-back class="story-detail">-->
+
+    <ion-nav-title class="font-14" ng-bind-html="story.name"></ion-nav-title>
+
+    <ion-content>
+        <div class="list">
+            <div class="item item-avatar item-borderless story-author">
+                <img ng-src="{{story.avatar}}" ng-click="clickUser()">
+
+                <h2>{{story.user_name}}</h2>
+
+                <!--<p><span>{{story.tags.join("   ")}}</span></p>-->
+            </div>
+
+            <div class="item item-body item-borderless story-content">
+                <div ng-bind-html="story.content">
+                </div>
+            </div>
+
+            <!--<div class="item tabs-action tabs tabs-secondary">-->
+            <!--<a class="tab-item" click-share="story" share-object="item">-->
+            <!--<span class="action-bar share">-->
+            <!--<i class="icon ic ic-share-grey"></i>-->
+            <!--</span>-->
+            <!--</a>-->
+
+            <!--<a class="tab-item">-->
+
+            <!--</a>-->
+            <!--<a class="tab-item" ng-click="onClickLikeStory($event, $index)">-->
+            <!--<span class="action-bar like">-->
+            <!--<i class="icon ic ic-like"-->
+            <!--ng-class="{'ic-like': !user.isSigned||!story.liked, 'ic-liked': user.isSigned&&story.liked}"></i>-->
+            <!--<span>{{story.like_num}}</span>-->
+            <!--</span>-->
+            <!--</a>-->
+
+            <!--<a class="tab-item" ng-click="onClickStoryComments($event, $index)">-->
+            <!--<span class="action-bar comment">-->
+            <!--<i class="icon ic ic-comment-grey"></i>-->
+            <!--<span>{{story.comment.num}}</span>-->
+            <!--&lt;!&ndash;<span class="badge badge-balanced">{{journey.comments.num}}</span>&ndash;&gt;-->
+            <!--</span>-->
+            <!--</a>-->
+
+            <!--</div>-->
+
+            <div class="item related-poi" ng-repeat="poi in story.pois">
+                <div><span>相关景点</span>
+                </div>
+                <div class="poi">
+                    <img ng-src="{{poi.img+imgSize}}">
+
+                    <div class="plus"><span>+</span></div>
+                    <div class="poi-desc">
+                        <p>{{poi.wish}}</p>
+
+                        <p>@{{poi.name}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item item-body item-borderless author-desc">
+                <!--<div class="item-avatar ">-->
+                <!--<img ng-src="{{story.avatar}}">-->
+
+                <!--<p>{{story.user_name}}</p>-->
+                <!--</div>-->
+                <p class="name">{{story.user_name}}</p>
+
+                <p class="desc">{{story.user_desc}}</p>
+
+                <div class="copyright">
+                    <!--<p>©版权声明</p>-->
+                    <p>©本故事由{{story.user_name}}授权投放于欧优游，若有合作意向或疑问，请联系欧优游或内容提供方</p>
+                </div>
+            </div>
+
+            <div class="page-comment">
+                <div class="title flex full">
+                    <span></span>
+                    <span class="main">评论</span>
+                    <span ng-click="onClickAllComments()" class="more"
+                          ng-if="story.comments.count>story.comments.list.length">
+                        所有{{story.comments.num}}条评论
+                        <i class="icon ion-chevron-right left-5"></i>
+                    </span>
+                </div>
+                <div class="comment flex full" ng-repeat="comment in story.comments.list track by comment.id">
+                    <div>
+                        <div style="background-image:url({{comment.avatar}})"
+                             ng-click="clickAvatar(comment.user_id,comment.user_name,comment.avatar)"></div>
+                    </div>
+                    <div class="main" ng-click="replyUser($event,comment.user_name)">
+                        <span class="user-name more">{{comment.user_name}}</span>
+
+                        <div>{{comment.comment}}</div>
+                    </div>
+                    <div>
+                        <div>{{comment.like_num}}</div>
+                        <div ng-class="{'active':comment.is_liked}" ng-click="onClickCommentLike(comment)"></div>
+                    </div>
+                </div>
+                <form ng-submit="submitComment()">
+                    <div class="comment-submit flex">
+                        <div>
+                            <div style="background-image:url({{user.isSigned?user.info.avatar:'img/user.png'}})"></div>
+                        </div>
+                        <div class="main">
+                            <div contenteditable="true" placeholder="说两句吧" ng-model="content.value"></div>
+                        </div>
+                        <button type="submit" class="button-clear">发送</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </ion-content>
+
+    <i class="btn-comment"
+       ng-click="onClickAllComments()">
+        <span class="badge">{{story.comments.num}}</span>
+    </i>
+
+    <i class="btn-share" click-share="story" share-object="story"></i>
+
+    <!--<i class="btn-mark"-->
+    <!--ng-click="onClickLikeStory()"></i>-->
+
+</ion-view>

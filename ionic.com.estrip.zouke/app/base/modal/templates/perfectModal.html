@@ -1,0 +1,46 @@
+<ion-modal-view class="perfect-modal bg-trans">
+    <ion-slide-box show-pager="true"
+                   ignore-bouncing
+                   on-slide-changed="perfectModal.onSlideChanged($index)"
+                   delegate-handle="perfect-slider"
+                   auto-play="false"
+                   ng-style="{height: perfectModal.devHeight}">
+
+        <ion-slide ng-style="{'background-image': 'url(img/perfect/1.jpg)'}">
+            <!--<img ng-src="{{perfectModal.hostImg+'/perfect/1.jpg'+perfectModal.imgSuffix}}" ng-cache/>-->
+            <div class="slogan s1" ng-class="{'active':perfectModal.activeSlide==0}">
+                <img class="img-responsive" src="img/perfect/1-slogan.png"/>
+                <!--<img class="img-responsive" ng-src="{{perfectModal.hostImg+'/perfect/1-slogan.png'}}" ng-cache/>-->
+            </div>
+        </ion-slide>
+
+        <ion-slide ng-style="{'background-image': 'url(img/perfect/2.jpg)'}">
+            <!--<img ng-src="{{perfectModal.hostImg+'/perfect/2.jpg'+perfectModal.imgSuffix}}" ng-cache/>-->
+            <div class="slogan s2" ng-class="{'active':perfectModal.activeSlide==1}">
+                <img class="img-responsive" src="img/perfect/2-slogan.png"/>
+                <!--<img class="img-responsive" ng-src="{{perfectModal.hostImg+'/perfect/2-slogan.png'}}" ng-cache/>-->
+            </div>
+        </ion-slide>
+
+        <ion-slide ng-style="{'background-image': 'url(img/perfect/3.jpg)'}">
+            <!--<img ng-src="{{perfectModal.hostImg+'/perfect/3.jpg'+perfectModal.imgSuffix}}" ng-cache/>-->
+            <div class="slogan s3" ng-class="{'active':perfectModal.activeSlide==2}">
+                <img class="img-responsive" src="img/perfect/3-slogan.png"/>
+                <!--<img class="img-responsive" ng-src="{{perfectModal.hostImg+'/perfect/3-slogan.png'}}" ng-cache/>-->
+            </div>
+        </ion-slide>
+
+        <ion-slide ng-style="{'background-image': 'url(img/perfect/4.jpg)'}">
+            <!--<img ng-src="{{perfectModal.hostImg+'/perfect/4.jpg'+perfectModal.imgSuffix}}" ng-cache/>-->
+            <div class="slogan s4" ng-class="{'active':perfectModal.activeSlide==3}">
+                <img class="img-responsive" src="img/perfect/4-slogan.png"/>
+                <!--<img class="img-responsive" ng-src="{{perfectModal.hostImg+'/perfect/4-slogan.png'}}" ng-cache/>-->
+            </div>
+            <div class="start">
+                <span ng-click="perfectModal.onClickStart()">开启有故事的旅行</span>
+            </div>
+        </ion-slide>
+        <ion-slide>
+        </ion-slide>
+    </ion-slide-box>
+</ion-modal-view>

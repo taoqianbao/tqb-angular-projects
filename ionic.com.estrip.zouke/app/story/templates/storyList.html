@@ -1,0 +1,45 @@
+<ion-view drag-back class="story-list"
+          load-modal="modal.url"
+          modal-name="modal.name"
+          modal-slide-direction="modal.direction"
+          modal-remove-leave="modal.removeLeave"
+          modal-drag-hide="modal.dragHide"
+          modal-blur-view="modal.blurView">
+
+    <ion-nav-title ng-click="hasFilter?openSubjectModel():{}">
+        {{title}}<i class="icon ion-ios-arrow-down" ng-if="hasFilter"></i>
+    </ion-nav-title>
+
+    <ion-content>
+
+        <div class="list list-borderless">
+            <div class="story-container" collection-repeat="item in items track by item.id">
+                <a class="item item-thumbnail-left item-story2"
+                   ng-click="onClickStory(item.id)">
+                    <img ng-src="{{item.img + imgSizeThumb}}"/>
+
+                    <h1>{{item.tag}}</h1>
+
+                    <h2>{{item.name}}</h2>
+
+                    <!--<p>by {{item.user}}</p>-->
+                    <p class="location"><i class="ic ic-location-fill-grey"></i>{{item.poi_name}}</p>
+                    <!--<i class="mark ic"-->
+                    <!--ng-class="{'ic-heart-inactive-grey': !item.is_marked, 'ic-heart-active': item.is_marked}"-->
+                    <!--ng-click="onClickMark($event, $index)"></i>-->
+                </a>
+            </div>
+        </div>
+
+        <ion-infinite-scroll
+                on-infinite="loadMore()"
+                ng-show="httpRequesting && hasMore"
+                spinner="spiral"
+                immediate-check="false"
+                distance="20%">
+        </ion-infinite-scroll>
+
+    </ion-content>
+
+</ion-view>
+

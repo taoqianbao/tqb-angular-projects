@@ -1,0 +1,21 @@
+<ion-view drag-back class="meeting-address">
+
+    <ion-nav-title class="font-small" ng-bind-html="title"></ion-nav-title>
+
+    <ion-content on-swipe-left="$event.stopPropagation()">
+        <div class="map" data-tap-disabled="true" ng-style="{width: mapWidth, height: mapHeight}">
+        </div>
+
+        <div class="list">
+            <label class="item">
+                <p>地址：{{poi.address}}</p>
+            </label>
+            <label class="item">
+                <p ng-bind-html="poi.remark"></p>
+            </label>
+        </div>
+
+    </ion-content>
+
+</ion-view>
+

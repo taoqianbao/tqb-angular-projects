@@ -1,0 +1,8 @@
+<ion-modal-view class="user-postcard-modal">
+    <div class="close" ng-click="close()"></div>
+    <div class="container" style="display:block;"><img ng-click="share()" ng-src="{{postcard.snapshot_url+imgSizePostBig}}">
+        <div ng-if="audio" class="media" ng-style="mediaStyle" ng-click="toggle()" ng-class="{play:isPlaying}">
+            <div class="time"><div>{{duration}}</div></div>
+        </div>
+    </div>
+</ion-modal-view>

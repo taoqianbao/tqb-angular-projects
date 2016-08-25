@@ -1,0 +1,29 @@
+<div class="datepicker" on-drag="$event.stopPropagation()"
+     on-swipe-left="nextMonth(1);$event.stopPropagation();"
+     on-swipe-right="preMonth(-1)">
+    <div class="datepicker-header">
+        <div class="datepicker-controls">
+            <a href="" class="datepicker-prev icon ion-ios-arrow-left" ng-if="allowPrevMonth" ng-click="preMonth()"></a>
+            <a href="" class="datepicker-next icon ion-ios-arrow-right" ng-if="allowNextMonth"
+               ng-click="nextMonth()"></a>
+        </div>
+        <h3 class="datepicker-centered-heading">
+            {{current | date:"yyyy年MM月"}} </h3>
+    </div>
+    <div class="datepicker-body">
+        <div class="datepicker-main">
+            <ul class="datepicker-cell">
+                <li class="datepicker-head" ng-repeat="dayName in dayNames">
+                    {{dayName}}
+                </li>
+            </ul>
+            <ul class="datepicker-cell">
+                <li ng-repeat="d in dates" ng-click="setDate(d)"
+                    ng-class="{'datepicker-disabled':isDateDisabled(d),'datepicker-active': model.selected == d,'datepicker-today':d==today}">
+                    {{d | date:"d"}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+

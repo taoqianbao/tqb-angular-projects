@@ -1,0 +1,1 @@
+angular.module("app.common.graphic", ["app.common.graphic.directive", "app.common.graphic.service"])

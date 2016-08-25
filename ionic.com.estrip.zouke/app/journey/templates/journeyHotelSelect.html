@@ -1,0 +1,23 @@
+<ion-view title="选择酒店（{{nowNode.name}}）" class="journey-hotel-select">
+    <ion-content>
+        <ul class="list">
+            <li class="item item-checkbox" ng-repeat="s in nodeSelectList">
+                <label class="checkbox">
+                    <input name="traffic" ng-value="s.id" ng-model="selectedId"  ng-click="checked(s)" type="radio">
+                </label>
+                <div>
+                    <div class="flex">
+                        <div>{{s.name}}</div>
+                        <div class="main">{{s.star}}星</div>
+                        <div class="main">&yen;{{s.price}}</div>
+                    </div>
+                    <div>{{s.localName}}</div>
+                    <div>{{s.des}}</div>
+                </div>
+            </li>
+        </ul>
+    </ion-content>
+    <ion-footer-bar ng-click="select()" class="bg-assertive">
+        <div class="title">确定</div>
+    </ion-footer-bar>
+</ion-view>

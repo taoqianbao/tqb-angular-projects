@@ -1,0 +1,1 @@
+angular.module("app.common.modal", ["app.common.modal.directive", "app.common.modal.service"])

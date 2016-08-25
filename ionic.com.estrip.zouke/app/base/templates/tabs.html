@@ -1,0 +1,53 @@
+<ion-nav-view></ion-nav-view>
+
+<!-- 底部导航 -->
+<div class="tabs tabs-index tabs-light tabs-color-active-positive" ng-class="{'inactive':_tab.isHideTab}" >
+    <!-- 行程 Tab -->
+    <a class="tab-item journey" ng-class="{'active':tab.tabActive=='journey'}"
+       ng-click="tab.switchTab($event, 'journey')">
+        <i class="ic"
+           ng-class="{'ic-journey-active': tab.tabActive=='journey', 'ic-journey-inactive': tab.tabActive!='journey'}"></i>
+        行程
+    </a>
+    <!-- 发现工具箱 Tab -->
+    <a class="tab-item toolbox" ng-class="{'active':tab.tabActive=='mall'}" ng-click="tab.switchTab($event, 'mall')" />
+        <i class="ic"
+        ng-class="{'ic-mall-active': tab.tabActive=='mall', 'ic-mall-inactive': tab.tabActive!='mall'}"></i>
+        买买买
+    </a>
+    <!-- 搜索 Tab -->
+    <!--<a class="tab-item add" ng-class="{'show':tab.showAddBar}"
+         ng-click="tab.switchTab($event, 'add')">
+        <span><i class="ic ic-add"></i></span>
+        <section ng-show="tab.showAddBar" class="add-postcard ng-hide">
+            <img src="img/postcard/postcard-btn.png" ng-click="tab.switchTab($event,'postcard')">
+        </section>
+    </a>-->
+    <a class="tab-item postcard" ng-click="tab.switchTab($event,'postcard')" style="position:relative;overflow:visible;">
+        <span style="position:absolute;bottom:-2px;left:10%;width:80%;background:white;border-radius:10em;padding:4px;"><img style="display:block;width:100%;border-radius:10em;" src="img/icon-new/postcard/postcard.png"></span>
+    </a>
+    <!-- 地图 Tab -->
+    <a class="tab-item map" ng-class="{'active':tab.tabActive=='map'}"
+       ng-click="tab.switchTab($event, 'map')">
+        <i class="ic"
+           ng-class="{'ic-map-active': tab.tabActive=='map', 'ic-map-inactive': tab.tabActive!='map'}"></i>
+        地图
+    </a>
+    <!-- 计划 Tab -->
+    <!--<a class="tab-item calendar" ng-click="onClickTab($event, 'calendar')">-->
+    <!--<i class="ic ic-calendar-inactive"-->
+    <!--ng-class="{'ic-calendar-active': user.tabActive=='calendar', 'ic-calendar-inactive': user.tabActive!='calendar'}"></i>-->
+    <!--</a>-->
+
+    <!-- 放一个空的占位tab，以免过于拥挤，click事件不响应 -->
+    <!--<a class="tab-item"></a>-->
+
+    <!-- 我的 Tab -->
+    <a class="tab-item user" ng-click="showSide($event)">
+        <i class="ic ic-user-inactive"></i>
+        我的
+    </a>
+
+    <div class="chat" ng-style="{'bottom':base.bottom}" ng-click="tab.switchTab($event,'chat')"><!--萌宠--></div>
+    <div class="tab-backdrop ng-hide" ng-click="tab.switchTab($event,'add')" ng-show="tab.showAddBar" ng-style="{'height':base.devHeight}"></div>
+</div>

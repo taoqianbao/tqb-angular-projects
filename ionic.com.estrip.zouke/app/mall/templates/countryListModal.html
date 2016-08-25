@@ -1,0 +1,23 @@
+<ion-modal-view>
+    <ion-header-bar>
+        <h1 class="title">选择国家</h1>
+
+        <div class="buttons">
+            <button class="button button-clear" ng-click="closeCountryModel()">取消</button>
+        </div>
+    </ion-header-bar>
+    <ion-content has-bouncing="false" scrollbar-y="false">
+        <div class="country-select">
+            <!--<a class="country-item bottom-grey" ng-class="{active: selected == 'hot'}"-->
+               <!--ng-click="countrySelect('hot','热门产品')"><span>热门产品</span></a>-->
+
+            <a class="country-item bottom-grey"
+               ng-repeat="country in countries"
+               ng-class="{active: selected == country.code}"
+               ng-click="countrySelect(country.code, country.name)">
+                <span>{{country.name}}</span>
+            </a>
+
+        </div>
+    </ion-content>
+</ion-modal-view>

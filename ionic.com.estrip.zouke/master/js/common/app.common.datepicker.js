@@ -1,0 +1,1 @@
+angular.module("app.common.datepicker", ["app.common.datepicker.directive"])

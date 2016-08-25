@@ -1,0 +1,112 @@
+<ion-view drag-back class="map-wrapper flip-container">
+
+    <ion-nav-title ng-bind-html="title"></ion-nav-title>
+
+    <ion-nav-buttons side="secondary">
+        <button class="button button-clear balanced" ng-if="flipShow" ng-click="onClickFlip()">
+            {{flipped?'离线':'在线'}}
+            <!--<i class="icon ic" ng-class="{'ic-map': !flipped, 'ic-list': flipped}"></i>-->
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content scroll="false" on-swipe-left="$event.stopPropagation()" on-drag="widget.selected==='search'&&onClickMapWidget('search')" ng-click="widget.selected==='search'&&onClickMapWidget('search')">
+        <!-- 列表视图与地图视图实现翻转效果 -->
+        <div class="flipper" ng-class="{'flipped': flipped}">
+            <div class="front">
+                <ion-content scroll="false">
+                    <div class="map" data-tap-disabled="true">
+                    </div>
+                </ion-content>
+            </div>
+
+            <div class="back">
+                <ion-content scroll="false">
+                    <div class="map" data-tap-disabled="true">
+                    </div>
+                </ion-content>
+            </div>
+
+            <div class="mask" ng-class="{'active':drag.isDragging}"></div>
+        </div>
+
+        <!-- 行程天数 -->
+        <ul class="map-days" ng-show="day.shown" ng-init="cities=[];days=[]">
+            <ion-scroll scrollbar-y="false" has-bouncing="false"
+                        on-swipe-left="$event.stopPropagation()">
+                <li ng-show="pointList.city.length>1"
+                    ng-class="{'active': day.activeDay=='all'}"
+                    ng-click="onClickDay('all')">
+                    <span>All</span>
+                </li>
+                <li id="{{$index}}"
+                    ng-repeat="item in pointList.journey"
+                    ng-init="cities.slice(-1)[0]==item.city_id?{}:cities.push(item.city_id);len=cities.length;lastDay=days.slice(-1)[0];days.push(item.dayIndex);"
+                    ng-class="{
+                                'active': day.activeDay==$index,
+                                'can-be-dropped': drag.isJourney?drag.isDragging&&item.city_id==activeCity.id&&day.activeDay!=$index:drag.isDragging&&item.city_id==activeCity.id,
+                                'drag-on': drag.elemId==$index,
+                                'odd': len%2==1,
+                                'even': len%2==0
+                              }"
+                    ng-click="onClickDay($index, item.city_id)">
+                    <span>D{{item.dayIndex|number:0}}</span>
+                    <span ng-if="(item.dayIndex|number:0)-item.dayIndex>0">AM</span>
+                    <span ng-if="(lastDay|number:0)-lastDay>0">PM</span>
+                </li>
+
+            </ion-scroll>
+            <li id="recycling" class="recycling ic"
+                ng-show="drag.isJourney&&drag.isDragging"
+                ng-class="{'can-be-dropped':drag.isJourney&&drag.isDragging, 'drag-on':drag.elemId=='recycling'}"></li>
+        </ul>
+
+        <div class="map-search" ng-show="widget.selected=='search' && mapType!='offline'"
+             ng-class="{'active':widget.selected=='search'}">
+            <form on-click="$event.stopPropagation()" class="input-set" name="frmSearch" novalidate ng-submit="searchPoi()">
+                <label class="item-input-wrapper">
+                    <input type="text" id="search" name="search" ng-model="search.key" placeholder="输入关键字...">
+                </label>
+            </form>
+        </div>
+
+        <ul class="map-widget" ng-class="{'active': !readOnly && widget.shown, 'expanded': widget.expanded}">
+            <li ng-click="onClickMapWidget('search');$event.stopPropagation()"
+                ng-class="{'active':widget.selected=='search'}" ng-if="mapType!='offline'">
+                <span><i class="ic ic-search"></i></span>
+            </li>
+            <!--<li ng-click="onClickMapWidget('journey')">行程</li>-->
+            <li ng-click="onClickMapWidget('mark')"
+                ng-class="{'active':widget.selected=='mark'}"><span>收藏</span></li>
+
+            <li ng-click="onClickMapWidget('AT', '景点')"
+                ng-class="{'active':widget.selected=='AT'}"><span>景点</span></li>
+
+            <li ng-click="onClickMapWidget('RS', '美食店')"
+                ng-show="widget.expanded"
+                ng-class="{'active':widget.selected=='RS'}"><span>美食</span></li>
+
+            <li ng-click="onClickMapWidget('SM', '活动')"
+                ng-show="widget.expanded"
+                ng-class="{'active':widget.selected=='SM'}"><span>活动</span></li>
+
+            <li ng-click="onClickMapWidget('SH', '购物点')"
+                ng-show="widget.expanded"
+                ng-class="{'active':widget.selected=='SH'}"><span>购物</span></li>
+
+            <li ng-click="onClickMapWidget('TL', '公厕')"
+                ng-show="widget.expanded"
+                ng-class="{'active':widget.selected=='TL'}"><span>公厕</span></li>
+
+            <li ng-click="onClickMapWidget('more')" class="more">
+                <i class="icon"
+                   ng-class="{'ion-ios-arrow-down':!widget.expanded, 'ion-ios-arrow-up': widget.expanded}"></i>
+            </li>
+        </ul>
+
+        <!-- 定位小图标 -->
+        <i class="position ic" ng-hide="drag.isDragging" ng-click="getLocation($event)"></i>
+
+    </ion-content>
+
+</ion-view>
+

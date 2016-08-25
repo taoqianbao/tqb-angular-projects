@@ -1,0 +1,25 @@
+<ion-view drag-back>
+    <ion-nav-title ng-bind-html="activity.name"></ion-nav-title>
+    <ion-content class="act-detail">
+        <div class="act-img" ng-if="activity">
+            <img class="img-responsive" ng-src="{{activity.image+imgSizeAct}}">
+        </div>
+        <div class="act-desc" ng-bind-html="activity.page_content">
+        </div>
+        <div class="list">
+            <div class="item item-divider-ios top-18">
+                <h2 class="balanced">相关产品</h2>
+            </div>
+            <div ng-repeat="p in activity.pdInfo">
+                <a class="item item-thumbnail-left" href="#/product/{{p._id}}">
+                    <img ng-src="{{p.image+imgSizeThumb}}">
+                    <h2 class="top-10">{{p.zh_name}}</h2>
+                    <p>
+                        <span class="price">¥{{p.price}}</span>
+                        <span class="ori-price">¥{{p.ori_price}}</span>
+                    </p>
+                </a>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

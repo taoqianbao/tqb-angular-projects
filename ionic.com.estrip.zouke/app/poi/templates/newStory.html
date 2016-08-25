@@ -1,0 +1,32 @@
+<ion-view drag-back view-title="{{title}}" class="new-story">
+    <ion-content class="">
+
+        <div class="list card">
+            <div class="item item-story-title">
+                <h1 ng-class="{'selected': storyData.tag_code!=''}" ng-click="openSubjectModel()">
+                    {{storyData.tag||"标签"}}
+                </h1>
+
+                <h2>
+                    <input type="text" ng-model="storyData.name" maxlength="16" placeholder="编辑标题, 16字以内">
+                </h2>
+
+                <p>by {{user.info.user_name}}</p>
+            </div>
+            <div class="item item-image" ng-style="{height: hImgStory}">
+                <div image-clip ng-model="storyData.img" bind-input=".reload input"></div>
+                <!--<img ng-if="storyData.image" class="full-image" ng-src="storyData.image">
+                <input type="file" ng-model="selected" ng-change="fileSelected($event)">-->
+                <span class="reload" ng-show="storyData.img.hasImage"><input type="file">重选图片</span>
+            </div>
+            <div class="item item-body">
+                <textarea ng-model="storyData.desc" maxlength="140" elastic placeholder="编辑故事内容, 140字以内"></textarea>
+            </div>
+            <div class="item submit positive">
+                <span ng-click="complete()">保&emsp;存</span>
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>
+

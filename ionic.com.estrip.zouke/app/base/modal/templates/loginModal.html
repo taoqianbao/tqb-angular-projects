@@ -1,0 +1,204 @@
+<ion-modal-view class="user-login">
+    <ion-content scroll="false">
+        <div class="mask mask-bg">
+            <img ng-src="{{loginModal.bgLogin}}">
+        </div>
+        <!--<div class="mask"></div>-->
+
+        <i class="icon ion-ios-close-empty close" ng-click="loginModal.close()"></i>
+        <i ng-if="loginModal.hasBack()" class="icon ion-ios-arrow-thin-left layerBack" ng-click="loginModal.back()"></i>
+
+        <modal-layer-list default="loginModal.defaultLayer">
+            <modal-layer name="modal.login.start">
+                <div class="avatar"><img src="img/logo-white.png"/></div>
+                <div class="action">
+                    <button class="button button-small button-full button-weixin"
+                            ng-click="loginModal.wxLogin()"
+                            ng-hide="user.wxInstalled==false">
+                        <i class="icon ic ic-weixin-white"></i>快速登录
+                    </button>
+                    <button class="button button-small button-full button-balanced"
+                            ng-click="loginModal.go('modal.login.mailLogin')">
+                        <i class="icon ion-ios-email"></i>邮件登录
+                    </button>
+                </div>
+            </modal-layer>
+
+            <modal-layer name="modal.login.mailLogin" class="list login list-borderless">
+                <form name="frmMailLogin" novalidate ng-submit="frmMailLogin.$valid && loginModal.mailLogin()"
+                      class="input-set">
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : frmMailLogin.email.$invalid && (frmMailLogin.email.$touched || frmMailLogin.$submitted) }">
+                        <input ime-next="frmMailLogin.psd" type="email" name="email"
+                               ng-model="loginModal.mailLoginData.email" required
+                               focus-me placeholder="邮箱">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="frmMailLogin.email.$error && (frmMailLogin.email.$touched || frmMailLogin.$submitted)"
+                         ng-messages="frmMailLogin.email.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+
+                    <label class="item item-input item-last"
+                           ng-class="{ 'has-error' : frmMailLogin.password.$invalid && (frmMailLogin.password.$touched || frmMailLogin.$submitted) }">
+                        <input ime-focus-id="frmMailLogin.psd" ime-next="$submit" type="password" name="password"
+                               ng-model="loginModal.mailLoginData.password" required minlength="6"
+                               placeholder="密码">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="frmMailLogin.password.$error && (frmMailLogin.password.$touched || frmMailLogin.$submitted)"
+                         ng-messages="frmMailLogin.password.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                    <input type="submit" id="mailLogin" hidden/>
+                </form>
+                <button class="button button-small button-full button-balanced"
+                        tabindex="3" linked="mailLogin">
+                    登录
+                </button>
+                <div class="addition">
+                    <span ng-click="loginModal.go('modal.login.forget')">忘记密码</span>
+                    <span ng-click="loginModal.go('modal.login.register')">注册新用户</span>
+                </div>
+            </modal-layer>
+
+            <modal-layer name="modal.login.register" class="list register list-borderless">
+                <form name="mailRegister" novalidate ng-submit="mailRegister.$valid && loginModal.mailRegister()"
+                      class="input-set">
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : mailRegister.email.$invalid && (mailRegister.email.$touched || mailRegister.$submitted) }">
+                        <input ime-next="mailRegister.username" type="email" name="email"
+                               ng-model="loginModal.mailRegData.email" required focus-me
+                               unique-email placeholder="邮箱">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="mailRegister.email.$error && (mailRegister.email.$touched || mailRegister.$submitted)"
+                         ng-messages="mailRegister.email.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : mailRegister.email.$invalid && (mailRegister.email.$touched || mailRegister.$submitted) }">
+                        <input ime-focus-id="mailRegister.username" ime-next="mailRegister.psd" type="text" name="nick"
+                               ng-model="loginModal.mailRegData.nick_name" required maxlength="16"
+                               placeholder="用户名">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="mailRegister.nick.$error && (mailRegister.nick.$touched || mailRegister.$submitted)"
+                         ng-messages="mailRegister.nick.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : mailRegister.password.$invalid && (mailRegister.password.$touched || mailRegister.$submitted) }">
+                        <input ime-focus-id="mailRegister.psd" ime-next="mailRegister.psd2" type="password"
+                               name="password" ng-model="loginModal.mailRegData.password" required
+                               minlength="6" placeholder="密码">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="mailRegister.password.$error && (mailRegister.password.$touched || mailRegister.$submitted)"
+                         ng-messages="mailRegister.password.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+
+                    <label class="item item-input item-last"
+                           ng-class="{ 'has-error' : mailRegister.password2.$invalid && (mailRegister.password2.$touched || mailRegister.$submitted) }">
+                        <input ime-focus-id="mailRegister.psd2" ime-next="$submit" type="password" name="password2"
+                               required ng-model="loginModal.mailRegData.password2"
+                               equal-to="loginModal.mailRegData.password"
+                               minlength="6" placeholder="密码(重复)">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="mailRegister.password2.$error && (mailRegister.password2.$touched || mailRegister.$submitted)"
+                         ng-messages="mailRegister.password2.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                    <input type="submit" id="mailRegister" hidden/>
+                </form>
+                <button class="button button-small button-full button-balanced" linked="mailRegister">
+                    同意协议并注册
+                </button>
+                <p class="agreement" ng-click="loginModal.go('modal.login.license')">用户隐私条款</p>
+            </modal-layer>
+
+            <modal-layer name="modal.login.forget" class="list forget list-borderless">
+                <form class="input-set" name="getPassword" novalidate
+                      ng-submit="getPassword.$valid && loginModal.getPassword()">
+                    <label class="item item-input"
+                           ng-class="{ 'has-error' : getPassword.email.$invalid && (getPassword.email.$touched || getPassword.$submitted) }">
+                        <input type="email" name="email" required focus-me
+                               ng-model="loginModal.getPwdData.email" placeholder="Email">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="getPassword.email.$error && (getPassword.email.$touched || getPassword.$submitted)"
+                         ng-messages="getPassword.email.$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                    <input type="submit" id="getPassword" hidden/>
+                </form>
+                <button class="button button-small button-full button-balanced" linked="getPassword">
+                    找回密码
+                </button>
+            </modal-layer>
+
+            <modal-layer name="modal.login.license">
+                <ion-scroll>
+                    <p class="center">『欧优游』用户协议</p>
+
+                    <p>欢迎使用欧优游APP！请仔细阅读以下声明，您注册欧优游APP，在欧优游查看信息以及使用欧优游提供的服务表明您对以下内容的接受：</p>
+
+                    <p>1.服务说明</p>
+
+                    <p>欧优游是为热爱旅行、热爱欧洲的旅游爱好者提供的用于收集、分享旅行故事，获取旅行灵感，创作旅行计划的开放平台。欧优游提倡有深度、有故事的旅行，鼓励原创、鼓励分享！</p>
+
+                    <p>欧优游APP提供的资讯以及功能仅允许个人以非商业目的进行使用，未经欧优游授权许可，任何人不得将欧优游APP作为媒介用来宣传自己的产品或服务，或将本APP作为其他商业用途。</p>
+
+                    <p>欧优游借助自身在欧洲多年积累下来的资源优势，为国内用户整合、甄选有深度、值得体验的欧洲自由行产品，并通过APP实现产品的浏览、预订。</p>
+
+                    <p>欧优游APP相关信息服务由上海走客网络科技股份有限公司提供，支付服务由旗下连云港假日国际旅行社有限公司提供。</p>
+
+                    <p>2.知识产权</p>
+
+                    <p>欧优游尊重知识产权并注重保护您享有的各项权利。您在欧优游APP发布（上传）的内容和授权欧优游APP使用您发布（上传）内容的行为不会对您就这些内容所享有的知识产权产生任何不良影响。</p>
+
+                    <p>您上传（发布）作品的著作权一律归作品的创作者所有。为了更好地对您、您发布（上传）的内容以及欧优游APP进行宣传推广，
+                        您同意欧优游可在欧优游APP、网站，及欧优游其他产品中使用和传播这些内容，以及为宣传推广的目的将上述内容许可给第三方进行使用和传播。</p>
+
+                    <p>未经欧优游授权许可，任何人或组织都不得复制、使用欧优游APP上的任何内容。欧优游APP出现的与欧优游有关的商标、Logo等标识，在未经欧优游书面授权许可的前提下，
+                        任何人或组织均不得以任何目的，任何方式进行使用。</p>
+
+                    <p>3.隐私权条款</p>
+
+                    <p>欧优游严格保障用户隐私权，对用户的个人信息保密，未经用户同意绝不向他人泄露，但法律另有规定的除外。
+                        只有当政府机关依照法定程序要求我们披露用户的个人资料时，欧优游才会依法或为维护公共安全之目的向执法单位提供相关用户的个人资料，且不承担任何法律责任。</p>
+
+                    <p>用户自愿注册个人信息，用户在注册时提供的所有信息，都是基于自愿，用户有权在任何时候拒绝提供这些信息。注册个人信息的用户同意欧优游对这些信息进行善意利用。
+                        欧优游使用目前业界高可靠性的服务器软件，支持安全加密协议。我们会运用这套软件并采用多种方法在最大程度上来确保用户提供的信息不被非法访问。
+                        用户明确同意其使用欧优游网络服务所存在的风险将完全由其自己承担。</p>
+
+                    <p>4.免责条款</p>
+
+                    <p>欧优游不担保网络服务一定能满足用户的要求，也不担保网络服务不会中断，对网络服务的及时性、安全性、准确性也都不做担保。</p>
+
+                    <p>欧优游不保证为向用户提供便利而设置的外部链接的准确性和完整性，同时，对于该等外部链接指向的不由欧优游实际控制的任何网页上的内容，欧优游不承担任何责任。</p>
+
+                    <p>对于因不可抗力或欧优游不能控制的原因造成的网络服务中断或其他缺陷，欧优游不承担任何责任，但将尽力减少因此而给用户造成的损失和影响。</p>
+
+                    <p>5.其他</p>
+
+                    <p>本声明适用中华人民共和国法律，用户和欧优游一致同意服从中华人民共和国人民法律，接受上海市浦东新区人民法院的管辖。
+                        如其中任何条款与中华人民共和国法律相抵触，则这些条款将完全按法律规定重新解释，而其它条款依旧具有法律效力。</p>
+
+                    <p>本协议最终解释权归“欧优游”（上海走客网络科技股份有限公司）所有，我们同时保留随时更改上述免责及其他条款的权利。</p>
+                </ion-scroll>
+            </modal-layer>
+        </modal-layer-list>
+    </ion-content>
+</ion-modal-view>

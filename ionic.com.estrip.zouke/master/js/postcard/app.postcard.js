@@ -1,0 +1,1 @@
+angular.module("app.postcard", ["app.postcard.controller", "app.postcard.route"])

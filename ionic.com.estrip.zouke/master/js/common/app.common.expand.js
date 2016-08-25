@@ -1,0 +1,1 @@
+angular.module("app.common.expand", ["app.common.expand.directive"])

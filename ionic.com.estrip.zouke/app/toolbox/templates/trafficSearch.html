@@ -1,0 +1,181 @@
+<ion-view drag-back view-title={{title}} class="traffic-search">
+
+    <ion-content scroll="false">
+
+        <div class="item tabs tabs-secondary">
+            <a class="tab-item" ng-class="{'active': activeSlide==0}" ng-click="onClickSwitch(0)">
+                站站查询
+            </a>
+            <a class="tab-item" ng-class="{'active': activeSlide==1}" ng-click="onClickSwitch(1)">
+                欧铁通票
+            </a>
+        </div>
+
+        <ion-slide-box ignore-bouncing prevent-event
+                       on-slide-changed="onSlideChanged($index)"
+                       delegate-handle="traffic-search"
+                       show-pager="false">
+
+            <!-- 站站查询 -->
+            <ion-slide class="query">
+                <ion-scroll has-bouncing="false">
+
+                    <form class="list" role="list" novalidate ng-submit="actionTrainSearch()">
+                        <div ng-class="{'row': mini}">
+                            <label class="item item-input" ng-class="{'col': mini}">
+                                <span class="input-label" ng-hide="mini">出发</span>
+                                <label class="input" ng-click="onClickSelect('from')">{{form.fromCity.zh_name}}</label>
+                                <span class="more" ng-hide="mini"><i class="icon ion-ios-arrow-right"></i></span>
+                            </label>
+
+                            <span class="arrow" ng-show="mini"><i class="icon ion-ios-arrow-right"></i></span>
+
+                            <label class="item item-input" ng-class="{'col': mini}">
+                                <span class="input-label" ng-hide="mini">到达</span>
+                                <label class="input" ng-click="onClickSelect('to')">{{form.toCity.zh_name}}</label>
+                                <span class="more" ng-hide="mini"><i class="icon ion-ios-arrow-right"></i></span>
+                            </label>
+                        </div>
+
+                        <div ng-class="{'row': mini}">
+                            <label class="item item-input" ng-class="{'col': mini}">
+                                <span class="input-label" ng-hide="mini">出发日期</span>
+                                <label class="input" ng-click="onClickSelect('date')">{{form.date}}</label>
+                                <span class="more" ng-hide="mini"><i class="icon ion-ios-arrow-right"></i></span>
+                            </label>
+
+                            <label class="item item-input" ng-class="{'col': mini}">
+                                <span class="input-label" ng-hide="mini">出发时间</span>
+                                <label class="input" ng-click="onClickSelect('time')">{{form.timeRange.label}}</label>
+                                <span class="more" ng-hide="mini"><i class="icon ion-ios-arrow-right"></i></span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="button button-full"
+                                ng-class="{'button-balanced': form.fromCity.zh_name && form.toCity.zh_name, 'top-10': mini}"
+                                ng-show="!mini||modified">
+                            查询
+                        </button>
+                    </form>
+
+                    <div class="list result" ng-show="mini">
+                        <div class="row" ng-if="mini" ion-affix data-affix-within-parent-with-class="list">
+                            <div class="col">出发</div>
+                            <div class="col">到达</div>
+                            <div class="col">历时</div>
+                            <div class="col">车次</div>
+                        </div>
+
+                        <div ng-repeat="train in trains" ng-init="expand=false">
+                            <div class="item" ng-click="train.has_transfer?expand=!expand:{}">
+                                <p>
+                                    <span>{{train.from_station}}</span>
+                                    <i class="icon ion-ios-arrow-thin-right"></i>
+                                    <span>{{train.to_station}}</span>
+                                </p>
+
+                                <div class="row">
+                                    <span class="col">{{train.from_time}}</span>
+                                    <span class="col">{{train.to_time}}</span>
+                                    <span class="col">{{train.time_cost}}</span>
+                                    <span class="col transfer"
+                                          ng-if="train.has_transfer">换乘{{train.transfer_times}}次</span>
+                                    <span class="more" ng-if="train.has_transfer">
+                                        <i class="icon"
+                                           ng-class="{'ion-ios-arrow-down':!expand, 'ion-ios-arrow-up':expand}"></i>
+                                    </span>
+                                    <span class="col" ng-if="!train.has_transfer">{{train.numbers.join('/')}}</span>
+                                </div>
+                            </div>
+
+                            <div class="item detail" ng-if="train.has_transfer"
+                                 ng-show="expand"
+                                 ng-repeat="item in train.detail">
+                                <p class="city" ng-if="item.transfer_wait">
+                                    <span><i>{{item.transfer_city}}</i>换乘</span>等候{{item.transfer_wait}}
+                                </p>
+
+                                <p>
+                                    <span>{{item.from_station}}</span>
+                                    <i class="icon ion-ios-arrow-thin-right"></i>
+                                    <span>{{item.to_station}}</span>
+                                </p>
+
+                                <div class="row">
+                                    <span class="col">{{item.from_time}}</span>
+                                    <span class="col">{{item.to_time}}</span>
+                                    <span class="col">{{item.time_cost}}</span>
+                                    <span class="col">{{item.numbers.join('/')}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </ion-scroll>
+            </ion-slide>
+
+            <!-- 欧铁通票 -->
+            <ion-slide class="ticket">
+                <ion-scroll has-bouncing="false">
+
+                    <div class="list">
+                        <div class="item"
+                             ng-repeat="product in products"
+                             ng-if="$index<number*page"
+                             ng-style="{height: imgHeight}">
+
+                            <a href="#/product/{{product.pid}}">
+                                <img class="img-responsive"
+                                     data-original="{{product.img+imgSize}}"
+                                     ng-src="{{product.img+imgSize}}"
+                                     ng-style="{height: imgHeight}">
+
+                                <div class="caption-top"></div>
+                                <div class="caption-bottom">
+                                    <div class="title">{{product.title}}</div>
+                                    <div class="desc">{{product.desc}}</div>
+                                    <div class="tips">
+                                        <span class="location right-5" ng-if="product.cat!='WD'">
+                                            <i class="ic ic-location-grey"></i>
+                                            {{product.cat == 'TG'?'常住地:' : (product.cat == 'RS'?'出发地:':'')}} {{product.city||product.country}}
+                                        </span>
+                                        <span class="dist left-5 right-5" ng-if="product.dist!=-1">
+                                            <i class="ic ic-location-grey"></i>
+                                            {{ product.dist > 1?product.dist+' km':'< 1km'}}
+                                        </span>
+                                        <span class="location right-5" ng-if="type == 'mark'">
+                                            <span class="category left-10 right-5"><i class="ion-bookmark"></i>{{product.category}}</span>
+                                        </span>
+                                    </div>
+
+                                    <div class="min-cost" ng-if="product.cat=='FS'||product == 'PT'">
+                                        <span>人均¥{{product.min_cost}}起</span></div>
+                                    <div class="price" ng-bind-html="'¥'+product.price"
+                                         ng-if="product.cat!='FS'&&product.cat != 'PT'"></div>
+                                    <div class="ori-price" ng-if="product.cat != 'FS'&&product != 'PT'">
+                                        {{product.ori_price=='0'||product.ori_price==''?'':'¥'+product.ori_price}}
+                                    </div>
+                                </div>
+
+                                <div class="pd-flag"></div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <ion-infinite-scroll
+                            on-infinite="loadMore(page)"
+                            ng-if="products.length>page*number"
+                            spinner="spiral"
+                            immediate-check="false"
+                            distance="20%">
+                    </ion-infinite-scroll>
+
+                </ion-scroll>
+            </ion-slide>
+
+        </ion-slide-box>
+
+    </ion-content>
+
+</ion-view>

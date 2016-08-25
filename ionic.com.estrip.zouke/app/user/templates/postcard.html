@@ -1,0 +1,14 @@
+<ion-view drag-back view-title="我的明信片" class="user user-postcard">
+    <ion-content>
+        <section ng-repeat="postcard in postcardList" class="postcard-block" ng-init="o_index=$index">
+            <div class="location">{{postcard.city_name||"其它"}}</div>
+            <div class="list flex">
+                <div ng-repeat="img in postcard.list">
+                    <div ng-click="showClip(img.id,o_index,$index)">
+                        <img ng-src="{{img.main_url+imgSizePost}}">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </ion-content>
+</ion-view>

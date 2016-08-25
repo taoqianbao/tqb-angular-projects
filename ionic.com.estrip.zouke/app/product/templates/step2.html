@@ -1,0 +1,145 @@
+<ion-view drag-back view-title="{{title}}" class="step2">
+    <ion-content>
+        <form name="infos" role="list" novalidate class="list" ng-submit="infos.$valid&&nextStep()">
+            <!--导游预约wifi定制没有出行人-->
+            <div ng-if="orderData.hasPerson()">
+                <div ng-repeat="c in loop">
+                    <div role="listitem" class="item item-divider item-borderless item-icon-left item-icon-right">
+                        <i class="icon ion-ios-person-outline"></i>
+                        {{$first?"主要出行人":"出行人 "+($index+1)+ ($index>=cIndex? ($index>=tIndex?"( 青少年 )": "( 儿童 )"):"" )}}
+                        <span style="cursor:pointer;" ng-click="choose($index)">
+                        <span style="color:#3EB8B2;" class="item-note">选择</span>
+                        <i style="color:#3EB8B2;" class="icon ion-ios-arrow-forward"></i></span>
+                    </div>
+                    <label class="item item-input">
+                        <span class="input-label">姓名</span>
+                        <input name="{{'name'+$index}}" ng-blur="getPinYin($index)"
+                               ng-model="orderData.personInfos[$index].name" type="text" required
+                               placeholder="与护照中文名一致">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="infos['name'+$index].$error && (infos['name'+$index].$touched || infos.$submitted)"
+                         ng-messages="infos['name'+$index].$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                    <label class="item item-input">
+                        <span class="input-label">拼音</span>
+                        <input name="{{'py'+$index}}" ng-model="orderData.personInfos[$index].pyname" required
+                               type="text">
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="infos['py'+$index].$error && (infos['py'+$index].$touched || infos.$submitted)"
+                         ng-messages="infos['py'+$index].$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                    <label ng-if="$index>=cIndex" class="item item-input">
+                        <span class="input-label">年龄</span>
+                        <input name="{{'age'+$index}}" ng-model="orderData.personInfos[$index].age" required
+                               type="number">
+                    </label>
+
+                    <div ng-if="$index>=cIndex" class="form-errors"
+                         ng-show="infos['age'+$index].$error && (infos['age'+$index].$touched || infos.$submitted)"
+                         ng-messages="infos['age'+$index].$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                    <!--<div ng-if="$last" class="item"></div>-->
+                </div>
+            </div>
+
+            <!--联系方式-->
+            <div>
+                <div role="listitem" class="item item-divider item-icon-left item-icon-right">
+                    <i class="icon ion-ios-paper-outline"></i>联系方式
+                    <span style="cursor:pointer;" ng-click="choose(-1)">
+                        <span style="color:#3EB8B2;" class="item-note">选择</span>
+                        <i style="color:#3EB8B2;" class="icon ion-ios-arrow-forward"></i>
+                    </span>
+                </div>
+                <label class="item item-input">
+                    <span class="input-label">姓名</span>
+                    <input name="name-1" ng-blur="getPinYin(-1)" ng-model="orderData.contactInfo.name" required
+                           type="text">
+                </label>
+
+                <div class="form-errors"
+                     ng-show="infos['name-1'].$error && (infos['name-1'].$touched || infos.$submitted)"
+                     ng-messages="infos['name-1'].$error"
+                     ng-messages-include="app/common/templates/form-errors.html">
+                </div>
+                <label class="item item-input">
+                    <span class="input-label">拼音</span>
+                    <input name="py-1" ng-model="orderData.contactInfo.pyname" required type="text">
+                </label>
+
+                <div class="form-errors"
+                     ng-show="infos['py-1'].$error && (infos['py-1'].$touched || infos.$submitted)"
+                     ng-messages="infos['py-1'].$error"
+                     ng-messages-include="app/common/templates/form-errors.html">
+                </div>
+                <label class="item item-input">
+                    <span class="input-label">手机</span>
+                    <input name="mobile-1" ng-model="orderData.contactInfo.mobile" required is-mobile type="number">
+                </label>
+
+                <div class="form-errors"
+                     ng-show="infos['mobile-1'].$error && (infos['mobile-1'].$touched || infos.$submitted)"
+                     ng-messages="infos['mobile-1'].$error"
+                     ng-messages-include="app/common/templates/form-errors.html">
+                </div>
+                <label class="item item-input">
+                    <span class="input-label">邮箱</span>
+                    <input name="email-1" ng-model="orderData.contactInfo.email" type="email" required>
+                </label>
+
+                <div class="form-errors"
+                     ng-show="infos['email-1'].$error && (infos['email-1'].$touched || infos.$submitted)"
+                     ng-messages="infos['email-1'].$error"
+                     ng-messages-include="app/common/templates/form-errors.html">
+                </div>
+                <div ng-if="orderData.needExpress">
+                    <label class="item item-input">
+                        <span class="input-label">地址</span>
+                        <input name="address-1" ng-model="orderData.contactInfo.address" type="text" required>
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="infos['address-1'].$error && (infos['address-1'].$touched || infos.$submitted)"
+                         ng-messages="infos['address-1'].$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                    <label class="item item-input">
+                        <span class="input-label">邮编</span>
+                        <input name="zipcode-1" ng-model="orderData.contactInfo.zipcode" type="text" required>
+                    </label>
+
+                    <div class="form-errors"
+                         ng-show="infos['zipcode-1'].$error && (infos['zipcode-1'].$touched || infos.$submitted)"
+                         ng-messages="infos['zipcode-1'].$error"
+                         ng-messages-include="app/common/templates/form-errors.html">
+                    </div>
+                </div>
+            </div>
+            <div class="small assertive button-small"><i class="icon ion-ios-information assertive"></i>&ensp;为顺利出行，请确保以上信息正确无误
+            </div>
+            <input type="submit" id="infosSubmit" hidden/>
+        </form>
+    </ion-content>
+
+    <ion-footer-bar>
+        <a class="tab-item">
+            <div ng-if="orderData.hasPrice()">
+                <span style="color:#3EB8B2;font-size:1.2em">{{orderData.isGuide()?"押金":"共" }}&ensp;&yen;{{orderData.getPrice()}}</span>
+                <span ng-if="!orderData.isGuide()"
+                      style="color:#777;font-size:0.8em;">省&yen;{{orderData.getSave()}}</span>
+            </div>
+            <div ng-if="!orderData.hasPrice()">
+                <span style="color:#3eb8b2">{{orderData.isPersonal()?"尊享定制":"免费预约"}}</span>
+            </div>
+        </a>
+        <button linked="infosSubmit" class="button icon-right button-round button-assertive ion-ios-arrow-right">下一步
+        </button>
+    </ion-footer-bar>
+</ion-view>

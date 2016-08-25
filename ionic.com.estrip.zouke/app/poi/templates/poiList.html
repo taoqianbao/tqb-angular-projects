@@ -1,0 +1,30 @@
+<ion-view drag-back view-title="{{title}}" class="poi-list">
+
+    <ion-content>
+        <div class="list list-borderless">
+            <a class="item item-thumbnail-left item-poi"
+               collection-repeat="poi in items track by poi.id"
+               ng-click="onClickPoi(poi.id, poi.name)">
+                <img ng-src="{{poi.img?poi.img+imgSizeThumb:hostImg+'/app/poi/default-thumb.jpg'+imgSizeThumb}}">
+
+                <h3>{{poi.name}}</h3>
+
+                <p>{{poi.tags}}</p>
+
+                <span class="more">
+                    <i class="icon ion-ios-arrow-right"></i>
+                </span>
+            </a>
+        </div>
+
+        <ion-infinite-scroll
+                ng-show="httpRequesting && hasMore"
+                on-infinite="loadMore()"
+                spinner="spiral"
+                immediate-check="false"
+                distance="20%">
+        </ion-infinite-scroll>
+
+    </ion-content>
+
+</ion-view>

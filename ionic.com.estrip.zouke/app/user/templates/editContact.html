@@ -1,0 +1,98 @@
+<ion-view drag-back view-title="{{title}}">
+    <ion-nav-buttons side="secondary">
+        <a class="button button-clear button-balanced" linked="editContactSubmit">
+            保存
+        </a>
+    </ion-nav-buttons>
+
+    <ion-content>
+        <form name="editContactForm" class="list" novalidate ng-submit="editContactForm.$valid&&saveContact()">
+            <input type="text" style="display:none;" id="contact-id" name="contact-id" class="contact-id" ng-model="contact._id" >
+            <label class="item item-input item-stacked-label" ng-class="{ 'has-error' : editContactForm.name.$invalid && (editContactForm.name.$touched || editContactForm.$submitted) }">
+                <span class="input-label">姓名</span>
+                <input type="text" name="name" ng-model="contact.name" autocorrect="off" required ng-blur="genPinyin()"/>
+            </label>
+            <div class="form-errors"
+                 ng-show="editContactForm.name.$error && (editContactForm.name.$touched || editContactForm.$submitted)"
+                 ng-messages="editContactForm.name.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+
+            <label class="item item-input item-stacked-label" ng-class="{ 'has-error' : editContactForm.pyname.$invalid && (editContactForm.pyname.$touched || editContactForm.$submitted) }">
+                <span class="input-label">拼音</span>
+                <input type="text" name="pyname" ng-model="contact.pyname" autocorrect="off" required />
+            </label>
+            <div class="form-errors"
+                 ng-show="editContactForm.pyname.$error && (editContactForm.pyname.$touched || editContactForm.$submitted)"
+                 ng-messages="editContactForm.pyname.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+
+            <label class="item item-input item-stacked-label" ng-class="{ 'has-error' : editContactForm.mobile.$invalid && (editContactForm.mobile.$touched || editContactForm.$submitted) }">
+                <span class="input-label">手机</span>
+                <input type="number" name="mobile" ng-model="contact.mobile" autocorrect="off" is-mobile required />
+            </label>
+            <div class="form-errors"
+                 ng-show="editContactForm.mobile.$error && (editContactForm.mobile.$touched || editContactForm.$submitted)"
+                 ng-messages="editContactForm.mobile.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+
+            <label class="item item-input item-stacked-label" ng-class="{ 'has-error' : editContactForm.email.$invalid && (editContactForm.email.$touched || editContactForm.$submitted) }">
+                <span class="input-label">邮箱</span>
+                <input type="email" name="email" ng-model="contact.email" autocorrect="off" />
+            </label>
+            <div class="form-errors"
+                 ng-show="editContactForm.email.$error && (editContactForm.email.$touched || editContactForm.$submitted)"
+                 ng-messages="editContactForm.email.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+
+            <label class="item item-input item-stacked-label" ng-class="{ 'has-error' : editContactForm.passport.$invalid && (editContactForm.passport.$touched || editContactForm.$submitted) }">
+                <span class="input-label">护照</span>
+                <input type="text" name="passport" ng-model="contact.passport" autocorrect="off" />
+            </label>
+            <div class="form-errors"
+                 ng-show="editContactForm.passport.$error && (editContactForm.passport.$touched || editContactForm.$submitted)"
+                 ng-messages="editContactForm.passport.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+
+            <label class="item item-input item-stacked-label" ng-class="{ 'has-error' : editContactForm.address.$invalid && (editContactForm.address.$touched || editContactForm.$submitted) }">
+                <span class="input-label">地址</span>
+                <input type="text" name="address" ng-model="contact.address" autocorrect="off" />
+            </label>
+            <div class="form-errors"
+                 ng-show="editContactForm.address.$error && (editContactForm.address.$touched || editContactForm.$submitted)"
+                 ng-messages="editContactForm.address.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+
+            <label class="item item-input item-stacked-label" ng-class="{ 'has-error' : editContactForm.zipcode.$invalid && (editContactForm.zipcode.$touched || editContactForm.$submitted) }">
+                <span class="input-label">邮编</span>
+                <input type="number" name="zipcode" ng-model="contact.zipcode" autocorrect="off" />
+            </label>
+            <div class="form-errors"
+                 ng-show="editContactForm.zipcode.$error && (editContactForm.zipcode.$touched || editContactForm.$submitted)"
+                 ng-messages="editContactForm.zipcode.$error"
+                 ng-messages-include="app/common/templates/form-errors.html">
+            </div>
+            <input type="submit" id="editContactSubmit" hidden />
+        </form>
+        <button class="button button-full button-stable assertive" ng-click="deleteContact()">
+            删除联系人
+        </button>
+
+
+        <div class="personal-center" on-finish-render>
+            <div class="contact-edit">
+                    <!-- 添加/编辑联系人页 -->
+                    <form class="form-contact" novalidate="novalidate">
+                        <a class="btn contact-del top-18 bg-white orange" ng-click="deleteContact()" style="display: none;">
+                            <span>删除该联系人信息</span>
+                        </a>
+                    </form>
+                </div>
+        </div>
+    </ion-content>
+</ion-view>

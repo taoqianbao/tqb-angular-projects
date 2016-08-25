@@ -1,0 +1,67 @@
+<ion-view drag-back view-title="添加城市" class="map-add">
+    <ion-nav-buttons side="right">
+        <button class="button button-clear" ng-class="{'balanced':cityAdded>0}" ng-click="onClickConfirm()">
+            <i class="badge" ng-show="cityAdded>0">{{cityAdded}}</i>
+            确定
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content delegate-handle="map-add" has-bouncing="false" on-swipe-left="$event.stopPropagation()">
+
+        <div class="list hot" ng-if="maplist">
+            <div class="item item-divider" ion-affix data-affix-within-parent-with-class="list">热门城市</div>
+
+            <div class="item item-text-wrap item-checkbox"
+                 ng-repeat="city in maplist | orderBy:'sort'"
+                 ng-if="city.hot == 1"
+                 ng-click="toggleCheck(city.id,$event)">
+                {{city.city_name}}
+                <span class="size">{{city.size_desc}}</span>
+                <span class="more" ng-if="city.status.downloadStatus == '1'">已下载</span>
+                <span class="more" ng-if="['2','3','4']|inArray:city.status.downloadStatus">下载中</span>
+                <span class="more" ng-if="city.status.downloadStatus == '5'">等待中</span>
+
+                <label class="checkbox" ng-if="['0','6']|inArray:city.status.downloadStatus"
+                       ng-click="toggleCheck1(city.id,$event);$event.stopPropagation()">
+                    <input type="checkbox" ng-checked="city.status.downloadStatus=='6'">
+                </label>
+            </div>
+        </div>
+
+        <div class="list" ng-init="maplistByCountry=(maplist | orderBy:'sort' | groupby:'country_name')"
+             ng-if="maplist">
+            <div class="item item-divider" ion-affix data-affix-within-parent-with-class="list">所有国家</div>
+
+            <div ng-repeat="item in maplistByCountry" ng-init="index = $index">
+
+                <div class="item item-text-wrap"
+                     ng-click="toggleGroup(index)"
+                     ng-class="{active: isGroupShown(index)}">
+                    {{item.key}}
+                    <span class="more">
+                        <i class="icon" ng-class="isGroupShown(index) ? 'ion-ios-arrow-up' : 'ion-ios-arrow-down'"></i>
+                    </span>
+                </div>
+
+                <div class="item item-text-wrap item-accordion item-checkbox city"
+                     ng-repeat="city in item.list"
+                     ng-click="toggleCheck(city.id,$event);"
+                     ng-show="isGroupShown(index)">
+                    {{city.city_name}}
+                    <span class="size">{{city.size_desc}}</span>
+
+                    <span class="more" ng-if="city.status.downloadStatus=='1'">已下载</span>
+                    <span class="more" ng-if="['2','3','4']|inArray:city.status.downloadStatus">下载中</span>
+                    <span class="more" ng-if="city.status.downloadStatus == '5'">等待中</span>
+
+                    <label class="checkbox" ng-if="['0','6']|inArray:city.status.downloadStatus"
+                           ng-click="toggleCheck1(city.id,$event);$event.stopPropagation()">
+                        <input type="checkbox" ng-checked="city.status.downloadStatus=='6'">
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+    </ion-content>
+</ion-view>

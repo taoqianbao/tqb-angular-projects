@@ -1,0 +1,1 @@
+angular.module("app.base", ["app.base.controller", "app.base.route", "app.base.modal", "app.base.directive", "app.base.logic", "app.base.config"])

@@ -1,0 +1,1 @@
+angular.module("app.common.resource", ["app.common.resource.service"])

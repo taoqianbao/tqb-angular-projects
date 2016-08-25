@@ -1,0 +1,20 @@
+<ion-modal-view>
+    <ion-header-bar>
+        <h1 class="title">选择故事标签</h1>
+
+        <div class="buttons">
+            <button class="button button-clear" ng-click="closeSubjectModel()">取消</button>
+        </div>
+    </ion-header-bar>
+    <ion-content has-bouncing="false" scrollbar-y="false">
+        <div class="story-tags-select">
+            <!-- 选择标签 -->
+            <!--<a class="tag-item bottom-grey" ng-class="{active: selected == 'hot'}"
+               ng-click="onClickTag('hot','热门故事')"><span>热门故事</span></a>-->
+
+            <a class="tag-item bottom-grey" ng-repeat="tag in tags"
+               ng-class="{active: selected == tag.code}"
+               ng-click="onClickTag(tag.code, tag.name)"><span>{{tag.name}}</span></a>
+        </div>
+    </ion-content>
+</ion-modal-view>

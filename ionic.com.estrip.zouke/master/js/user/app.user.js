@@ -1,0 +1,1 @@
+angular.module("app.user", ["app.user.modal", "app.user.controller", "app.user.route"])

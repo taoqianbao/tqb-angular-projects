@@ -1,0 +1,44 @@
+<ion-view drag-back class="comment-list">
+    <ion-nav-title><a class="font-14">{{title}}</a></ion-nav-title>
+
+    <ion-content delegate-handle="comment-list">
+
+        <div class="comment">
+            <div class="item item-avatar item-comment" ng-repeat="comment in comments track by comment.id">
+                <img ng-src="{{comment.avatar}}"
+                     ng-click="comment.user_id==user.info.user_id?sideModal.setUserInfo():onClickUser(comment.user_id, comment.user, comment.avatar)">
+
+                <h3 ng-click="replyUser($event,comment.user_name)">{{comment.user_name}}</h3>
+                <p ng-click="replyUser($event,comment.user_name)">{{comment.comment}}</p>
+
+                <!--<p ng-if="comment.reply_id == null"><span>回复此条</span></p>-->
+
+                <!--<p ng-if="comment.reply_id != null"><span>{{comment.reply_nick}}</span>回复:-->
+                <!--{{comment.reply_comment}}</p>-->
+
+                <div class="like" ng-click="onClickCommentLike(comment.id, $index)">
+                    {{comment.like_num}}<span ng-class="{'active':comment.is_liked}">有用</span>
+                    <!--<i class="ic" ng-class="{'ic-like':!comment.is_liked,'ic-liked':comment.is_liked}"></i>-->
+                </div>
+                <i class="hr"></i>
+            </div>
+        </div>
+
+    </ion-content>
+
+    <ion-footer-bar class="bar-light" keyboard-attach>
+        <form class="item item-input-inset top-grey" ng-submit="onSubmitComment()">
+            <!--<span>说两句</span>-->
+            <img class="avatar" ng-src="{{user.isSigned?user.info.avatar:'img/user.png'}}"
+                 ng-click="sideModal.setUserInfo()">
+            <label class="item-input-wrapper">
+                <!-- 使用elastic指令实现textarea高度自适应 -->
+                <textarea rows="1" minlength="1" maxlength="140"
+                          placeholder="{{comments.length==0?'抢个沙发吧':'说点什么吧'}}"
+                          ng-model="content.value"></textarea>
+                <button class="button button-small button-clear button-balanced" type="submit">发送</button>
+            </label>
+        </form>
+    </ion-footer-bar>
+</ion-view>
+

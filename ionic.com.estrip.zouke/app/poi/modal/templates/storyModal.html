@@ -1,0 +1,82 @@
+<ion-modal-view class="story-card">
+    <!--<div class="card-bg" ng-style="{'background-image': 'url(http://cdn1.zouke.com/product/1427448793571525.jpg)'}"></div>-->
+
+    <div class="item-title" ng-click="onClickStoryTitle(story.poiId, story.poiName)" ng-show="story.titleShown">
+        <span class="poi">
+            {{story.poiName}}
+            <span class="city">
+                <i class="ic ic-location-grey"></i>{{story.city}}
+            </span>
+        </span>
+        <span class="mark" ng-click="onClickMarkPoi($event, story.poiId)">
+            <i class="ic"
+               ng-class="{'ic-heart-inactive-grey': !user.isSigned||!story.poiMarked, 'ic-heart-active': user.isSigned&&story.poiMarked}"></i>
+            {{story.poiMarked?'已收藏':'收藏'}}
+        </span>
+    </div>
+
+    <ion-slide-box ignore-bouncing delegate-handle="story-card-slider"
+                   on-slide-changed="onStorySlideChanged($index)"
+                   on-drag="onStoryDrag()"
+                   on-release="onStoryRelease()"
+                   show-pager="false">
+
+        <ion-slide ng-repeat="item in stories">
+
+            <!--<ion-scroll has-bouncing="false">-->
+                <div class="list card">
+                    <div class="item item-story-title">
+                        <h1>{{item.tag}}</h1>
+
+                        <h2>{{item.name}}</h2>
+
+                        <p ng-click="onClickStoryAuthor($event, stories[$index].user_id, stories[$index].user)">
+                            by {{item.user}}</p>
+                    </div>
+
+                    <div class="item item-image" ng-style="{height: story.hImgStory}">
+                        <img class="full-image" ng-src="{{item.img+story.imgSizeStory}}">
+                    </div>
+
+                    <div class="item item-body">
+                        <p>{{item.desc}}</p>
+                    </div>
+
+                    <div class="item tabs-action tabs tabs-secondary">
+                        <a class="tab-item">
+                            <span class="action-bar share" click-share="story" share-object="item">
+                                <i class="icon ic ic-share-grey"></i>
+                            </span>
+                        </a>
+                        <a class="tab-item">
+                            <span class="action-bar like" ng-click="onClickLike($index)">
+                                <i class="icon ic"
+                                   ng-class="{'ic-like': !item.liked, 'ic-liked': item.liked}"></i>
+                                <span>{{item.like}}</span>
+                            </span>
+                        </a>
+                        <a class="tab-item">
+                            <span class="action-bar comment" ng-click="onClickStoryComment(item.id, item.name)">
+                                <i class="icon ic ic-comment-grey"></i>
+                                <span>{{item.comment_num}}</span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            <!--</ion-scroll>-->
+
+        </ion-slide>
+    </ion-slide-box>
+
+    <section class="audio" ng-media media-type="audio" progress-show="true" ng-model="story.audio"
+             ng-show="story.audioShown">
+        <span>{{story.audioName}}</span>
+        <span>
+            <i class="time">{{story.audioDuration}}</i>
+            <i class="icon play ion-ios-play"
+               ng-class="{'ion-ios-play': story.audioPaused, 'ion-ios-pause': !story.audioPaused}"
+               ng-click="onClickPlay()"></i>
+        </span>
+    </section>
+
+</ion-modal-view>

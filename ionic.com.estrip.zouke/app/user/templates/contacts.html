@@ -1,0 +1,65 @@
+<ion-view drag-back view-title="{{title}}" class="contacts">
+    <ion-nav-buttons side="secondary">
+        <a class="button button-clear" href="#/addContact/{{opt}}">
+            <i class="icon ion-ios-plus-outline"></i>
+        </a>
+    </ion-nav-buttons>
+
+    <ion-content on-swipe-left="$event.stopPropagation()" ng-class="{'has-footer':choose}">
+        <ul ng-repeat="c in contacts" role="list" class="list">
+            <li role="listitem" ng-class="{'item-checkbox':choose}" class="item item-stable item-button-right">
+                <label ng-if="choose" class="checkbox"><input ng-model="orderData.chooseIndex[index]" type="radio" name="cid" value="{{$index}}" ></label>
+                {{c.name}}
+                <!--<button ng-click="" class="button button-light" style="padding:0 6px;right:3em;">
+                    <i class="icon ion-edit"></i>
+                </button>-->
+                <button ng-click="editContact(c)" class="button button-light" style="padding:0 6px;">
+                    <i class="icon edit"></i>
+                </button>
+            </li>
+            <li role="listitem" class="item item-icon-left">
+                <i class="icon ion-ios-telephone"></i>{{c.mobile||'&emsp;'}}
+            </li>
+            <li role="listitem" class="item item-icon-left">
+                <i class="icon ion-android-mail"></i>{{c.email||'&emsp;'}}
+            </li>
+            <!--<li role="listitem" class="item item-icon-left">-->
+                <!--<i class="icon ion-ios-paper"></i>{{c.passport||'&emsp;'}}-->
+            <!--</li>-->
+            <!--<li role="listitem" class="item item-icon-left">-->
+                <!--<i class="icon ion-ios-paper"></i>{{c.address||'&emsp;'}}-->
+            <!--</li>-->
+            <!--<li role="listitem" class="item item-icon-left">-->
+                <!--<i class="icon ion-ios-paper"></i>{{c.zipcode||'&emsp;'}}-->
+            <!--</li>-->
+        </ul>
+
+        <!--<div class="personal-center" on-finish-render>
+            <div class="contact-list">
+                <div class="panel top-18" id="550a726eb6f3ab64198b4568" ng-repeat="c in contacts">
+                    <div class="panel-heading top-grey">
+                        <a class="left-10" href="#/my/editContact/{{c._id}}">
+                        <span class="zh-name">{{c.name}}</span>
+                        <span class="more dark-blue">编辑</span><i class="more ic icon-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="item">
+                        <div class="row">
+                            <label>手机</label><span>{{c.mobile}}</span></div>
+                        <div class="row">
+                            <label>邮箱</label><span>{{c.email}}</span></div>
+                        <div class="row">
+                            <label>护照</label><span>{{c.passport}}</span></div>
+                        <div class="row">
+                            <label>地址</label><span>{{c.address}}</span></div>
+                        <div class="row">
+                            <label>邮编</label><span>{{c.zipcode}}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </ion-content>
+    <div ng-if="choose" ng-click="choose()" role="banner" class="bar bar-footer bar-balanced">
+        <div class="title">确定</div>
+    </div>
+</ion-view>

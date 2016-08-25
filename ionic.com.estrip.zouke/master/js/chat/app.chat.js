@@ -1,0 +1,1 @@
+angular.module("app.chat", ["app.controllers.chat", "app.route.chat"])

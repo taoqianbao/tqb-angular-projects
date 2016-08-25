@@ -1,0 +1,22 @@
+<ion-view drag-back view-title="详细行程" class="product">
+    <ion-content overflow-scroll="true">
+        <img class="img-responsive journey-img" ng-src="{{data.route_pic+imgSize}}">
+
+        <div class="list bottom-30">
+            <div class="item border-none center wrap bg-trans balanced">
+                {{data.route_name}}
+            </div>
+
+            <div ng-repeat="plan in data.day_plan">
+                <div class="item item-icon-right balanced" ng-init="toggle=false" ng-click="toggle=!toggle">
+                    {{$index+1}}天:&nbsp;{{plan.route}}
+                    <i class="icon ion-ios-minus-empty" ng-if="toggle"></i>
+                    <i class="icon ion-ios-plus-empty" ng-if="!toggle"></i>
+                </div>
+                <div class="item item-text-wrap" ng-show="toggle">
+                    <p>{{plan.route_brief}}</p>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

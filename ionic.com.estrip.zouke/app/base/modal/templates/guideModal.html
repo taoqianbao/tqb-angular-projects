@@ -1,0 +1,39 @@
+<ion-modal-view class="guide-modal bg-trans">
+    <ion-slide-box show-pager="true"
+                   ignore-bouncing
+                   on-slide-changed="guideModal.onSlideChanged($index)"
+                   on-swipe-left="guideModal.onSwipeLeft()"
+                   delegate-handle="guide-slider"
+                   auto-play="false"
+                   ng-style="{height: guideModal.devHeight, 'background-image': 'url(img/guide/0.jpg)'}">
+
+        <ion-slide ng-style="{'background-image': 'url(img/guide/1.png)'}">
+            <div class="slogan s1" ng-class="{'active':guideModal.activeSlide==0}"
+                 ng-style="{'background-image': 'url(img/guide/1-slogan.png)'}">
+            </div>
+        </ion-slide>
+
+        <ion-slide ng-style="{'background-image': 'url(img/guide/2.png)'}">
+            <div class="slogan s2" ng-class="{'active':guideModal.activeSlide==1}"
+                 ng-style="{'background-image': 'url(img/guide/2-slogan.png)'}">
+            </div>
+        </ion-slide>
+
+        <ion-slide ng-style="{'background-image': 'url(img/guide/3.png)'}">
+            <div class="slogan s3" ng-class="{'active':guideModal.activeSlide==2}"
+                 ng-style="{'background-image': 'url(img/guide/3-slogan.png)'}">
+            </div>
+        </ion-slide>
+
+        <ion-slide ng-style="{'background-image': 'url(img/guide/4.png)'}">
+            <div class="slogan s4" ng-class="{'active':guideModal.activeSlide==3}"
+                 ng-style="{'background-image': 'url(img/guide/4-slogan.png)'}">
+            </div>
+            <div class="start" ng-class="{'active':guideModal.startReady}">
+                <span ng-click="guideModal.onClickStart()">
+                    开始体验<i class="icon ion-ios-arrow-right"></i>
+                </span>
+            </div>
+        </ion-slide>
+    </ion-slide-box>
+</ion-modal-view>

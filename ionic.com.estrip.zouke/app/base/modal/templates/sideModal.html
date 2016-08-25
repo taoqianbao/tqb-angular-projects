@@ -1,0 +1,78 @@
+<ion-modal-view class="side-menu" on-swipe-right="sideModal.hide()" ng-click="sideModal.hide()">
+    <ion-content scroll="false" ng-click="$event.stopPropagation()">
+        <div class="list">
+
+            <div class="item item-borderless user">
+                <img class="avatar" ng-src="{{user.isSigned?user.info.avatar:'img/user.png'}}"
+                     ng-click="sideModal.setUserInfo()">
+
+                <p class="avatar-tip" ng-click="sideModal.setUserInfo()">
+                    {{user.isSigned?user.info.user_name:"开启有故事的旅行"}}</p>
+
+                <span class="setting" ng-click="sideModal.showSetting()">
+                    <i class="ic ic-setting"></i>
+                </span>
+            </div>
+
+            <div class="bar">
+                <a class="tab-item" ng-click="sideModal.onClickBar('journey')">
+                    <span>行程</span>
+                    <span>{{user.info.journey}}</span>
+                </a>
+                <a class="tab-item" ng-click="sideModal.onClickBar('poi')">
+                    <span>地点</span>
+                    <span>{{user.info.poi}}</span>
+                </a>
+                <a class="tab-item" ng-click="sideModal.onClickBar('postcard')">
+                    <span>明信片</span>
+                    <span>{{user.info.postcard}}</span>
+                </a>
+            </div>
+
+            <ul class="list notification">
+                <!--<li class="item item-divider" ng-click="sideModal.showMessage()">-->
+                    <!--我的消息<span class="badge" ng-show="user.info.message>0">{{user.info.message}}</span>-->
+                    <!--<span class="more">-->
+                        <!--<i class="icon ion-ios-arrow-right"></i>-->
+                    <!--</span>-->
+                <!--</li>-->
+
+                <li class="item item-divider" ng-click="sideModal.onClickBar('order')">
+                    我的订单<span class="badge">{{user.info.order.need_pay+user.info.order.un_use || ""}}</span>
+                    <span class="more">
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </li>
+
+                <!--<li class="item item-divider">-->
+                <!--完美旅行-->
+                <!--<span class="more">-->
+                <!--<i class="icon ion-ios-arrow-right"></i>-->
+                <!--</span>-->
+                <!--</li>-->
+
+                <li class="item item-divider" click-share="app" ng-click="sideModal.hide()">
+                    邀请朋友
+                    <span class="more">
+                        <i class="icon ion-ios-arrow-right"></i>
+                    </span>
+                </li>
+
+                <!--<li class="item item-divider" ng-click="sideModal.showSubscribe()">-->
+                <!--订阅选项-->
+                <!--<span class="more">-->
+                <!--<i class="icon ion-ios-arrow-right"></i>-->
+                <!--</span>-->
+                <!--</li>-->
+            </ul>
+
+        </div>
+
+        <div class="addition">
+            <!--<div>邀请朋友</div>-->
+            <div ng-click="sideModal.onClickBestTrip()">完美旅行</div>
+            <div ng-click="sideModal.showSetting('feedback')">和我们聊聊</div>
+        </div>
+    </ion-content>
+
+</ion-modal-view>

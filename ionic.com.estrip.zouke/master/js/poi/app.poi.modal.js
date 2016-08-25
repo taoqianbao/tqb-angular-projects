@@ -1,0 +1,1 @@
+angular.module("app.poi.modal", ["app.poi.modal.service"])

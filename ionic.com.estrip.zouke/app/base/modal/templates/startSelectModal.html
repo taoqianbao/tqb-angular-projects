@@ -1,0 +1,46 @@
+<ion-modal-view class="journey-start-select" ng-click="onClickModal()">
+    <div class="card" ng-show="$parent.start.active=='card'" ng-click="$event.stopPropagation()">
+        <!--<div class="item item-divider">-->
+        <!--选择出发地点与时间-->
+        <!--</div>-->
+        <label class="item item-input">
+            <span class="input-label">出发地</span>
+            <input type="hidden" ng-model="$parent.start.placeId">
+            <label class="input" ng-click="onClickSelect('place')">{{$parent.start.placeName}}</label>
+            <span class="more"><i class="icon ion-ios-arrow-right"></i></span>
+        </label>
+        <label class="item item-input">
+            <span class="input-label">出发日期</span>
+            <label class="input" ng-click="onClickSelect('date')">{{$parent.start.date.selected}}</label>
+            <span class="more"><i class="icon ion-ios-arrow-right"></i></span>
+        </label>
+
+        <div class="item item-divider">
+            <button class="button button-small"
+                    ng-class="{'button-assertive': $parent.start.placeId != ''}"
+                    ng-click="onClickConfirm($event)">确定
+            </button>
+        </div>
+    </div>
+
+    <ion-scroll class="place-picker" direction="y" scrollbar-y="true" has-bouncing="false"
+                ng-show="$parent.start.active=='place'" ng-click="$event.stopPropagation()">
+        <div class="list">
+            <label class="item item-radio" ng-repeat="city in $parent.start.places"
+                   ng-click="$parent.start.active='card';$parent.start.placeId=city.code;$parent.start.placeName=city.name">
+                <input type="radio" name="group">
+
+                <a class="item-content">
+                    {{city.name}}
+                </a>
+                <i class="radio-icon ion-ios-checkmark"></i>
+            </label>
+        </div>
+    </ion-scroll>
+
+    <div class="date-picker" ng-show="$parent.start.active=='date'" ng-click="$event.stopPropagation()">
+        <datepicker ng-model="$parent.start.date"></datepicker>
+    </div>
+
+</ion-modal-view>
+

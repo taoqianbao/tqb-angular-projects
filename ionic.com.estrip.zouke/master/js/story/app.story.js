@@ -1,0 +1,1 @@
+angular.module("app.story", ["app.story.controller", "app.story.route"])

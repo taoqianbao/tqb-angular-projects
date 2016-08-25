@@ -1,0 +1,167 @@
+<ion-view drag-back view-title="我的订单" class="user user-order">
+
+    <ion-content scroll="false" back-to-root>
+        <div class="item tabs tabs-secondary">
+            <a class="tab-item" ng-class="{'active': activeSlide==0}" ng-click="onClickSwitch(0)">
+                全部<span>{{orders.length}}</span>
+            </a>
+            <a class="tab-item" ng-class="{'active': activeSlide==1}" ng-click="onClickSwitch(1)">
+                待支付<span class="unpaid">{{orderGroup.unpaid.length}}</span>
+            </a>
+            <a class="tab-item" ng-class="{'active': activeSlide==2}" ng-click="onClickSwitch(2)">
+                未使用<span class="unused">{{orderGroup.unused.length}}</span>
+            </a>
+            <a class="tab-item" ng-class="{'active': activeSlide==3}" ng-click="onClickSwitch(3)">
+                待评价<span>{{orderGroup.uncomment.length}}</span>
+            </a>
+        </div>
+
+        <ion-slide-box ignore-bouncing prevent-event
+                       on-slide-changed="onSlideChanged($index)"
+                       delegate-handle="user-order"
+                       show-pager="false">
+            <!-- 全部订单 -->
+            <ion-slide>
+                <ion-scroll has-bouncing="false">
+                    <div class="list">
+                        <div ng-repeat="order in orders track by order.oid">
+                            <a class="item item-thumbnail-left" ng-click="gotoDetail(order.oid)">
+                                <img ng-src="{{order.image+imgSizeThumb}}">
+
+                                <h2>{{order.title}}</h2>
+
+                                <p>下单时间: {{order.order_time}}</p>
+
+                                <p>订单编号: {{order.oid}}</p>
+
+                                <p>订单状态: {{order.status_desc}}</p>
+                            </a>
+
+                            <i class="hr"></i>
+
+                            <div class="item item-divider" ng-switch="order.use_stat">
+                                &yen;{{order.price}} <span ng-if="order.save>0">省&yen;{{order.save}}</span>
+                                <a ng-switch-when="1" ng-click="gotoDetail(order.oid)"
+                                   class="button button-small button-assertive">付款</a>
+                                <a ng-switch-when="9" class="button button-small button-light">已取消</a>
+                                <a ng-switch-when="3" href="#/commentList/product/{{order.pd_id}}/{{order.title}}" class="button button-small button-balanced">评价</a>
+                                <a ng-switch-default ng-click="gotoDetail(order.oid)"
+                                   class="button button-small">查看</a>
+                            </div>
+                        </div>
+                    </div>
+
+                   <!-- <ion-infinite-scroll on-infinite="loadMore(1, page1)"
+                                         ng-if="orders.length>(page1*number)"
+                                         spinner="spiral"
+                                         immediate-check="false"
+                                         distance="20%">
+                    </ion-infinite-scroll>-->
+                </ion-scroll>
+            </ion-slide>
+
+            <!-- 待支付订单 -->
+            <ion-slide>
+                <ion-scroll has-bouncing="false">
+                    <div class="list">
+                        <div ng-repeat="order in orderGroup.unpaid track by order.oid">
+                            <a class="item item-thumbnail-left" ng-click="gotoDetail(order.oid)">
+                                <img ng-src="{{order.image+imgSizeThumb}}">
+
+                                <h2>{{order.title}}</h2>
+
+                                <p>下单时间: {{order.order_time}}</p>
+
+                                <p>订单编号: {{order.oid}}</p>
+
+                                <p>订单状态: {{order.status_desc}}</p>
+                            </a>
+
+                            <div class="item item-divider">
+                                &yen;{{order.price}} <span ng-if="order.save>0">省&yen;{{order.save}}</span>
+                                <a ng-click="gotoDetail(order.oid)" class="button button-small button-assertive">付款</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<ion-infinite-scroll on-infinite="loadMore(2, page2)"
+                                         ng-if="orderGroup.unpaid.length>(page2*number)"
+                                         spinner="spiral"
+                                         immediate-check="false"
+                                         distance="20%">
+                    </ion-infinite-scroll>-->
+                </ion-scroll>
+            </ion-slide>
+
+            <!-- 未使用订单 -->
+            <ion-slide>
+                <ion-scroll has-bouncing="false">
+                    <div class="list">
+                        <div ng-repeat="order in orderGroup.unused track by order.oid">
+                            <a class="item item-thumbnail-left" ng-click="gotoDetail(order.oid)">
+                                <img ng-src="{{order.image+imgSizeThumb}}">
+
+                                <h2>{{order.title}}</h2>
+
+                                <p>下单时间: {{order.order_time}}</p>
+
+                                <p>订单编号: {{order.oid}}</p>
+
+                                <p>订单状态: {{order.status_desc}}</p>
+                            </a>
+
+                            <div class="item item-divider">
+                                &yen;{{order.price}} <span ng-if="order.save>0">省&yen;{{order.save}}</span>
+                                <a ng-click="gotoDetail(order.oid)" class="button button-small">查看</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<ion-infinite-scroll on-infinite="loadMore(3, page3)"
+                                         ng-if="orderGroup.unused.length>(page3*number)"
+                                         spinner="spiral"
+                                         immediate-check="false"
+                                         distance="20%">
+                    </ion-infinite-scroll>-->
+                </ion-scroll>
+            </ion-slide>
+
+            <!-- 待评价订单 -->
+            <ion-slide>
+                <ion-scroll has-bouncing="false">
+                    <div class="list">
+                        <div ng-repeat="order in orderGroup.uncomment track by order.oid">
+                            <a class="item item-thumbnail-left" ng-click="gotoDetail(order.oid)">
+                                <img ng-src="{{order.image+imgSizeThumb}}">
+
+                                <h2>{{order.title}}</h2>
+
+                                <p>下单时间: {{order.order_time}}</p>
+
+                                <p>订单编号: {{order.oid}}</p>
+
+                                <p>订单状态: {{order.status_desc}}</p>
+                            </a>
+
+                            <div class="item item-divider">
+                                &yen;{{order.price}} <span ng-if="order.save>0">省&yen;{{order.save}}</span>
+                                <a href="#/commentList/product/{{order.pd_id}}/{{order.title}}" class="button button-small button-balanced">评价</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<ion-infinite-scroll on-infinite="loadMore(4, page4)"
+                                         ng-if="orderGroup.uncomment.length>(page4*number)"
+                                         spinner="spiral"
+                                         immediate-check="false"
+                                         distance="20%">
+                    </ion-infinite-scroll>-->
+                </ion-scroll>
+            </ion-slide>
+        </ion-slide-box>
+
+
+    </ion-content>
+
+
+</ion-view>

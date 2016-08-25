@@ -1,0 +1,24 @@
+<ion-view view-title="选择航班（{{nowNode.from}} ~ {{nowNode.to}}）" class="journey-traffic-select" >
+
+    <ion-content>
+        <ul class="list">
+            <li class="item item-checkbox" ng-repeat="s in nodeSelectList">
+                <label class="checkbox">
+                    <input name="traffic" ng-value="s.id" ng-model="selectedId"  ng-click="checked(s)" type="radio">
+                </label>
+                <div>
+                    <div class="flex average">
+                        <div>{{s.company}}</div>
+                        <div>{{s.hours}}小时</div>
+                        <div>&yen;{{s.price}}</div>
+                    </div>
+                    <div>{{s.number}}&ensp;/&ensp;{{s.transit}}</div>
+                    <div>{{s.begin|date:"MM.dd HH:mm"}}&ensp;~&ensp;{{s.end|date:"MM.dd HH:mm"}}</div>
+                </div>
+            </li>
+        </ul>
+    </ion-content>
+    <ion-footer-bar ng-click="select()" class="bg-assertive">
+        <div class="title">确定</div>
+    </ion-footer-bar>
+</ion-view>

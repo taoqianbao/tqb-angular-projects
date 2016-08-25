@@ -1,0 +1,85 @@
+<ion-view exit-app view-title="行程" on-drag-up="_tab.hideTab()" on-drag-down="_tab.showTab()" class="journey-home" hide-nav-bar="true" hide-back-button="true" fix-tabs-animation>
+
+    <ion-content delegate-handle="journey-content">
+        <ion-refresher
+                pulling-icon="ion-ios-arrow-thin-down"
+                pulling-text="下拉刷新..."
+                spinner="lines"
+                on-refresh="doRefresh()">
+        </ion-refresher>
+
+
+        <ion-slide-box does-continue="false" auto-play="true" slide-interval="3000" ignore-bouncing prevent-event
+                       show-pager="true"
+                       ng-style="{height: hImgTp}"
+                       delegate-handle = "banner" on-slide-changed="loop($index)">
+
+            <ion-slide ng-repeat="activity in activities">
+                <a class="box">
+                    <img ng-click="clickActivity(activity)" class="img-responsive" ng-src="{{activity.img+imgSizeTopic}}"/>
+                </a>
+            </ion-slide>
+            <!-- 显示默认图片 -->
+
+        </ion-slide-box>
+
+
+        <div class="list list-borderless">
+            <div class="item item-journey"
+                 ng-repeat="rst in items"
+                 ng-click="onClickItem($index, rst.type, rst.id, rst.name)">
+
+                <div class="topic" ng-if="rst.type=='0'"
+                     ng-style="{height: hImgTp}">
+                    <img ng-src="{{rst.img+imgSizeTopic}}"/>
+
+                    <!--<div class="mask">-->
+                    <!--<div class="center">-->
+                    <!--<span class="name">{{rst.name}}</span>-->
+                    <!--<span class="slogan">{{rst.slogan}}</span>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                </div>
+
+                <div class="journey" ng-if="rst.type=='1'" ng-style="{height: hJourney}">
+                    <img ng-src="{{rst.img+imgSizePd}}" ng-style="{height: hImgJourney}"/>
+
+                    <div class="top-shadow"></div>
+                    <div class="bottom-shadow"></div>
+                    <div class="row journey-summary">
+                        <a ng-click="onClickUser($event, rst.user_id, rst.user, rst.avatar)">
+                            <img class="avatar" ng-src="{{rst.avatar}}"/>
+                        </a>
+
+                        <div>
+                            <span class="name">{{rst.name}}</span>
+                            <span class="author">{{rst.user}}</span>
+                        </div>
+                        <!--<div class="remark">-->
+                        <!--{{rst.mark}} 收藏-->
+                        <!--</div>-->
+                        <!--<div class="like" ng-click="onClickLike($event, $index)">-->
+                            <!--<i class="ic"-->
+                               <!--ng-class="{'ic-like': !user.isSigned||!rst.is_liked, 'ic-liked': user.isSigned&&rst.is_liked}"></i>-->
+                            <!--{{rst.like_num}}-->
+                        <!--</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ion-infinite-scroll on-infinite="loadMore()"
+                             ng-show="httpRequesting && hasMore"
+                             spinner="spiral"
+                             immediate-check="false"
+                             distance="20%">
+        </ion-infinite-scroll>
+    </ion-content>
+
+    <!-- 点击该icon重新打开story modal -->
+    <!-- 暂时屏蔽该功能 -->
+    <!--<span class="return-story" ng-show="!modalCard.isShown()" ng-click="showModalCard()">-->
+    <!--<i class="ic ic-expand"></i>-->
+    <!--</span>-->
+
+</ion-view>

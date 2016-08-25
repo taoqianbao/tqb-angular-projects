@@ -1,0 +1,55 @@
+<ion-view drag-back view-title="我的故事" class="user user-story"
+          load-modal="modal.url"
+          modal-name="modal.name"
+          modal-slide-direction="modal.direction"
+          modal-remove-leave="modal.removeLeave"
+          modal-drag-hide="modal.dragHide"
+          modal-blur-view="modal.blurView">
+
+    <ion-content back-to-root>
+
+        <ion-list class="list-borderless bottom-0"
+                  delegate-handle="story-list"
+                  ng-repeat="item in storyList track by item.id"
+                  ng-init="pIndex=$index">
+            <p class="poi-title" ng-click="onClickPoi($index, item.id, item.name)">
+                <i class="ic ic-location-fill"></i>{{item.city}}&nbsp;&nbsp;{{item.name}}
+                <span class="more">
+                    <i class="icon ion-ios-arrow-right"></i>
+                </span>
+            </p>
+            <ion-item prevent-event class="item-remove-animate item-thumbnail-left item-story2"
+                      ng-repeat="story in item.storys"
+                      ng-click="onClickStory(pIndex, $index)">
+                <img ng-src="{{story.img + imgSizeThumb}}"/>
+
+                <h1>{{story.tag}}</h1>
+
+                <h2>{{story.name}}</h2>
+
+                <p>by {{story.user}}</p>
+                <span class="pending ic ic-pending" ng-if="story.status=='1'"></span>
+                <span class="pending ic ic-reject" ng-if="story.status=='2'"></span>
+
+                <ion-option-button class="button-balanced"
+                                   ng-click="onClickStoryEdit($event, pIndex, $index)">编辑
+                </ion-option-button>
+                <!-- 仅在待审状态可删除 -->
+                <ion-option-button class="button-assertive"
+                                   ng-if="story.status=='1'||story.status=='2'"
+                                   ng-click="onClickStoryDel($event, story.id)">删除
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+
+        <ion-infinite-scroll on-infinite="loadMore()"
+                             ng-show="httpRequesting && hasMore"
+                             spinner="spiral"
+                             immediate-check="false"
+                             distance="20%">
+        </ion-infinite-scroll>
+
+    </ion-content>
+
+</ion-view>
+

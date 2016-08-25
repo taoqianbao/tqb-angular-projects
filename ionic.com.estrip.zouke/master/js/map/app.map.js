@@ -1,0 +1,1 @@
+angular.module("app.map", ["app.map.controller", "app.map.service", "app.map.route"])

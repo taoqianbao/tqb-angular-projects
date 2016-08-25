@@ -1,0 +1,21 @@
+<ion-modal-view class="postcard-address">
+    <ion-content scroll="false">
+        <div class="list list-inset flex">
+            <label class="item item-input flex main">
+                <i class="icon ion-search placeholder-icon"></i>
+                <input type="text" placeholder="搜索或新建地点" ng-model="search.keyword">
+            </label>
+            <div style="padding:0 0 0 10px;z-index:10;" ng-click="chooseAddress();">
+                <img src="img/icon-new/postcard/close.png" style="width:36px;display:block;">
+            </div>
+        </div>
+        <div class="list list-inset a-list flex vertical full">
+            <div style="flex-shrink:0"><div ng-show="search.keyword" class="item" ng-click="chooseAddress({zh_name:search.keyword})" style="color:lightblue;">创建该地址：{{search.keyword}}</div></div>
+            <ion-scroll delegate-handle="postcard-poi" class="main">
+                <div class="item" ng-repeat="p in positionList" ng-click="chooseAddress(p)">
+                    {{p.zh_name||p.en_name}}
+                </div>
+            </ion-scroll>
+        </div>
+    </ion-content>
+</ion-modal-view>
