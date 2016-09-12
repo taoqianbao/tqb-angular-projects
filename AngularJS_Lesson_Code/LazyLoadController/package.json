@@ -1,0 +1,11 @@
+{
+  "name": "lazyload",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm start"
+  },
+  "author": "peter",
+  "license": "MIT"
+}

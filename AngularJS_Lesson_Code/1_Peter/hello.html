@@ -17,14 +17,13 @@
 <script type="text/javascript">
 
     (function () {
-        //
+      
         angular.module('myApp', [])
                 .filter('greet', function () {
                     return function (name) {
                         return 'Hello, ' + name + '!';
                     };
                 });
-        //
 
     })();
 </script>

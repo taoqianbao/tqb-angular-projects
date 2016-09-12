@@ -11,6 +11,7 @@ function MyController($scope, $timeout) {
    setInterval(function () {
 
         updateClock();
+
         $scope.$apply();
 
         //recommended

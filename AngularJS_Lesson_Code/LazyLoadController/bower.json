@@ -1,0 +1,24 @@
+{
+    "name": "lazyload",
+    "description": "",
+    "main": "app.js",
+    "authors": [
+        "peter"
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/taoqianbao/tqb-angular-projects",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "angular-ui-bootstrap": "1.2.4",
+        "angular-ui-router": "~0.2.15",
+        "angularAMD": "~0.2.1",
+        "angular": "~1.5.8",
+        "requirejs": "~2.1.20"
+    }
+}
